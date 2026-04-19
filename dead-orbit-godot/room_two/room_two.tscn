@@ -1,0 +1,43 @@
+[gd_scene format=3 uid="uid://b05pmwpmx0amm"]
+
+[ext_resource type="Texture2D" uid="uid://dty7dhl5r7m0p" path="res://room_two/room_two_graphics/craiyon_160927_a_pixel_art_platformer_dystopian_space_station_hallway_parallax_layers__orthogonal_view.png" id="1_lvae0"]
+[ext_resource type="PackedScene" uid="uid://dkuew8h4ptgdw" path="res://room_two/temp_sol.tscn" id="2_aa6lu"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_lvae0"]
+size = Vector2(20, 890)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_aa6lu"]
+size = Vector2(1313, 20)
+
+[node name="RoomTwo" type="Node2D" unique_id=1691997581]
+
+[node name="TempBackground" type="Sprite2D" parent="." unique_id=1570004545]
+texture = ExtResource("1_lvae0")
+
+[node name="PlayerB" parent="." unique_id=902897292 instance=ExtResource("2_aa6lu")]
+
+[node name="Borders" type="Node2D" parent="." unique_id=1581052226]
+
+[node name="RightWall" type="StaticBody2D" parent="Borders" unique_id=1558344195]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/RightWall" unique_id=1097999158]
+position = Vector2(652, 1)
+shape = SubResource("RectangleShape2D_lvae0")
+
+[node name="LeftWall" type="StaticBody2D" parent="Borders" unique_id=2106089215]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/LeftWall" unique_id=1018057815]
+position = Vector2(-654, 1)
+shape = SubResource("RectangleShape2D_lvae0")
+
+[node name="BottomWall" type="StaticBody2D" parent="Borders" unique_id=1155856314]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/BottomWall" unique_id=364981654]
+position = Vector2(0, 459)
+shape = SubResource("RectangleShape2D_aa6lu")
+
+[node name="TopWall" type="StaticBody2D" parent="Borders" unique_id=703947514]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/TopWall" unique_id=1951765846]
+position = Vector2(0, -462)
+shape = SubResource("RectangleShape2D_aa6lu")

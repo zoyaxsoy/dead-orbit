@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://dkuew8h4ptgdw"]
+
+[ext_resource type="Texture2D" uid="uid://bdkpwsrqpo7rp" path="res://room_two/room_two_graphics/temp_sol.png" id="1_qe070"]
+[ext_resource type="Script" uid="uid://yn2o4k5mtmyi" path="res://room_two/temp_sol.gd" id="1_qg1nl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_qe070"]
+size = Vector2(41.5, 13)
+
+[node name="PlayerB" type="CharacterBody2D" unique_id=902897292]
+script = ExtResource("1_qg1nl")
+
+[node name="Sol" type="Sprite2D" parent="." unique_id=519664226]
+scale = Vector2(0.03, 0.03)
+texture = ExtResource("1_qe070")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=422238899]
+position = Vector2(0.25, 4.5)
+shape = SubResource("RectangleShape2D_qe070")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=934872176]
+zoom = Vector2(1.67, 1.67)
+position_smoothing_enabled = true
