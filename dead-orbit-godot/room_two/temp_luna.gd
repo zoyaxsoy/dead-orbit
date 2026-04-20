@@ -8,8 +8,6 @@ func _ready() -> void:
 	camera.enabled = true
 
 func _physics_process(delta: float) -> void: 
-	direction = Input.get_vector("sol_left", "sol_right", "sol_up", "sol_down") 
+	direction = Input.get_vector("luna_left", "luna_right", "luna_up", "luna_down") 
 	velocity = direction * speed 
 	move_and_slide()
-		
-	

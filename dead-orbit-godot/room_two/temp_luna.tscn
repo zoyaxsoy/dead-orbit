@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://ce8qf8qy3r8j1"]
+
+[ext_resource type="Texture2D" uid="uid://bm08umrfv2op2" path="res://room_two/room_two_graphics/temp_luna.png" id="1_h5cll"]
+[ext_resource type="Script" uid="uid://dd0013n00r63r" path="res://room_two/temp_luna.gd" id="1_xlryf"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_h5cll"]
+size = Vector2(24, 13)
+
+[node name="PlayerA" type="CharacterBody2D" unique_id=1914497341]
+script = ExtResource("1_xlryf")
+
+[node name="Luna" type="Sprite2D" parent="." unique_id=519366008]
+scale = Vector2(0.03, 0.03)
+texture = ExtResource("1_h5cll")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=783017306]
+position = Vector2(0, 1.5)
+shape = SubResource("RectangleShape2D_h5cll")

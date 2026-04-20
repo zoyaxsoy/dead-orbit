@@ -1,6 +1,8 @@
 [gd_scene format=3 uid="uid://b05pmwpmx0amm"]
 
+[ext_resource type="Script" uid="uid://l6r1wm3lpp1r" path="res://room_two/room_two.gd" id="1_0a3yq"]
 [ext_resource type="Texture2D" uid="uid://dty7dhl5r7m0p" path="res://room_two/room_two_graphics/craiyon_160927_a_pixel_art_platformer_dystopian_space_station_hallway_parallax_layers__orthogonal_view.png" id="1_lvae0"]
+[ext_resource type="PackedScene" uid="uid://ce8qf8qy3r8j1" path="res://room_two/temp_luna.tscn" id="2_0a3yq"]
 [ext_resource type="PackedScene" uid="uid://dkuew8h4ptgdw" path="res://room_two/temp_sol.tscn" id="2_aa6lu"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_lvae0"]
@@ -9,35 +11,72 @@ size = Vector2(20, 890)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_aa6lu"]
 size = Vector2(1313, 20)
 
-[node name="RoomTwo" type="Node2D" unique_id=1691997581]
+[node name="RoomTwo" type="Control" unique_id=247806796]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_0a3yq")
 
-[node name="TempBackground" type="Sprite2D" parent="." unique_id=1570004545]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1739060916]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="HBoxContainer" unique_id=1535348622]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SubViewport" type="SubViewport" parent="HBoxContainer/SubViewportContainer" unique_id=1449451380]
+handle_input_locally = false
+render_target_update_mode = 4
+
+[node name="TempBackground" type="Sprite2D" parent="HBoxContainer/SubViewportContainer/SubViewport" unique_id=1570004545]
 texture = ExtResource("1_lvae0")
 
-[node name="PlayerB" parent="." unique_id=902897292 instance=ExtResource("2_aa6lu")]
+[node name="Borders" type="Node2D" parent="HBoxContainer/SubViewportContainer/SubViewport" unique_id=1581052226]
 
-[node name="Borders" type="Node2D" parent="." unique_id=1581052226]
+[node name="RightWall" type="StaticBody2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Borders" unique_id=1558344195]
 
-[node name="RightWall" type="StaticBody2D" parent="Borders" unique_id=1558344195]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/RightWall" unique_id=1097999158]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Borders/RightWall" unique_id=1097999158]
 position = Vector2(652, 1)
 shape = SubResource("RectangleShape2D_lvae0")
 
-[node name="LeftWall" type="StaticBody2D" parent="Borders" unique_id=2106089215]
+[node name="LeftWall" type="StaticBody2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Borders" unique_id=2106089215]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/LeftWall" unique_id=1018057815]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Borders/LeftWall" unique_id=1018057815]
 position = Vector2(-654, 1)
 shape = SubResource("RectangleShape2D_lvae0")
 
-[node name="BottomWall" type="StaticBody2D" parent="Borders" unique_id=1155856314]
+[node name="BottomWall" type="StaticBody2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Borders" unique_id=1155856314]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/BottomWall" unique_id=364981654]
-position = Vector2(0, 459)
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Borders/BottomWall" unique_id=364981654]
+position = Vector2(-5, 287)
 shape = SubResource("RectangleShape2D_aa6lu")
 
-[node name="TopWall" type="StaticBody2D" parent="Borders" unique_id=703947514]
+[node name="TopWall" type="StaticBody2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Borders" unique_id=703947514]
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Borders/TopWall" unique_id=1951765846]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Borders/TopWall" unique_id=1951765846]
 position = Vector2(0, -462)
 shape = SubResource("RectangleShape2D_aa6lu")
+
+[node name="PlayerA" parent="HBoxContainer/SubViewportContainer/SubViewport" unique_id=1914497341 instance=ExtResource("2_0a3yq")]
+
+[node name="Camera2D" type="Camera2D" parent="HBoxContainer/SubViewportContainer/SubViewport/PlayerA" unique_id=433016659]
+position_smoothing_enabled = true
+
+[node name="SubViewportContainer2" type="SubViewportContainer" parent="HBoxContainer" unique_id=1609236975]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SubViewport" type="SubViewport" parent="HBoxContainer/SubViewportContainer2" unique_id=36978954]
+handle_input_locally = false
+render_target_update_mode = 4
+
+[node name="PlayerB" parent="HBoxContainer/SubViewportContainer2/SubViewport" unique_id=902897292 instance=ExtResource("2_aa6lu")]
+position = Vector2(-52, 0)
+
+[node name="Camera2D" type="Camera2D" parent="HBoxContainer/SubViewportContainer2/SubViewport/PlayerB" unique_id=1992445052]
+position = Vector2(52, 0)
+position_smoothing_enabled = true
