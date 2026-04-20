@@ -13,7 +13,11 @@ size = Vector2(1313, 20)
 
 [node name="RoomTwo" type="Control" unique_id=247806796]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_0a3yq")
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1739060916]
@@ -27,10 +31,12 @@ grow_vertical = 2
 [node name="SubViewportContainer" type="SubViewportContainer" parent="HBoxContainer" unique_id=1535348622]
 layout_mode = 2
 size_flags_horizontal = 3
+stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="HBoxContainer/SubViewportContainer" unique_id=1449451380]
 handle_input_locally = false
 render_target_update_mode = 4
+size = Vector2i(960, 540)
 
 [node name="TempBackground" type="Sprite2D" parent="HBoxContainer/SubViewportContainer/SubViewport" unique_id=1570004545]
 texture = ExtResource("1_lvae0")
@@ -69,10 +75,12 @@ position_smoothing_enabled = true
 [node name="SubViewportContainer2" type="SubViewportContainer" parent="HBoxContainer" unique_id=1609236975]
 layout_mode = 2
 size_flags_horizontal = 3
+stretch = true
 
 [node name="SubViewport" type="SubViewport" parent="HBoxContainer/SubViewportContainer2" unique_id=36978954]
 handle_input_locally = false
 render_target_update_mode = 4
+size = Vector2i(960, 540)
 
 [node name="PlayerB" parent="HBoxContainer/SubViewportContainer2/SubViewport" unique_id=902897292 instance=ExtResource("2_aa6lu")]
 position = Vector2(-52, 0)
