@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://dvxwha6b15pu"]
+
+[ext_resource type="Texture2D" uid="uid://cjraou3sxwypx" path="res://room_one/room_one_graphics/V0e0ONd2QIepXdb5sAsCgw.webp" id="1_cugct"]
+[ext_resource type="PackedScene" path="res://room_one/player_sol.tscn" id="1_l2ry5"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_left_wall"]
+size = Vector2(30, 680)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_right_wall"]
+size = Vector2(30, 680)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mpiw2"]
+size = Vector2(1555, 30.5)
+
+[sub_resource type="GDScript" id="GDScript_electric_charge"]
+script/source = "extends Area2D
+
+@export var move_distance: float = 480.0
+@export var move_speed: float = 0.9
+@export var respawn_position: Vector2 = Vector2(280, 539)
+
+var start_position: Vector2
+var elapsed: float = 0.0
+
+func _ready() -> void:
+	start_position = global_position
+	body_entered.connect(_on_body_entered)
+
+func _process(delta: float) -> void:
+	elapsed += delta
+	global_position.x = start_position.x + sin(elapsed * move_speed) * move_distance
+
+func _on_body_entered(body: Node) -> void:
+	if body is CharacterBody2D:
+		body.global_position = respawn_position
+		body.velocity = Vector2.ZERO
+"
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_charge"]
+size = Vector2(80, 18)
+
+[node name="RoomOne" type="Node2D" unique_id=486337481]
+
+[node name="Background" type="Polygon2D" parent="." unique_id=543688255]
+position = Vector2(104, 2)
+color = Color(0.105882, 0.121569, 0.14902, 1)
+polygon = PackedVector2Array(-100, -100, 1049, -100, 1048, 646, -99, 646)
+
+[node name="LeftWall" type="StaticBody2D" parent="." unique_id=1692130856]
+position = Vector2(6, 290)
+
+[node name="WallVisual" type="Polygon2D" parent="LeftWall" unique_id=1203997593]
+position = Vector2(9, 0)
+color = Color(0.164706, 0.184314, 0.223529, 1)
+polygon = PackedVector2Array(-15, -340, 15, -340, 15, 340, -15, 340)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall" unique_id=188753931]
+position = Vector2(9, 0)
+shape = SubResource("RectangleShape2D_left_wall")
+
+[node name="RightWall" type="StaticBody2D" parent="." unique_id=572769188]
+position = Vector2(1092, 290)
+
+[node name="WallVisual" type="Polygon2D" parent="RightWall" unique_id=1258142006]
+position = Vector2(46, 0)
+color = Color(0.164706, 0.184314, 0.223529, 1)
+polygon = PackedVector2Array(-15, -340, 15, -340, 15, 340, -15, 340)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall" unique_id=199437885]
+position = Vector2(45, 1)
+shape = SubResource("RectangleShape2D_right_wall")
+
+[node name="Background2" type="Sprite2D" parent="." unique_id=1166663437]
+position = Vector2(669, 245)
+scale = Vector2(1.2907367, 1.2907368)
+texture = ExtResource("1_cugct")
+
+[node name="Floor" type="StaticBody2D" parent="." unique_id=1956382338]
+position = Vector2(-3, 1)
+
+[node name="FloorVisual" type="Polygon2D" parent="Floor" unique_id=1354404839]
+visible = false
+position = Vector2(602.04254, 603.4872)
+scale = Vector2(1.2130669, 2.025641)
+color = Color(0.03529412, 0.0627451, 0.10980392, 0.69803923)
+polygon = PackedVector2Array(322.28845, -169.56964, 452.53687, -168.58229, 259.79843, 22.468353, -390.7802, 21.481018)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floor" unique_id=1560504225]
+position = Vector2(749.5, 623)
+shape = SubResource("RectangleShape2D_mpiw2")
+
+[node name="ElectricCharge" type="Area2D" parent="." unique_id=1657322553]
+position = Vector2(580, 607)
+script = SubResource("GDScript_electric_charge")
+
+[node name="ChargeVisual" type="Polygon2D" parent="ElectricCharge" unique_id=1679481725]
+position = Vector2(0, 11)
+color = Color(1, 0.564706, 0.235294, 1)
+polygon = PackedVector2Array(-40, -9, 40, -9, 40, 9, -40, 9)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ElectricCharge" unique_id=477280187]
+position = Vector2(0, 11)
+shape = SubResource("RectangleShape2D_charge")
+
+[node name="PlayerSol" parent="." unique_id=1908340962 instance=ExtResource("1_l2ry5")]
+position = Vector2(580, 322)
