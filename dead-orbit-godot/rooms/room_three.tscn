@@ -1,3 +1,128 @@
 [gd_scene format=3 uid="uid://dobtesvicaf53"]
 
-[node name="Node2D" type="Node2D" unique_id=1226152593]
+[ext_resource type="Script" path="res://rooms/room_three.gd" id="1_1x3b6"]
+[ext_resource type="PackedScene" uid="uid://ce8qf8qy3r8j1" path="res://room_two/temp_luna.tscn" id="2_2whkt"]
+[ext_resource type="PackedScene" uid="uid://dkuew8h4ptgdw" path="res://room_two/temp_sol.tscn" id="3_tsq2x"]
+
+[node name="RoomThree" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_1x3b6")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="HBoxContainer/SubViewportContainer"]
+handle_input_locally = false
+render_target_update_mode = 4
+size = Vector2i(960, 540)
+
+[node name="SpaceBackground" type="Polygon2D" parent="HBoxContainer/SubViewportContainer/SubViewport"]
+color = Color(0.0117647, 0.0156863, 0.0313726, 1)
+polygon = PackedVector2Array(-1400, -900, 1400, -900, 1400, 900, -1400, 900)
+
+[node name="Starfield" type="Node2D" parent="HBoxContainer/SubViewportContainer/SubViewport"]
+
+[node name="Star1" type="Polygon2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Starfield"]
+color = Color(0.756863, 0.882353, 1, 0.7)
+polygon = PackedVector2Array(-3, -3, 3, -3, 3, 3, -3, 3)
+position = Vector2(-520, -280)
+
+[node name="Star2" type="Polygon2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Starfield"]
+color = Color(0.941176, 0.980392, 1, 0.75)
+polygon = PackedVector2Array(-4, -4, 4, -4, 4, 4, -4, 4)
+position = Vector2(460, -210)
+
+[node name="Star3" type="Polygon2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Starfield"]
+color = Color(0.65098, 0.827451, 0.968627, 0.65)
+polygon = PackedVector2Array(-3, -3, 3, -3, 3, 3, -3, 3)
+position = Vector2(300, 40)
+
+[node name="Star4" type="Polygon2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Starfield"]
+color = Color(0.941176, 0.980392, 1, 0.7)
+polygon = PackedVector2Array(-2, -2, 2, -2, 2, 2, -2, 2)
+position = Vector2(-440, 90)
+
+[node name="Station" type="Node2D" parent="HBoxContainer/SubViewportContainer/SubViewport"]
+
+[node name="FarCap" type="Polygon2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Station"]
+color = Color(0.141176, 0.164706, 0.223529, 1)
+polygon = PackedVector2Array(-86, -276, -58, -286, -20, -292, 20, -292, 58, -286, 86, -276, 66, -246, 24, -232, -24, -232, -66, -246)
+
+[node name="HullSurface" type="Polygon2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Station"]
+color = Color(0.223529, 0.270588, 0.356863, 1)
+polygon = PackedVector2Array(-64, -250, -114, -182, -170, -100, -236, -16, -310, 70, -398, 166, 398, 166, 310, 70, 236, -16, 170, -100, 114, -182, 64, -250)
+
+[node name="LeftCurvatureShadow" type="Polygon2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Station"]
+color = Color(0.0901961, 0.109804, 0.156863, 0.82)
+polygon = PackedVector2Array(-64, -250, -114, -182, -170, -100, -236, -16, -310, 70, -398, 166, -348, 186, -256, 89, -188, 6, -132, -74, -84, -146, -44, -204)
+
+[node name="RightCurvatureShadow" type="Polygon2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Station"]
+color = Color(0.0901961, 0.109804, 0.156863, 0.82)
+polygon = PackedVector2Array(64, -250, 114, -182, 170, -100, 236, -16, 310, 70, 398, 166, 348, 186, 256, 89, 188, 6, 132, -74, 84, -146, 44, -204)
+
+[node name="MidSurfaceHighlight" type="Polygon2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Station"]
+color = Color(0.313726, 0.388235, 0.509804, 0.85)
+polygon = PackedVector2Array(-18, -240, -44, -176, -76, -102, -118, -16, -166, 74, -224, 172, 224, 172, 166, 74, 118, -16, 76, -102, 44, -176, 18, -240)
+
+[node name="CenterStripe" type="Polygon2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Station"]
+color = Color(0.427451, 0.690196, 0.87451, 0.32)
+polygon = PackedVector2Array(-8, -236, -19, -172, -31, -96, -44, -8, -62, 84, -88, 176, 88, 176, 62, 84, 44, -8, 31, -96, 19, -172, 8, -236)
+
+[node name="NearCap" type="Polygon2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Station"]
+color = Color(0.176471, 0.2, 0.278431, 1)
+polygon = PackedVector2Array(-430, 214, -386, 184, -318, 160, -220, 142, -112, 132, 0, 128, 112, 132, 220, 142, 318, 160, 386, 184, 430, 214, 395, 320, 326, 358, 224, 386, 114, 400, 0, 404, -114, 400, -224, 386, -326, 358, -395, 320)
+
+[node name="SurfaceBands" type="Node2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Station"]
+
+[node name="SpawnA" type="Marker2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Station"]
+position = Vector2(-120, 124)
+
+[node name="SpawnB" type="Marker2D" parent="HBoxContainer/SubViewportContainer/SubViewport/Station"]
+position = Vector2(120, 152)
+
+[node name="PlayerA" parent="HBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("2_2whkt")]
+position = Vector2(-120, 124)
+
+[node name="Camera2D" type="Camera2D" parent="HBoxContainer/SubViewportContainer/SubViewport/PlayerA"]
+position_smoothing_enabled = true
+position_smoothing_speed = 6.0
+
+[node name="PlayerB" parent="HBoxContainer/SubViewportContainer/SubViewport" instance=ExtResource("3_tsq2x")]
+position = Vector2(120, 152)
+
+[node name="Camera2D" type="Camera2D" parent="HBoxContainer/SubViewportContainer/SubViewport/PlayerB"]
+position_smoothing_enabled = true
+position_smoothing_speed = 6.0
+
+[node name="StaticCameraA" type="Camera2D" parent="HBoxContainer/SubViewportContainer/SubViewport"]
+position = Vector2(-70, 85)
+enabled = true
+
+[node name="SubViewportContainer2" type="SubViewportContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="HBoxContainer/SubViewportContainer2"]
+handle_input_locally = false
+render_target_update_mode = 4
+size = Vector2i(960, 540)
+
+[node name="StaticCameraB" type="Camera2D" parent="HBoxContainer/SubViewportContainer2/SubViewport"]
+position = Vector2(70, 85)
+enabled = true
