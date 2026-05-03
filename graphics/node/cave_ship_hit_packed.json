@@ -1,0 +1,146 @@
+{ "frames": {
+   "cave_ship_hit 0.aseprite": {
+    "frame": { "x": 0, "y": 0, "w": 35, "h": 22 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 22 },
+    "sourceSize": { "w": 35, "h": 22 },
+    "duration": 20
+   },
+   "cave_ship_hit 1.aseprite": {
+    "frame": { "x": 35, "y": 0, "w": 35, "h": 22 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 22 },
+    "sourceSize": { "w": 35, "h": 22 },
+    "duration": 20
+   },
+   "cave_ship_hit 2.aseprite": {
+    "frame": { "x": 70, "y": 0, "w": 35, "h": 22 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 22 },
+    "sourceSize": { "w": 35, "h": 22 },
+    "duration": 20
+   },
+   "cave_ship_hit 3.aseprite": {
+    "frame": { "x": 105, "y": 0, "w": 35, "h": 22 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 22 },
+    "sourceSize": { "w": 35, "h": 22 },
+    "duration": 20
+   },
+   "cave_ship_hit 4.aseprite": {
+    "frame": { "x": 0, "y": 22, "w": 35, "h": 22 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 22 },
+    "sourceSize": { "w": 35, "h": 22 },
+    "duration": 20
+   },
+   "cave_ship_hit 5.aseprite": {
+    "frame": { "x": 35, "y": 22, "w": 35, "h": 22 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 22 },
+    "sourceSize": { "w": 35, "h": 22 },
+    "duration": 20
+   },
+   "cave_ship_hit 6.aseprite": {
+    "frame": { "x": 70, "y": 22, "w": 35, "h": 22 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 22 },
+    "sourceSize": { "w": 35, "h": 22 },
+    "duration": 20
+   },
+   "cave_ship_hit 7.aseprite": {
+    "frame": { "x": 105, "y": 22, "w": 35, "h": 22 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 22 },
+    "sourceSize": { "w": 35, "h": 22 },
+    "duration": 20
+   },
+   "cave_ship_hit 8.aseprite": {
+    "frame": { "x": 0, "y": 44, "w": 35, "h": 22 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 22 },
+    "sourceSize": { "w": 35, "h": 22 },
+    "duration": 20
+   },
+   "cave_ship_hit 9.aseprite": {
+    "frame": { "x": 35, "y": 44, "w": 35, "h": 22 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 22 },
+    "sourceSize": { "w": 35, "h": 22 },
+    "duration": 20
+   },
+   "cave_ship_hit 10.aseprite": {
+    "frame": { "x": 70, "y": 44, "w": 35, "h": 22 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 22 },
+    "sourceSize": { "w": 35, "h": 22 },
+    "duration": 20
+   },
+   "cave_ship_hit 11.aseprite": {
+    "frame": { "x": 105, "y": 44, "w": 35, "h": 22 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 22 },
+    "sourceSize": { "w": 35, "h": 22 },
+    "duration": 20
+   },
+   "cave_ship_hit 12.aseprite": {
+    "frame": { "x": 0, "y": 66, "w": 35, "h": 22 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 22 },
+    "sourceSize": { "w": 35, "h": 22 },
+    "duration": 20
+   },
+   "cave_ship_hit 13.aseprite": {
+    "frame": { "x": 35, "y": 66, "w": 35, "h": 22 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 22 },
+    "sourceSize": { "w": 35, "h": 22 },
+    "duration": 20
+   },
+   "cave_ship_hit 14.aseprite": {
+    "frame": { "x": 70, "y": 66, "w": 35, "h": 22 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 22 },
+    "sourceSize": { "w": 35, "h": 22 },
+    "duration": 20
+   },
+   "cave_ship_hit 15.aseprite": {
+    "frame": { "x": 35, "y": 66, "w": 35, "h": 22 },
+    "rotated": false,
+    "trimmed": false,
+    "spriteSourceSize": { "x": 0, "y": 0, "w": 35, "h": 22 },
+    "sourceSize": { "w": 35, "h": 22 },
+    "duration": 20
+   }
+ },
+ "meta": {
+  "app": "http://www.aseprite.org/",
+  "version": "1.2.21-x64",
+  "image": "cave_ship_hit.png",
+  "format": "I8",
+  "size": { "w": 140, "h": 88 },
+  "scale": "1",
+  "frameTags": [
+  ],
+  "layers": [
+   { "name": "Layer", "opacity": 255, "blendMode": "normal" }
+  ],
+  "slices": [
+  ]
+ }
+}
