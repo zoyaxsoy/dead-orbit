@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://dobtesvicaf53"]
+[gd_scene format=3 uid="uid://dobtesvicaf53"]
 
-[ext_resource type="Script" path="res://rooms/room_three.gd" id="1_1x3b6"]
+[ext_resource type="Script" uid="uid://cvhc52raerbfv" path="res://rooms/room_three.gd" id="1_1x3b6"]
 
-[node name="RoomThree" type="Control"]
+[node name="RoomThree" type="Control" unique_id=840173819]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
