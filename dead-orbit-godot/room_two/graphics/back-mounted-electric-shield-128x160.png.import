@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bm08umrfv2op2"
-path="res://.godot/imported/temp_luna.png-b67b26ea449df27767db75f15c94ea5a.ctex"
+uid="uid://bgvgqs0dh04f5"
+path="res://.godot/imported/back-mounted-electric-shield-128x160.png-4a2e677eaefee5c7f88f12e9a24c5595.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://room_two/room_two_graphics/temp_luna.png"
-dest_files=["res://.godot/imported/temp_luna.png-b67b26ea449df27767db75f15c94ea5a.ctex"]
+source_file="res://room_two/graphics/back-mounted-electric-shield-128x160.png"
+dest_files=["res://.godot/imported/back-mounted-electric-shield-128x160.png-4a2e677eaefee5c7f88f12e9a24c5595.ctex"]
 
 [params]
 

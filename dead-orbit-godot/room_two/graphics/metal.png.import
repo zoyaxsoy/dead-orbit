@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bdkpwsrqpo7rp"
-path="res://.godot/imported/temp_sol.png-682e2f2b87ab3bf9cf9edaa1c8da11fa.ctex"
+uid="uid://dr8p2gnynx12f"
+path="res://.godot/imported/metal.png-696cbf43a2a0452ce87bc4557815588a.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://room_two/room_two_graphics/temp_sol.png"
-dest_files=["res://.godot/imported/temp_sol.png-682e2f2b87ab3bf9cf9edaa1c8da11fa.ctex"]
+source_file="res://room_two/graphics/metal.png"
+dest_files=["res://.godot/imported/metal.png-696cbf43a2a0452ce87bc4557815588a.ctex"]
 
 [params]
 
