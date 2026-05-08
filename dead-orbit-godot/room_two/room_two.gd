@@ -1,33 +1,49 @@
 extends Node2D
-@onready var player_a = $Sol
-@onready var player_b = $Luna
-@onready var tether_line = $TetherLine
 
-var max_distance := 200
+@onready var player_a = $Players/Sol
+@onready var player_b = $Players/Luna
+@onready var tether_line = $TetherLine
+@export var max_distance: float = 200.0
+@export var pull_strength: float = 800.0
 
 func _process(delta):
 	var a = player_a.global_position
 	var b = player_b.global_position
-
 	var mid = (a + b) / 2
-	# mid.y += 5  # sag amount
-
 	tether_line.points = [
 		tether_line.to_local(a),
 		tether_line.to_local(mid),
 		tether_line.to_local(b)
 	]
-	
+
+var is_taut: bool = false
+
 func _physics_process(delta):
-	var a_pos = player_a.global_position
-	var b_pos = player_b.global_position
-	var offset = b_pos - a_pos
+	var offset = player_b.global_position - player_a.global_position
 	var distance = offset.length()
+	is_taut = distance > max_distance
 
-	if distance > max_distance:
+	if is_taut:
 		var direction = offset.normalized()
-		var extra_distance = distance - max_distance
-		var pull_strength = 8.0
 
-		player_a.global_position += direction * extra_distance * 0.5 * pull_strength * delta
-		player_b.global_position -= direction * extra_distance * 0.5 * pull_strength * delta
+		if player_a.is_on_floor():
+			var correction = (distance - max_distance) * direction
+			player_b.global_position -= correction
+			var radial_speed = player_b.velocity.dot(direction)
+			if radial_speed > 0:
+				player_b.velocity -= direction * radial_speed
+
+		elif player_b.is_on_floor():
+			var direction_a = -direction
+			var correction = (distance - max_distance) * direction_a
+			player_a.global_position -= correction
+			var radial_speed = player_a.velocity.dot(direction_a)
+			if radial_speed > 0:
+				player_a.velocity -= direction_a * radial_speed
+
+		else:
+			player_a.velocity += direction * pull_strength * delta
+			player_b.velocity += -direction * pull_strength * delta
+
+func _ready():
+	$Course/AreaTwo/Shield/Area2D.activated.connect($Course/AreaTwo/MovingPlatform.activate)
