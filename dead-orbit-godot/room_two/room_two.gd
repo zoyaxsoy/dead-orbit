@@ -3,7 +3,7 @@ extends Node2D
 @onready var player_a = $Players/Sol
 @onready var player_b = $Players/Luna
 @onready var tether_line = $TetherLine
-@export var max_distance: float = 200.0
+@export var max_distance: float = 500.0
 @export var pull_strength: float = 800.0
 
 func _process(delta):
@@ -46,4 +46,5 @@ func _physics_process(delta):
 			player_b.velocity += -direction * pull_strength * delta
 
 func _ready():
-	$Course/AreaTwo/Shield/Area2D.activated.connect($Course/AreaTwo/MovingPlatform.activate)
+	$Course/AreaTwo/Shield.activated.connect($Course/AreaTwo/MovingPlatform.activate)
+	$Course/AreaTwo/Shield.activated.connect($Course/AreaTwo/CanvasLayer/ShieldPopUp.show_popup)
