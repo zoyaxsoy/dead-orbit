@@ -5,4 +5,6 @@ func _ready():
 
 func _on_body_entered(body):
 	if body.is_in_group("players"):
-		body.respawn()
+		for player in get_tree().get_nodes_in_group("players"):
+			if player is CharacterBody2D:
+				player.respawn()

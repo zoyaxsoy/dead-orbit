@@ -9,9 +9,10 @@
 [ext_resource type="Script" uid="uid://dcdwlx4grvyro" path="res://room_two/player_scripts/sol.gd" id="3_qrvlp"]
 [ext_resource type="Texture2D" uid="uid://qdn36udxrjj" path="res://rooms/room_three_graphics/room3_sol_eva_sheet.png" id="5_05bwp"]
 [ext_resource type="Script" uid="uid://dlt4oiwpktt5c" path="res://room_two/player_scripts/luna.gd" id="5_411r1"]
+[ext_resource type="Texture2D" uid="uid://cc2d5aqtpw5vj" path="res://room_two/graphics/room3_sol_eva_shield_pose_sheet copy.png" id="6_4joyh"]
 [ext_resource type="Texture2D" uid="uid://jvktmrtrk5i4" path="res://rooms/room_three_graphics/room3_luna_eva_sheet.png" id="7_c2jje"]
-[ext_resource type="Texture2D" uid="uid://j1a58lcwhgj5" path="res://room_two/graphics/empty_box.png" id="8_411r1"]
 [ext_resource type="Texture2D" uid="uid://crgsi0uwdbnb" path="res://room_two/graphics/engine-bay-platform-spritesheet-transparent.png" id="9_3r8o0"]
+[ext_resource type="Texture2D" uid="uid://bnndqlucmiqn0" path="res://room_two/graphics/room3_luna_eva_shield_pose_sheet copy.png" id="9_hrltk"]
 [ext_resource type="Script" uid="uid://bmhvft8ael4xa" path="res://room_two/area_scripts/area_one/moving_platforms.gd" id="9_qqy8t"]
 [ext_resource type="Texture2D" uid="uid://c70qbvmpcpegc" path="res://room_two/graphics/engine-bay-platform-spritesheet-source.png" id="10_2xkmh"]
 [ext_resource type="Texture2D" uid="uid://bgvgqs0dh04f5" path="res://room_two/graphics/back-mounted-electric-shield-128x160.png" id="11_p78yq"]
@@ -19,11 +20,17 @@
 [ext_resource type="Script" uid="uid://cs28dpbnmbx4n" path="res://room_two/area_scripts/area_two/shield.gd" id="12_p78yq"]
 [ext_resource type="Script" uid="uid://b3cnoa86w83o5" path="res://room_two/area_scripts/area_two/moving_platform.gd" id="13_05bwp"]
 [ext_resource type="Script" uid="uid://dyc4tybwebmrp" path="res://room_two/area_scripts/kill_zone.gd" id="18_2xkmh"]
-[ext_resource type="Script" uid="uid://mqe2xxgt1lyg" path="res://room_two/area_scripts/area_three/electric_charges.gd" id="18_i6pmf"]
 [ext_resource type="Script" uid="uid://cq5t88656al20" path="res://room_two/area_scripts/area_two/shield_pop_up.gd" id="18_ys3rg"]
 [ext_resource type="Texture2D" uid="uid://cn06xli1wax7w" path="res://room_two/graphics/shield_instruction_popup_space_text_only.png" id="19_l16gl"]
 [ext_resource type="Texture2D" uid="uid://bl41m3ji0xrbn" path="res://room_two/graphics/metal_box_sprite.png" id="19_x8c52"]
 [ext_resource type="Script" uid="uid://qf1df68igiav" path="res://room_two/area_scripts/checkpoint.gd" id="20_kpevg"]
+[ext_resource type="Script" uid="uid://dqk1suq48ps1y" path="res://room_two/area_scripts/area_three/pressure_plate.gd" id="24_im44d"]
+[ext_resource type="Texture2D" uid="uid://qcsc82eurwuu" path="res://room_two/graphics/ground_pressure_plate_clear_press_sheet.png" id="24_rkcg2"]
+[ext_resource type="Script" uid="uid://co07uu5l5pcbw" path="res://room_two/area_scripts/area_three/ladder.gd" id="25_4h5sc"]
+[ext_resource type="Texture2D" uid="uid://f3qou5ctc8jk" path="res://room_two/graphics/extending_ladder_animation_sheet.png" id="25_im44d"]
+[ext_resource type="Texture2D" uid="uid://daiyayu0sgjg6" path="res://room_two/graphics/wall_energy_node_fill_animation_sheet.png" id="28_13ave"]
+[ext_resource type="Script" uid="uid://lt3yln68veq4" path="res://room_two/area_scripts/energy_node.gd" id="28_vhqpk"]
+[ext_resource type="Script" uid="uid://cnq6mcwh1xyt6" path="res://room_two/area_scripts/area_three/laser.gd" id="29_13ave"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hrltk"]
 atlas = ExtResource("3_nsqpp")
@@ -39,6 +46,10 @@ animations = [{
 "name": &"default",
 "speed": 8.0
 }]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hwxhv"]
+atlas = ExtResource("6_4joyh")
+region = Rect2(0, 0, 80, 96)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c2jje"]
 atlas = ExtResource("5_05bwp")
@@ -64,8 +75,40 @@ region = Rect2(256, 0, 64, 80)
 atlas = ExtResource("5_05bwp")
 region = Rect2(320, 0, 64, 80)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_im44d"]
+atlas = ExtResource("6_4joyh")
+region = Rect2(0, 0, 80, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4h5sc"]
+atlas = ExtResource("6_4joyh")
+region = Rect2(80, 0, 80, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rkcg2"]
+atlas = ExtResource("6_4joyh")
+region = Rect2(160, 0, 80, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_13ave"]
+atlas = ExtResource("6_4joyh")
+region = Rect2(240, 0, 80, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vhqpk"]
+atlas = ExtResource("6_4joyh")
+region = Rect2(320, 0, 80, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4u6g1"]
+atlas = ExtResource("6_4joyh")
+region = Rect2(400, 0, 80, 96)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_qqy8t"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hwxhv")
+}],
+"loop": true,
+"name": &"shield_idle",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_c2jje")
@@ -88,10 +131,37 @@ animations = [{
 "loop": true,
 "name": &"walk",
 "speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_im44d")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4h5sc")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rkcg2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_13ave")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vhqpk")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_4u6g1")
+}],
+"loop": true,
+"name": &"walk_w_shield",
+"speed": 10.0
 }]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_bs57x"]
 size = Vector2(350.0001, 395.00027)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uk4hd"]
+atlas = ExtResource("9_hrltk")
+region = Rect2(0, 0, 80, 96)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_i6pmf"]
 atlas = ExtResource("7_c2jje")
@@ -117,8 +187,40 @@ region = Rect2(256, 0, 64, 80)
 atlas = ExtResource("7_c2jje")
 region = Rect2(320, 0, 64, 80)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_l0ds2"]
+atlas = ExtResource("9_hrltk")
+region = Rect2(0, 0, 80, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2b7yf"]
+atlas = ExtResource("9_hrltk")
+region = Rect2(80, 0, 80, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ir60l"]
+atlas = ExtResource("9_hrltk")
+region = Rect2(160, 0, 80, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c4g6k"]
+atlas = ExtResource("9_hrltk")
+region = Rect2(240, 0, 80, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bdb3v"]
+atlas = ExtResource("9_hrltk")
+region = Rect2(320, 0, 80, 96)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kayga"]
+atlas = ExtResource("9_hrltk")
+region = Rect2(400, 0, 80, 96)
+
 [sub_resource type="SpriteFrames" id="SpriteFrames_vf01q"]
 animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uk4hd")
+}],
+"loop": true,
+"name": &"shield_idle",
+"speed": 5.0
+}, {
 "frames": [{
 "duration": 1.0,
 "texture": SubResource("AtlasTexture_i6pmf")
@@ -140,6 +242,29 @@ animations = [{
 }],
 "loop": true,
 "name": &"walk",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_l0ds2")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2b7yf")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ir60l")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c4g6k")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bdb3v")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kayga")
+}],
+"loop": true,
+"name": &"walk_w_shield",
 "speed": 10.0
 }]
 
@@ -9650,6 +9775,56 @@ sources/1 = SubResource("TileSetAtlasSource_0a3yq")
 sources/2 = SubResource("TileSetAtlasSource_nsqpp")
 sources/3 = SubResource("TileSetAtlasSource_kpevg")
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_lrlxs"]
+atlas = ExtResource("28_13ave")
+region = Rect2(0, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_gptq4"]
+atlas = ExtResource("28_13ave")
+region = Rect2(48, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k0tfi"]
+atlas = ExtResource("28_13ave")
+region = Rect2(96, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bd4ho"]
+atlas = ExtResource("28_13ave")
+region = Rect2(144, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_q5wiq"]
+atlas = ExtResource("28_13ave")
+region = Rect2(192, 0, 48, 64)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vf01q"]
+atlas = ExtResource("28_13ave")
+region = Rect2(240, 0, 48, 64)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_hwxhv"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_lrlxs")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_gptq4")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k0tfi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_bd4ho")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_q5wiq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vf01q")
+}],
+"loop": false,
+"name": &"fill",
+"speed": 10.0
+}]
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_411r1"]
 texture = ExtResource("1_kjqpv")
 2:0/0 = 0
@@ -10341,6 +10516,81 @@ sources/2 = SubResource("TileSetAtlasSource_c2jje")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qqy8t"]
 size = Vector2(64, 16)
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_36lok"]
+atlas = ExtResource("24_rkcg2")
+region = Rect2(0, 0, 64, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_txhgw"]
+atlas = ExtResource("24_rkcg2")
+region = Rect2(64, 0, 64, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_u7fyu"]
+atlas = ExtResource("24_rkcg2")
+region = Rect2(128, 0, 64, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_a0e2x"]
+atlas = ExtResource("24_rkcg2")
+region = Rect2(192, 0, 64, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_j80iy"]
+atlas = ExtResource("24_rkcg2")
+region = Rect2(192, 0, 64, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_syhiq"]
+atlas = ExtResource("24_rkcg2")
+region = Rect2(128, 0, 64, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vwnwm"]
+atlas = ExtResource("24_rkcg2")
+region = Rect2(64, 0, 64, 40)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_np6wr"]
+atlas = ExtResource("24_rkcg2")
+region = Rect2(0, 0, 64, 40)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_sc6je"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_36lok")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_txhgw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_u7fyu")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_a0e2x")
+}],
+"loop": false,
+"name": &"down",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_j80iy")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_syhiq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vwnwm")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_np6wr")
+}],
+"loop": false,
+"name": &"up",
+"speed": 10.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_im44d"]
+size = Vector2(48.000183, 17.599995)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_rkcg2"]
+size = Vector2(48.000305, 15.200014)
+
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_l3n66"]
 texture = ExtResource("1_kjqpv")
 2:0/0 = 0
@@ -10887,8 +11137,10 @@ texture = ExtResource("1_kjqpv")
 4:1/0 = 0
 5:1/0 = 0
 5:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8, -8, -8)
+5:1/0/physics_layer_0/polygon_0/one_way = true
 6:1/0 = 0
 6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
+6:1/0/physics_layer_0/polygon_0/one_way = true
 7:1/0 = 0
 8:1/0 = 0
 9:1/0 = 0
@@ -11035,7 +11287,69 @@ physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_i6pmf")
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4og5j"]
-size = Vector2(132.80037, 131.72504)
+size = Vector2(174.49997, 174.40004)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_sc6je"]
+atlas = ExtResource("25_im44d")
+region = Rect2(0, 0, 48, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_vwxdw"]
+atlas = ExtResource("25_im44d")
+region = Rect2(48, 0, 48, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_k4ino"]
+atlas = ExtResource("25_im44d")
+region = Rect2(96, 0, 48, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ybyva"]
+atlas = ExtResource("25_im44d")
+region = Rect2(144, 0, 48, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_stihg"]
+atlas = ExtResource("25_im44d")
+region = Rect2(192, 0, 48, 128)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_rtdiv"]
+atlas = ExtResource("25_im44d")
+region = Rect2(240, 0, 48, 128)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_u7fyu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_sc6je")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_vwxdw")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_k4ino")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ybyva")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_stihg")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_rtdiv")
+}],
+"loop": false,
+"name": &"down",
+"speed": 5.0
+}]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_13ave"]
+size = Vector2(20, 122.399994)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_4u6g1"]
+size = Vector2(105.42792, 277.60004)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l0ds2"]
+size = Vector2(104.79996, 312.29984)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_2b7yf"]
+size = Vector2(105.45502, 314.74988)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qrvlp"]
 size = Vector2(19, 856.14996)
@@ -11052,10 +11366,14 @@ size = Vector2(151.59985, 73.80001)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_x8c52"]
 size = Vector2(138.39941, 92)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_vhqpk"]
+size = Vector2(191.59985, 106.00002)
+
 [node name="RoomTwo" type="Node2D" unique_id=1614500363]
 scale = Vector2(2.5, 2.5)
 script = ExtResource("1_4te54")
-metadata/_edit_horizontal_guides_ = [3064.0]
+metadata/_edit_horizontal_guides_ = [3064.0, -1.0]
+metadata/_edit_vertical_guides_ = [67.0, 9569.0, 10269.0, 11049.0, 11839.0]
 
 [node name="ParallaxBackground" type="ParallaxBackground" parent="." unique_id=1631136592]
 
@@ -11079,9 +11397,9 @@ sprite_frames = SubResource("SpriteFrames_4te54")
 autoplay = "default"
 frame_progress = 1.0
 
-[node name="EndDoor2" type="AnimatedSprite2D" parent="Doors" unique_id=479440990]
+[node name="EndDoor" type="AnimatedSprite2D" parent="Doors" unique_id=479440990]
 texture_filter = 1
-position = Vector2(5296.8, -240.80002)
+position = Vector2(5294, -209.59999)
 scale = Vector2(0.75, 0.75)
 sprite_frames = SubResource("SpriteFrames_4te54")
 autoplay = "default"
@@ -11092,7 +11410,7 @@ position = Vector2(9.1552734e-05, 0)
 scale = Vector2(0.9999998, 0.9999998)
 
 [node name="Sol" type="CharacterBody2D" parent="Players" unique_id=1261697106 groups=["players"]]
-position = Vector2(2252.33, 8.77)
+position = Vector2(3000, -269.42)
 scale = Vector2(0.1, 0.1)
 script = ExtResource("3_qrvlp")
 
@@ -11102,7 +11420,6 @@ position = Vector2(-1.695282, -45.300034)
 scale = Vector2(5.5462375, 6.632501)
 sprite_frames = SubResource("SpriteFrames_qqy8t")
 animation = &"walk"
-frame_progress = 0.12813978
 
 [node name="Camera2D" type="Camera2D" parent="Players/Sol" unique_id=2126147581]
 position = Vector2(-1.6943359, -4.5776367e-05)
@@ -11119,7 +11436,7 @@ scale = Vector2(0.9999996, 0.9999996)
 shape = SubResource("RectangleShape2D_bs57x")
 
 [node name="Luna" type="CharacterBody2D" parent="Players" unique_id=1450521674 groups=["players"]]
-position = Vector2(2213.5, 3.6)
+position = Vector2(3000, -228.08)
 scale = Vector2(0.030000003, 0.030000003)
 script = ExtResource("5_411r1")
 
@@ -11129,7 +11446,6 @@ position = Vector2(0.014022827, -101.47167)
 scale = Vector2(22.033382, 20.870121)
 sprite_frames = SubResource("SpriteFrames_vf01q")
 animation = &"walk"
-frame_progress = 0.68367183
 
 [node name="Camera2D" type="Camera2D" parent="Players/Luna" unique_id=522354781]
 
@@ -11145,15 +11461,26 @@ width = 2.0
 
 [node name="BeginningFloor" type="TileMapLayer" parent="Course" unique_id=655996685]
 position = Vector2(0, 58)
-tile_map_data = PackedByteArray("AAAAAP//AAAFAAEAAAABAP//AAAGAAEAAAACAP//AAAFAAEAAAADAP//AAAGAAEAAAAEAP//AAAFAAEAAAAFAP//AAAGAAEAAAAGAP//AAAFAAEAAAAHAP//AAAGAAEAAAAIAP//AAAFAAEAAAAJAP//AAAGAAEAAAAKAP//AAAFAAEAAAALAP//AAAGAAEAAAAMAP//AAAFAAEAAAANAP//AAAGAAEAAAAOAP//AAAFAAEAAAAPAP//AAAGAAEAAAAQAP//AAAFAAEAAAARAP//AAAGAAEAAAASAP//AAAFAAEAAAATAP//AAAGAAEAAAAUAP//AAAFAAEAAAAVAP//AAAGAAEAAAAWAP//AAAFAAEAAAAXAP//AAAGAAEAAAAYAP//AAAFAAEAAAAZAP//AAAGAAEAAAAaAP//AAAFAAEAAAAbAP//AAAGAAEAAAAcAP//AAAFAAEAAAAdAP//AAAGAAEAAAAeAP//AAAFAAEAAAAfAP//AAAGAAEAAAAgAP//AAAFAAEAAAAhAP//AAAGAAEAAAAiAP//AAAFAAEAAAAjAP//AAAGAAEAAAAkAP//AAAFAAEAAAAlAP//AAAGAAEAAAAmAP//AAAFAAEAAAAnAP//AAAGAAEAAAAoAP//AAAFAAEAAAApAP//AAAGAAEAAAAqAP//AAAFAAEAAAArAP//AAAGAAEAAAAsAP//AAAFAAEAAAAtAP//AAAGAAEAAAAuAP//AAAFAAEAAAAvAP//AAAGAAEAAAAwAP//AAAFAAEAAAAxAP//AAAGAAEAAAAyAP//AAAFAAEAAAAzAP//AAAGAAEAAAA0AP//AAAFAAEAAAA1AP//AAAGAAEAAAA2AP//AAAFAAEAAAA3AP//AAAGAAEAAAA4AP//AAAFAAEAAAA5AP//AAAGAAEAAAA6AP//AAAFAAEAAAA7AP//AAAGAAEAAAA8AP//AAAFAAEAAAA9AP//AAAGAAEAAAA+AP//AAAFAAEAAAA/AP//AAAGAAEAAABAAP//AAAFAAEAAABBAP//AAAGAAEAAABCAP//AAAFAAEAAABDAP//AAAGAAEAAABEAP//AAAFAAEAAABFAP//AAAGAAEAAABGAP//AAAFAAEAAABHAP//AAAGAAEAAAA=")
+tile_map_data = PackedByteArray("AAACAP//AAAFAAEAAAADAP//AAAGAAEAAAAEAP//AAAFAAEAAAAFAP//AAAGAAEAAAAGAP//AAAFAAEAAAAHAP//AAAGAAEAAAAIAP//AAAFAAEAAAAJAP//AAAGAAEAAAAKAP//AAAFAAEAAAALAP//AAAGAAEAAAAMAP//AAAFAAEAAAANAP//AAAGAAEAAAAOAP//AAAFAAEAAAAPAP//AAAGAAEAAAAQAP//AAAFAAEAAAARAP//AAAGAAEAAAASAP//AAAFAAEAAAATAP//AAAGAAEAAAAUAP//AAAFAAEAAAAVAP//AAAGAAEAAAAWAP//AAAFAAEAAAAXAP//AAAGAAEAAAAYAP//AAAFAAEAAAAZAP//AAAGAAEAAAAaAP//AAAFAAEAAAAbAP//AAAGAAEAAAAcAP//AAAFAAEAAAAdAP//AAAGAAEAAAAeAP//AAAFAAEAAAAfAP//AAAGAAEAAAAgAP//AAAFAAEAAAAhAP//AAAGAAEAAAAiAP//AAAFAAEAAAAjAP//AAAGAAEAAAAkAP//AAAFAAEAAAAlAP//AAAGAAEAAAAmAP//AAAFAAEAAAAnAP//AAAGAAEAAAAoAP//AAAFAAEAAAApAP//AAAGAAEAAAAqAP//AAAFAAEAAAArAP//AAAGAAEAAAAsAP//AAAFAAEAAAAtAP//AAAGAAEAAAAuAP//AAAFAAEAAAAvAP//AAAGAAEAAAAwAP//AAAFAAEAAAAxAP//AAAGAAEAAAAyAP//AAAFAAEAAAAzAP//AAAGAAEAAAA0AP//AAAFAAEAAAA1AP//AAAGAAEAAAA2AP//AAAFAAEAAAA3AP//AAAGAAEAAAA4AP//AAAFAAEAAAA5AP//AAAGAAEAAAA6AP//AAAFAAEAAAA7AP//AAAGAAEAAAA8AP//AAAFAAEAAAA9AP//AAAGAAEAAAA+AP//AAAFAAEAAAA/AP//AAAGAAEAAABAAP//AAAFAAEAAABBAP//AAAGAAEAAABCAP//AAAFAAEAAABDAP//AAAGAAEAAABEAP//AAAFAAEAAABFAP//AAAGAAEAAABGAP//AAAFAAEAAABHAP//AAAGAAEAAAABAP//AAAGAAEAAAAAAP//AAAFAAEAAAA=")
 tile_set = SubResource("TileSet_qrvlp")
 
 [node name="EndingFloor" type="TileMapLayer" parent="Course" unique_id=1951709083]
 position = Vector2(4750, 58)
-tile_map_data = PackedByteArray("AAD///P/AAAFAAEAAAAAAPP/AAAGAAEAAAABAPP/AAAFAAEAAAACAPP/AAAGAAEAAAADAPP/AAAFAAEAAAAEAPP/AAAGAAEAAAAFAPP/AAAFAAEAAAAGAPP/AAAGAAEAAAAHAPP/AAAFAAEAAAAIAPP/AAAGAAEAAAAJAPP/AAAFAAEAAAAKAPP/AAAGAAEAAAALAPP/AAAFAAEAAAAMAPP/AAAGAAEAAAANAPP/AAAFAAEAAAAOAPP/AAAGAAEAAAAPAPP/AAAFAAEAAAAQAPP/AAAGAAEAAAARAPP/AAAFAAEAAAASAPP/AAAGAAEAAAATAPP/AAAFAAEAAAAUAPP/AAAGAAEAAAAVAPP/AAAFAAEAAAAWAPP/AAAGAAEAAAAXAPP/AAAFAAEAAAAYAPP/AAAGAAEAAAAZAPP/AAAFAAEAAAAaAPP/AAAGAAEAAAAbAPP/AAAFAAEAAAAcAPP/AAAGAAEAAAAdAPP/AAAFAAEAAAAeAPP/AAAGAAEAAAAfAPP/AAAFAAEAAAAgAPP/AAAGAAEAAAAhAPP/AAAFAAEAAAAiAPP/AAAGAAEAAAAjAPP/AAAFAAEAAAAkAPP/AAAGAAEAAAAlAPP/AAAFAAEAAAAmAPP/AAAGAAEAAAAnAPP/AAAFAAEAAAAoAPP/AAAGAAEAAAApAPP/AAAFAAEAAAAqAPP/AAAGAAEAAAArAPP/AAAFAAEAAAAsAPP/AAAGAAEAAAAtAPP/AAAFAAEAAAAuAPP/AAAGAAEAAAAvAPP/AAAFAAEAAAAwAPP/AAAGAAEAAAAxAPP/AAAFAAEAAAAyAPP/AAAGAAEAAAAzAPP/AAAFAAEAAAA0APP/AAAGAAEAAAA1APP/AAAFAAEAAAA2APP/AAAGAAEAAAA3APP/AAAFAAEAAAA4APP/AAAGAAEAAAA5APP/AAAFAAEAAAA6APP/AAAGAAEAAAA7APP/AAAFAAEAAAA8APP/AAAGAAEAAAA9APP/AAAFAAEAAAA+APP/AAAGAAEAAAA/APP/AAAFAAEAAABAAPP/AAAGAAEAAABBAPP/AAAFAAEAAABCAPP/AAAGAAEAAABDAPP/AAAFAAEAAABEAPP/AAAGAAEAAABFAPP/AAAFAAEAAABGAPP/AAAGAAEAAAA=")
+tile_map_data = PackedByteArray("AAD///X/AAAFAAEAAAAAAPX/AAAGAAEAAAABAPX/AAAFAAEAAAACAPX/AAAGAAEAAAADAPX/AAAFAAEAAAAEAPX/AAAGAAEAAAAFAPX/AAAFAAEAAAAGAPX/AAAGAAEAAAAHAPX/AAAFAAEAAAAIAPX/AAAGAAEAAAAJAPX/AAAFAAEAAAAKAPX/AAAGAAEAAAALAPX/AAAFAAEAAAAMAPX/AAAGAAEAAAANAPX/AAAFAAEAAAAOAPX/AAAGAAEAAAAPAPX/AAAFAAEAAAAQAPX/AAAGAAEAAAARAPX/AAAFAAEAAAASAPX/AAAGAAEAAAATAPX/AAAFAAEAAAAUAPX/AAAGAAEAAAAVAPX/AAAFAAEAAAAWAPX/AAAGAAEAAAAXAPX/AAAFAAEAAAAYAPX/AAAGAAEAAAAZAPX/AAAFAAEAAAAaAPX/AAAGAAEAAAAbAPX/AAAFAAEAAAAcAPX/AAAGAAEAAAAdAPX/AAAFAAEAAAAeAPX/AAAGAAEAAAAfAPX/AAAFAAEAAAAgAPX/AAAGAAEAAAAhAPX/AAAFAAEAAAAiAPX/AAAGAAEAAAAjAPX/AAAFAAEAAAAkAPX/AAAGAAEAAAAlAPX/AAAFAAEAAAAmAPX/AAAGAAEAAAAnAPX/AAAFAAEAAAAoAPX/AAAGAAEAAAApAPX/AAAFAAEAAAAqAPX/AAAGAAEAAAArAPX/AAAFAAEAAAAsAPX/AAAGAAEAAAAtAPX/AAAFAAEAAAAuAPX/AAAGAAEAAAAvAPX/AAAFAAEAAAAwAPX/AAAGAAEAAAAxAPX/AAAFAAEAAAAyAPX/AAAGAAEAAAAzAPX/AAAFAAEAAAA0APX/AAAGAAEAAAA1APX/AAAFAAEAAAA2APX/AAAGAAEAAAA3APX/AAAFAAEAAAA4APX/AAAGAAEAAAA5APX/AAAFAAEAAAA6APX/AAAGAAEAAAA7APX/AAAFAAEAAAA8APX/AAAGAAEAAAA9APX/AAAFAAEAAAA+APX/AAAGAAEAAAA/APX/AAAFAAEAAABAAPX/AAAGAAEAAABBAPX/AAAFAAEAAABCAPX/AAAGAAEAAABDAPX/AAAFAAEAAABEAPX/AAAGAAEAAABFAPX/AAAFAAEAAABGAPX/AAAGAAEAAAA=")
 tile_set = SubResource("TileSet_qrvlp")
 
 [node name="AreaOne" type="Node2D" parent="Course" unique_id=1463200024]
+
+[node name="EnergyNode" type="Node2D" parent="Course/AreaOne" unique_id=552819400]
+texture_filter = 1
+position = Vector2(2322.2, -124.51)
+scale = Vector2(0.9999998, 0.9999998)
+script = ExtResource("28_vhqpk")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Course/AreaOne/EnergyNode" unique_id=1002870189]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_hwxhv")
+animation = &"fill"
 
 [node name="Wall" type="TileMapLayer" parent="Course/AreaOne" unique_id=2112869616]
 tile_map_data = PackedByteArray("AACIAAIAAAAFAAEAAACJAAIAAAAGAAEAAACKAAIAAAAFAAEAAACLAAIAAAAGAAEAAACMAAIAAAAFAAEAAACNAAIAAAAGAAEAAACOAAIAAAAFAAEAAACPAAIAAAAGAAEAAACQAAIAAAAFAAEAAACRAAIAAAAGAAEAAAA=")
@@ -11175,7 +11502,70 @@ tile_set = SubResource("TileSet_gxhhh")
 position = Vector2(1380, -13)
 shape = SubResource("RectangleShape2D_qqy8t")
 
+[node name="PressurePlate" type="Node2D" parent="Course/AreaOne" unique_id=829553216]
+position = Vector2(2251.51, 16.33)
+scale = Vector2(0.9999998, 0.9999998)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Course/AreaOne/PressurePlate" unique_id=826003354]
+texture_filter = 1
+position = Vector2(0, -0.3999939)
+scale = Vector2(0.99999976, 0.99999976)
+sprite_frames = SubResource("SpriteFrames_sc6je")
+animation = &"down"
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Course/AreaOne/PressurePlate" unique_id=1228412505]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaOne/PressurePlate/StaticBody2D" unique_id=73070687]
+position = Vector2(0, 2.4000015)
+scale = Vector2(0.99999976, 0.99999976)
+shape = SubResource("RectangleShape2D_im44d")
+
+[node name="Area2D" type="Area2D" parent="Course/AreaOne/PressurePlate" unique_id=1900237480]
+script = ExtResource("24_im44d")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaOne/PressurePlate/Area2D" unique_id=744936065]
+position = Vector2(0, -14)
+scale = Vector2(0.99999976, 0.99999976)
+shape = SubResource("RectangleShape2D_rkcg2")
+
 [node name="AreaTwo" type="Node2D" parent="Course" unique_id=949437694]
+
+[node name="EnergyNode" type="Node2D" parent="Course/AreaTwo" unique_id=1998153720]
+texture_filter = 1
+position = Vector2(3585.47, -82.79)
+scale = Vector2(0.99999994, 0.99999994)
+script = ExtResource("28_vhqpk")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Course/AreaTwo/EnergyNode" unique_id=834440454]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_hwxhv")
+animation = &"fill"
+
+[node name="PressurePlate" type="Node2D" parent="Course/AreaTwo" unique_id=375059232]
+position = Vector2(3500, 16.33)
+scale = Vector2(0.99999994, 0.99999994)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Course/AreaTwo/PressurePlate" unique_id=1168520403]
+texture_filter = 1
+position = Vector2(0, -0.3999939)
+scale = Vector2(0.99999976, 0.99999976)
+sprite_frames = SubResource("SpriteFrames_sc6je")
+animation = &"down"
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Course/AreaTwo/PressurePlate" unique_id=688939469]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaTwo/PressurePlate/StaticBody2D" unique_id=960269431]
+position = Vector2(0, 2.4000015)
+scale = Vector2(0.99999976, 0.99999976)
+shape = SubResource("RectangleShape2D_im44d")
+
+[node name="Area2D" type="Area2D" parent="Course/AreaTwo/PressurePlate" unique_id=1133833986]
+script = ExtResource("24_im44d")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaTwo/PressurePlate/Area2D" unique_id=2009494790]
+position = Vector2(0, -14)
+scale = Vector2(0.99999976, 0.99999976)
+shape = SubResource("RectangleShape2D_rkcg2")
 
 [node name="Layout" type="TileMapLayer" parent="Course/AreaTwo" unique_id=1088713690]
 tile_map_data = PackedByteArray("AACRAAIAAAAEAAEAAACRAAEAAAAGAAAAAACRAAAAAAADAAAAAACSAAAAAAAFAAAAAACTAAAAAAAFAAAAAACUAAAAAAAFAAAAAACVAAAAAAAFAAAAAACWAAAAAAAFAAAAAACXAAAAAAAFAAAAAACYAAAAAAAFAAAAAACZAAAAAAAFAAAAAACaAAAAAAAFAAAAAACbAAAAAAAFAAAAAACcAAAAAAAFAAAAAACdAAAAAAAFAAAAAACeAAAAAAAFAAAAAACfAAAAAAAFAAAAAACgAAAAAAAFAAAAAAChAAAAAAAGAAEAAAC3APT/AAAFAAEAAAC4APT/AAAGAAEAAAC5APT/AAAFAAEAAAC6APT/AAAGAAEAAAC7APT/AAAFAAEAAAC8APT/AAAGAAEAAAC9APT/AAAFAAEAAAC+APT/AAAGAAEAAAA=")
@@ -11233,9 +11623,14 @@ offset_bottom = 40.0
 script = ExtResource("18_ys3rg")
 
 [node name="TextureRect" type="TextureRect" parent="Course/AreaTwo/CanvasLayer/ShieldPopUp" unique_id=1017155197]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = 997.0
+offset_top = 614.0
+offset_right = 2017.0
+offset_bottom = 890.0
 texture = ExtResource("19_l16gl")
 
 [node name="AreaThree" type="Node2D" parent="Course" unique_id=1196799887]
@@ -11244,25 +11639,127 @@ texture = ExtResource("19_l16gl")
 tile_map_data = PackedByteArray("AADUAAIAAAAFAAEAAADVAAIAAAAGAAEAAADWAAIAAAAFAAEAAADXAAIAAAAGAAEAAADYAAIAAAAFAAEAAADZAAIAAAAGAAEAAADaAAIAAAAFAAEAAADbAAIAAAAGAAEAAADcAAIAAAAFAAEAAADdAAIAAAAGAAEAAADeAAIAAAAFAAEAAADfAAIAAAAGAAEAAADgAAIAAAAFAAEAAADhAAIAAAAGAAEAAADiAAIAAAAFAAEAAADjAAIAAAAGAAEAAADkAAIAAAAFAAEAAADlAAIAAAAGAAEAAADmAAIAAAAFAAEAAADnAAIAAAAGAAEAAADoAAIAAAAFAAEAAADpAAIAAAAGAAEAAADqAAIAAAAFAAEAAADrAAIAAAAGAAEAAADsAAIAAAAFAAEAAADtAAIAAAAGAAEAAADuAAIAAAAFAAEAAADvAAIAAAAGAAEAAADwAAIAAAAFAAEAAADxAAIAAAAGAAEAAADyAAIAAAAFAAEAAADzAAIAAAAGAAEAAAD0AAIAAAAFAAEAAAD1AAIAAAAGAAEAAAD2AAIAAAAFAAEAAAD3AAIAAAAGAAEAAAD4AAIAAAAFAAEAAAD5AAIAAAAGAAEAAAD6AAIAAAAFAAEAAAD7AAIAAAAGAAEAAAD8AAIAAAAFAAEAAAD9AAIAAAAGAAEAAAD+AAIAAAAFAAEAAAD/AAIAAAAGAAEAAAAAAQIAAAAFAAEAAAABAQIAAAAGAAEAAAACAQIAAAAFAAEAAAADAQIAAAAGAAEAAAAEAQIAAAAFAAEAAAAFAQIAAAAGAAEAAAAGAQIAAAAFAAEAAAAHAQIAAAAGAAEAAAAIAQIAAAAFAAEAAAAJAQIAAAAGAAEAAAAKAQIAAAAFAAEAAAALAQIAAAAGAAEAAAAMAQIAAAAFAAEAAAANAQIAAAAGAAEAAAAOAQIAAAAFAAEAAAAPAQIAAAAGAAEAAAAQAQIAAAAFAAEAAAARAQIAAAAGAAEAAAASAQIAAAAFAAEAAAATAQIAAAAGAAEAAAAUAQIAAAAFAAEAAAAVAQIAAAAGAAEAAAAWAQIAAAAFAAEAAAAXAQIAAAAGAAEAAAAYAQIAAAAFAAEAAAAZAQIAAAAGAAEAAAAaAQIAAAAFAAEAAAAbAQIAAAAGAAEAAAAcAQIAAAAFAAEAAAAdAQIAAAAGAAEAAAAeAQIAAAAFAAEAAAAfAQIAAAAGAAEAAAAgAQIAAAAFAAEAAAAhAQIAAAAGAAEAAAAiAQIAAAAFAAEAAAAjAQIAAAAGAAEAAAAkAQIAAAAFAAEAAAAlAQIAAAAGAAEAAAAmAQIAAAAFAAEAAAAnAQIAAAAGAAEAAAA=")
 tile_set = SubResource("TileSet_x8c52")
 
-[node name="ElectricCharges" type="Node2D" parent="Course/AreaThree" unique_id=119298763]
-script = ExtResource("18_i6pmf")
-
 [node name="Area2D" type="RigidBody2D" parent="Course/AreaThree" unique_id=1602548057]
-position = Vector2(4266.4, -40.8)
+position = Vector2(3736.01, -356.16)
 scale = Vector2(0.99999994, 0.99999994)
 mass = 5.0
+gravity_scale = 2.0
 linear_damp = 5.0
 
 [node name="MetalBox" type="Sprite2D" parent="Course/AreaThree/Area2D" unique_id=606068378]
 texture_filter = 1
-position = Vector2(-82.55002, -156.94994)
-scale = Vector2(3.3171873, 3.3171873)
+scale = Vector2(4.367191, 4.367191)
 texture = ExtResource("19_x8c52")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaThree/Area2D" unique_id=1372373176]
-position = Vector2(-83.200195, -143.46251)
+position = Vector2(0, 17.599993)
 scale = Vector2(0.9999998, 0.9999998)
 shape = SubResource("RectangleShape2D_4og5j")
+
+[node name="PressurePlate" type="Node2D" parent="Course/AreaThree" unique_id=1292083483]
+position = Vector2(4838, -129.6)
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Course/AreaThree/PressurePlate" unique_id=1433107129]
+texture_filter = 1
+position = Vector2(0, -0.3999939)
+scale = Vector2(0.99999976, 0.99999976)
+sprite_frames = SubResource("SpriteFrames_sc6je")
+animation = &"down"
+
+[node name="StaticBody2D" type="StaticBody2D" parent="Course/AreaThree/PressurePlate" unique_id=1134397558]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaThree/PressurePlate/StaticBody2D" unique_id=1106317771]
+position = Vector2(0, 2.4000015)
+scale = Vector2(0.99999976, 0.99999976)
+shape = SubResource("RectangleShape2D_im44d")
+
+[node name="Area2D" type="Area2D" parent="Course/AreaThree/PressurePlate" unique_id=1487043622]
+script = ExtResource("24_im44d")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaThree/PressurePlate/Area2D" unique_id=900761966]
+position = Vector2(0, -14)
+scale = Vector2(0.99999976, 0.99999976)
+shape = SubResource("RectangleShape2D_rkcg2")
+
+[node name="Ladder" type="Node2D" parent="Course/AreaThree" unique_id=1555725816]
+position = Vector2(4750, -52.41)
+script = ExtResource("25_4h5sc")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Course/AreaThree/Ladder" unique_id=360102436]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_u7fyu")
+animation = &"down"
+
+[node name="ClimbArea" type="Area2D" parent="Course/AreaThree/Ladder" unique_id=1055399326]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaThree/Ladder/ClimbArea" unique_id=1651663879]
+position = Vector2(0, -2.7899895)
+scale = Vector2(0.9999998, 0.9999998)
+shape = SubResource("RectangleShape2D_13ave")
+
+[node name="EnergyNode" type="Node2D" parent="Course/AreaThree" unique_id=627549039]
+texture_filter = 1
+position = Vector2(4926.97, -215.35)
+script = ExtResource("28_vhqpk")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Course/AreaThree/EnergyNode" unique_id=140777846]
+texture_filter = 1
+sprite_frames = SubResource("SpriteFrames_hwxhv")
+animation = &"fill"
+
+[node name="LaserRow" type="Node2D" parent="Course/AreaThree" unique_id=342101580]
+
+[node name="Laser1" type="Node2D" parent="Course/AreaThree/LaserRow" unique_id=243716828 groups=["lasers"]]
+position = Vector2(3972.14, -300)
+rotation = 1.5707964
+script = ExtResource("29_13ave")
+
+[node name="RayCast2D" type="RayCast2D" parent="Course/AreaThree/LaserRow/Laser1" unique_id=429674349]
+
+[node name="Line2D" type="Line2D" parent="Course/AreaThree/LaserRow/Laser1" unique_id=1224561506]
+width = 5.0
+
+[node name="DetectionArea" type="Area2D" parent="Course/AreaThree/LaserRow/Laser1" unique_id=2041744057]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaThree/LaserRow/Laser1/DetectionArea" unique_id=1681983801]
+position = Vector2(281.1139, 4.9399414)
+scale = Vector2(0.99999976, 0.99999976)
+shape = SubResource("RectangleShape2D_4u6g1")
+
+[node name="Laser2" type="Node2D" parent="Course/AreaThree/LaserRow" unique_id=426004124 groups=["lasers"]]
+position = Vector2(4273.14, -300)
+rotation = 1.5707964
+script = ExtResource("29_13ave")
+
+[node name="RayCast2D" type="RayCast2D" parent="Course/AreaThree/LaserRow/Laser2" unique_id=287120112]
+scale = Vector2(0.9999998, 0.9999998)
+
+[node name="Line2D" type="Line2D" parent="Course/AreaThree/LaserRow/Laser2" unique_id=53646453]
+width = 5.0
+
+[node name="DetectionArea" type="Area2D" parent="Course/AreaThree/LaserRow/Laser2" unique_id=1027014563]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaThree/LaserRow/Laser2/DetectionArea" unique_id=511560208]
+position = Vector2(280.3999, 9.691406)
+scale = Vector2(0.99999976, 0.99999976)
+shape = SubResource("RectangleShape2D_l0ds2")
+
+[node name="Laser3" type="Node2D" parent="Course/AreaThree/LaserRow" unique_id=1983614056 groups=["lasers"]]
+position = Vector2(4578.08, -300)
+rotation = 1.5707964
+script = ExtResource("29_13ave")
+
+[node name="RayCast2D" type="RayCast2D" parent="Course/AreaThree/LaserRow/Laser3" unique_id=1038760152]
+
+[node name="Line2D" type="Line2D" parent="Course/AreaThree/LaserRow/Laser3" unique_id=1714771695]
+width = 5.0
+
+[node name="DetectionArea" type="Area2D" parent="Course/AreaThree/LaserRow/Laser3" unique_id=54346909]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaThree/LaserRow/Laser3/DetectionArea" unique_id=670758801]
+position = Vector2(280.72748, -0.14501953)
+scale = Vector2(0.99999976, 0.99999976)
+shape = SubResource("RectangleShape2D_2b7yf")
 
 [node name="Borders" type="Node2D" parent="." unique_id=320020824]
 
@@ -11291,32 +11788,6 @@ shape = SubResource("RectangleShape2D_1ywa5")
 position = Vector2(3022.4, 427.19998)
 shape = SubResource("RectangleShape2D_1ywa5")
 
-[node name="PowerNodes" type="CanvasLayer" parent="." unique_id=1754137034]
-offset = Vector2(1.78, 0)
-transform = Transform2D(1, 0, 0, 1, 1.78, 0)
-
-[node name="HBoxContainer" type="HBoxContainer" parent="PowerNodes" unique_id=789539623]
-anchors_preset = -1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -208.0
-offset_top = 20.0
-offset_right = -12.0
-offset_bottom = 69.0
-grow_horizontal = 0
-
-[node name="TextureRect2" type="TextureRect" parent="PowerNodes/HBoxContainer" unique_id=2077954410]
-layout_mode = 2
-texture = ExtResource("8_411r1")
-
-[node name="TextureRect3" type="TextureRect" parent="PowerNodes/HBoxContainer" unique_id=292541568]
-layout_mode = 2
-texture = ExtResource("8_411r1")
-
-[node name="TextureRect4" type="TextureRect" parent="PowerNodes/HBoxContainer" unique_id=771512171]
-layout_mode = 2
-texture = ExtResource("8_411r1")
-
 [node name="KillZone" type="Node2D" parent="." unique_id=410525483]
 
 [node name="Area2D" type="Area2D" parent="KillZone" unique_id=530582719]
@@ -11330,22 +11801,26 @@ shape = SubResource("RectangleShape2D_kpevg")
 [node name="Checkpoints" type="Node2D" parent="." unique_id=1335726371]
 
 [node name="CheckpointOne" type="Area2D" parent="Checkpoints" unique_id=201600650]
+position = Vector2(998.59, 4.01)
 script = ExtResource("20_kpevg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/CheckpointOne" unique_id=1815792219]
-position = Vector2(1073.2, 2.0999982)
 scale = Vector2(0.99999976, 0.99999976)
 shape = SubResource("RectangleShape2D_i6pmf")
 
 [node name="CheckpointTwo" type="Area2D" parent="Checkpoints" unique_id=61054184]
+position = Vector2(2393.3, -47.72)
 script = ExtResource("20_kpevg")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/CheckpointTwo" unique_id=1878399570]
-position = Vector2(2248.3992, -16.799994)
 scale = Vector2(0.99999976, 0.99999976)
 shape = SubResource("RectangleShape2D_x8c52")
 
 [node name="CheckpointThree" type="Area2D" parent="Checkpoints" unique_id=1129371580]
+position = Vector2(3732.66, -19.03)
 script = ExtResource("20_kpevg")
+activates_lasers = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/CheckpointThree" unique_id=2135140413]
+scale = Vector2(0.99999976, 0.99999976)
+shape = SubResource("RectangleShape2D_vhqpk")
