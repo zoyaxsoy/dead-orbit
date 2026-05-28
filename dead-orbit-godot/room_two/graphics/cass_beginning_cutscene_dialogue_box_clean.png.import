@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cc2d5aqtpw5vj"
-path="res://.godot/imported/room3_sol_eva_shield_pose_sheet.png-ab4cc916706615f43a0775bbf1f9c747.ctex"
+uid="uid://bgwyjcjolu3mo"
+path="res://.godot/imported/cass_beginning_cutscene_dialogue_box_clean.png-5d8a2b533433c80fa32ac662a972cd49.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://room_two/graphics/room3_sol_eva_shield_pose_sheet.png"
-dest_files=["res://.godot/imported/room3_sol_eva_shield_pose_sheet.png-ab4cc916706615f43a0775bbf1f9c747.ctex"]
+source_file="res://room_two/graphics/cass_beginning_cutscene_dialogue_box_clean.png"
+dest_files=["res://.godot/imported/cass_beginning_cutscene_dialogue_box_clean.png-5d8a2b533433c80fa32ac662a972cd49.ctex"]
 
 [params]
 
