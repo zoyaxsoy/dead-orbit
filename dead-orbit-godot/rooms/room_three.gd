@@ -72,6 +72,10 @@ var sealed_breach_count: int = 0
 var completed: bool = false
 var status_time: float = 0.0
 var blink_time: float = 0.0
+var room_four_transition_started: bool = false
+var room_four_transition_elapsed: float = 0.0
+var room_four_transition_overlay: ColorRect
+var room_four_transition_label: Label
 
 func _ready() -> void:
 	_build_level_data()
@@ -89,6 +93,8 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	blink_time += delta
 	status_time = maxf(0.0, status_time - delta)
+	if room_four_transition_started:
+		_update_room_four_transition(delta)
 	_update_warning_lights()
 	_update_repair_sparks()
 	_update_tether_visual()
@@ -690,9 +696,51 @@ func _update_exit_airlock() -> void:
 	var sol_body: CharacterBody2D = players["sol"]["body"] as CharacterBody2D
 	if exit_rect.has_point(luna_body.global_position) and exit_rect.has_point(sol_body.global_position):
 		completed = true
-		completion_label.text = "AIRLOCK SECURED - ROOM 3 COMPLETE"
+		completion_label.text = "AIRLOCK SECURED - SIGNAL RELAY ROUTE ONLINE"
 		completion_label.visible = true
 		_set_status("EVA COMPLETE", 3.0)
+		_start_room_four_transition()
+
+func _start_room_four_transition() -> void:
+	if room_four_transition_started:
+		return
+
+	room_four_transition_started = true
+	room_four_transition_elapsed = 0.0
+
+	room_four_transition_overlay = ColorRect.new()
+	room_four_transition_overlay.name = "SignalRelayTransition"
+	room_four_transition_overlay.color = Color(0.01, 0.015, 0.026, 0.92)
+	room_four_transition_overlay.anchor_right = 1.0
+	room_four_transition_overlay.anchor_bottom = 1.0
+	room_four_transition_overlay.offset_left = 0.0
+	room_four_transition_overlay.offset_top = 0.0
+	room_four_transition_overlay.offset_right = 0.0
+	room_four_transition_overlay.offset_bottom = 0.0
+	hud_layer.add_child(room_four_transition_overlay)
+
+	room_four_transition_label = _make_label("", Vector2(70, 165), Vector2(820, 230), Color(0.82, 0.96, 1.0))
+	room_four_transition_label.name = "SignalRelayTransitionText"
+	room_four_transition_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	room_four_transition_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	room_four_transition_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	room_four_transition_label.add_theme_font_size_override("font_size", 26)
+	room_four_transition_overlay.add_child(room_four_transition_label)
+
+func _update_room_four_transition(delta: float) -> void:
+	room_four_transition_elapsed += delta
+	if room_four_transition_label == null:
+		return
+
+	if room_four_transition_elapsed < 2.2:
+		room_four_transition_label.text = "The hull seals. The station goes quiet."
+	elif room_four_transition_elapsed < 4.8:
+		room_four_transition_label.text = "CASS: Signal Relay offline. Escape pod access is locked behind a crew code channel."
+	else:
+		room_four_transition_label.text = "Restore the relay together. Luna follows the dark corridor. Sol tunes the interference."
+
+	if room_four_transition_elapsed >= 7.0:
+		get_tree().change_scene_to_file("res://room_four/room_four.tscn")
 
 func _update_failures() -> void:
 	var luna_body: CharacterBody2D = players["luna"]["body"] as CharacterBody2D
