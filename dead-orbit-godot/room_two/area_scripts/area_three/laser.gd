@@ -2,25 +2,24 @@ extends Node2D
 
 @export var beam_length: float = 1000.0
 @export var rotation_speed: float = 2.0
-@export var sweep_speed: float = 0.5
-@export var sweep_angle_min: float = -45.0
-@export var sweep_angle_max: float = 45.0
-
+@export var sweep_range: float = 200.0
+@export var sweep_speed: float = 100.0
 
 var active := false
 var player_in_range := false
 var sweep_direction: float = 1.0
-var sweep_offset: float = 0.0
+var start_x: float = 0.0
 var base_rotation: float = 0.0
 
 func activate():
 	active = true
 
 func _ready():
+	start_x = position.x
 	base_rotation = rotation_degrees
 	$RayCast2D.enabled = true
 	$RayCast2D.target_position = Vector2(beam_length, 0)
-	$Line2D.width = 2.5
+	$Line2D.width = 5.0
 	$Line2D.default_color = Color(1.0, 0.0, 0.0)
 	$DetectionArea.body_entered.connect(_on_body_entered)
 	$DetectionArea.body_exited.connect(_on_body_exited)
@@ -38,14 +37,12 @@ func _physics_process(delta):
 		return
 
 	if not player_in_range:
-		sweep_offset += sweep_speed * sweep_direction * delta * 60
-		if sweep_offset >= sweep_angle_max:
+		position.x += sweep_speed * sweep_direction * delta
+		if position.x >= start_x + sweep_range:
 			sweep_direction = -1.0
-		elif sweep_offset <= sweep_angle_min:
+		elif position.x <= start_x - sweep_range:
 			sweep_direction = 1.0
-		rotation_degrees = base_rotation + sweep_offset
-		
-		rotation_degrees = base_rotation + sweep_offset
+		rotation_degrees = base_rotation
 	else:
 		var target = null
 		for player in get_tree().get_nodes_in_group("players"):

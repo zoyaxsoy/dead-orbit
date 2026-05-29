@@ -72,7 +72,6 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
-	# push rigidbodies
 	move_and_slide()
 	for i in get_slide_collision_count():
 		var col = get_slide_collision(i)
