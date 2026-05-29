@@ -1,8 +1,8 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://u3ndi3nuw8e8"]
 
-[ext_resource type="Script" path="res://room_four/room_four.gd" id="1_room4"]
+[ext_resource type="Script" uid="uid://dmgw2fnwkqkn0" path="res://room_four/room_four.gd" id="1_room4"]
 
-[node name="RoomFour" type="Control"]
+[node name="RoomFour" type="Control" unique_id=456853787]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
