@@ -48,3 +48,16 @@ func _physics_process(delta):
 func _ready():
 	$Course/AreaTwo/Shield.activated.connect($Course/AreaTwo/MovingPlatform.activate)
 	$Course/AreaTwo/Shield.activated.connect($Course/AreaTwo/CanvasLayer/ShieldPopUp.show_popup)
+	$Course/AreaTwo/Shield.collected_by.connect(_on_shield_collected)
+	$Course/AreaThree/PressurePlate/Area2D.pressed.connect(func(): $Course/AreaThree/Ladder._on_pressure_plate_pressed())
+	$Course/AreaThree/PressurePlate/Area2D.released.connect(func(): $Course/AreaThree/Ladder._on_pressure_plate_released())
+	$Course/AreaThree/PressurePlate/Area2D.pressed.connect($Course/AreaThree/EnergyNode.start_filling)
+	$Course/AreaThree/PressurePlate/Area2D.released.connect($Course/AreaThree/EnergyNode.stop_filling)
+	$Course/AreaTwo/PressurePlate/Area2D.pressed.connect($Course/AreaTwo/EnergyNode.start_filling)
+	$Course/AreaTwo/PressurePlate/Area2D.released.connect($Course/AreaTwo/EnergyNode.stop_filling)
+	$Course/AreaOne/PressurePlate/Area2D.pressed.connect($Course/AreaOne/EnergyNode.start_filling)
+	$Course/AreaOne/PressurePlate/Area2D.released.connect($Course/AreaOne/EnergyNode.stop_filling)
+	
+
+func _on_shield_collected(player):
+	player.collect_shield()
