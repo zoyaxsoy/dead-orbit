@@ -10,4 +10,5 @@ func _on_body_entered(body):
 	if body.is_in_group("players"):
 		collected_by.emit(body)
 		activated.emit()
+		get_tree().paused = true
 		queue_free()
