@@ -24,7 +24,6 @@ stretch = true
 
 [node name="LeftViewport" type="SubViewport" parent="CanvasLayer/LeftSVC" unique_id=1869632481]
 handle_input_locally = false
-own_world_2d = true
 size = Vector2i(576, 648)
 render_target_update_mode = 4
 
@@ -39,7 +38,6 @@ stretch = true
 
 [node name="RightViewport" type="SubViewport" parent="CanvasLayer/RightSVC" unique_id=1102700301]
 handle_input_locally = false
-own_world_2d = true
 size = Vector2i(576, 648)
 render_target_update_mode = 4
 
