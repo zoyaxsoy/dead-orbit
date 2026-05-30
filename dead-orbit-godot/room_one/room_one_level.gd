@@ -38,6 +38,7 @@ var _rock_timer: float = 0.0
 var _next_rock_time: float = 2.0
 var _rock_pause: float = 0.0
 var _level_complete: bool = false
+var _is_dying: bool = false   # true while death overlay is showing
 
 # Each entry: {x1, x2, body: StaticBody2D, shape: CollisionShape2D}
 var _floor_segs: Array = []
@@ -68,7 +69,8 @@ func _ready() -> void:
 	exit_area.body_entered.connect(_on_exit_body_entered)
 
 func _process(delta: float) -> void:
-	if _level_complete:
+	# Freeze everything while the death overlay is visible
+	if _level_complete or _is_dying:
 		return
 	_update_camera(delta)
 	_update_parallax()
@@ -140,8 +142,19 @@ func _clean_rocks() -> void:
 			rock.queue_free()
 
 func _respawn() -> void:
+	if _is_dying:
+		return
+	_is_dying = true
+	player.set_physics_process(false)
+	player.velocity = Vector2.ZERO
+	_show_death_overlay()
+	await get_tree().create_timer(1.5).timeout
+	player.set_physics_process(true)
+	_execute_respawn()
+	_is_dying = false
+
+func _execute_respawn() -> void:
 	if _rocks_active:
-		# Clear all in-flight rocks
 		for rock in rocks.get_children():
 			rock.queue_free()
 		_clear_rock_holes()
@@ -329,3 +342,65 @@ func _clear_rock_holes() -> void:
 	_floor_segs.clear()
 	_build_floor_segs()
 	_fill_static_gaps()
+
+# ── Death overlay ─────────────────────────────────────────────────────────────
+
+func _show_death_overlay() -> void:
+	var accent: Color = Color(1.0, 0.55, 0.05) if player_is_sol else Color(0.3, 0.75, 1.0)
+
+	var cl := CanvasLayer.new()
+	cl.layer = 10
+	add_child(cl)
+
+	# CanvasLayer has no modulate, so wrap everything in a Control for fading
+	var root := Control.new()
+	root.anchor_right = 1.0
+	root.anchor_bottom = 1.0
+	cl.add_child(root)
+
+	# Dark background
+	var bg := ColorRect.new()
+	bg.anchor_right = 1.0
+	bg.anchor_bottom = 1.0
+	bg.color = Color(0.0, 0.0, 0.05, 0.78)
+	root.add_child(bg)
+
+	# Thin accent bar along the top
+	var bar := ColorRect.new()
+	bar.anchor_right = 1.0
+	bar.offset_bottom = 4.0
+	bar.color = accent
+	root.add_child(bar)
+
+	# ☠  skull
+	_death_label(root, "☠", accent, 56, 195.0)
+	# Main line
+	_death_label(root, "ASTRONAUT DOWN", accent, 21, 270.0)
+	# Sub line — blinking
+	var sub := _death_label(root, "respawning...", Color(0.72, 0.76, 0.88, 0.9), 13, 308.0)
+	var blink := sub.create_tween().set_loops()
+	blink.tween_property(sub, "modulate:a", 0.15, 0.45)
+	blink.tween_property(sub, "modulate:a", 1.0,  0.45)
+
+	# Fade the Control root in (CanvasLayer itself has no modulate)
+	root.modulate.a = 0.0
+	var tw := root.create_tween()
+	tw.tween_property(root, "modulate:a", 1.0, 0.2)
+
+	# Self-destruct just before respawn fires
+	get_tree().create_timer(1.35).timeout.connect(func():
+		if is_instance_valid(cl): cl.queue_free()
+	)
+
+func _death_label(parent: Control, txt: String, col: Color,
+		font_sz: int, y: float) -> Label:
+	var lbl := Label.new()
+	lbl.text = txt
+	lbl.anchor_right = 1.0
+	lbl.offset_top    = y
+	lbl.offset_bottom = y + font_sz + 10.0
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.add_theme_color_override("font_color", col)
+	lbl.add_theme_font_size_override("font_size", font_sz)
+	parent.add_child(lbl)
+	return lbl
