@@ -1,9 +1,16 @@
 extends CharacterBody2D
 
+@onready var camera: Camera2D = $Camera2D
+
 @export var speed: float = 250.0
 @export var jump_velocity: float = -420.0
 var gravity: float = ProjectSettings.get_setting("physics/2d/default_gravity")
 
+func _ready() -> void:
+	camera.enabled = true
+	camera.make_current()
+	print(get_viewport().get_camera_2d())
+	
 func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity.y += gravity * delta
