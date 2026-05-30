@@ -1,0 +1,266 @@
+[gd_scene format=3]
+
+[ext_resource type="Texture2D" uid="uid://isv06a7cs75u" path="res://room_one/room_one_graphics/parallax/cyberpunk-corridor-PREVIEW.png" id="1_bg"]
+[ext_resource type="Texture2D" uid="uid://4kgd62m5w1m0" path="res://room_one/room_one_graphics/parallax/big-computer.png" id="2_computer"]
+[ext_resource type="Script" path="res://room_one/room_one_level.gd" id="3_level"]
+[ext_resource type="Script" path="res://room_one/room_one_player.gd" id="4_player"]
+[ext_resource type="Script" path="res://room_one/electric_charge.gd" id="5_charge"]
+
+[sub_resource type="RectangleShape2D" id="ShapeFloor1"]
+size = Vector2(3100, 30)
+
+[sub_resource type="RectangleShape2D" id="ShapeFloor2"]
+size = Vector2(560, 30)
+
+[sub_resource type="RectangleShape2D" id="ShapeFloor3"]
+size = Vector2(640, 30)
+
+[sub_resource type="RectangleShape2D" id="ShapeFloor4"]
+size = Vector2(1210, 30)
+
+[sub_resource type="RectangleShape2D" id="ShapeWallL"]
+size = Vector2(30, 800)
+
+[sub_resource type="RectangleShape2D" id="ShapeWallR"]
+size = Vector2(30, 800)
+
+[sub_resource type="RectangleShape2D" id="ShapePlayer"]
+size = Vector2(40, 64)
+
+[sub_resource type="RectangleShape2D" id="ShapeCharge"]
+size = Vector2(80, 10)
+
+[sub_resource type="RectangleShape2D" id="ShapeExit"]
+size = Vector2(150, 300)
+
+[node name="RoomOneLevel" type="Node2D"]
+script = ExtResource("3_level")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+position = Vector2(288, 324)
+
+[node name="BackLayer" type="Parallax2D" parent="."]
+repeat_size = Vector2(1248, 0)
+
+[node name="BackSprite" type="Sprite2D" parent="BackLayer"]
+z_index = -20
+scale = Vector2(3.7, 3.7)
+texture = ExtResource("1_bg")
+centered = false
+
+[node name="MidLayer" type="Parallax2D" parent="."]
+repeat_size = Vector2(1248, 0)
+
+[node name="MidSprite" type="Sprite2D" parent="MidLayer"]
+z_index = -15
+position = Vector2(0, 20)
+scale = Vector2(3.7, 3.7)
+modulate = Color(0.65, 0.72, 0.95, 0.55)
+texture = ExtResource("1_bg")
+centered = false
+
+[node name="FrontLayer" type="Parallax2D" parent="."]
+
+[node name="FrontSprite" type="Sprite2D" parent="FrontLayer"]
+z_index = -10
+position = Vector2(400, 200)
+scale = Vector2(2.4, 2.4)
+texture = ExtResource("2_computer")
+centered = false
+
+[node name="Floors" type="Node2D" parent="."]
+
+[node name="Floor1" type="StaticBody2D" parent="Floors"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floors/Floor1"]
+position = Vector2(1550, 636)
+shape = SubResource("ShapeFloor1")
+
+[node name="FloorVisual" type="Polygon2D" parent="Floors/Floor1"]
+z_index = -5
+color = Color(0.14, 0.17, 0.24, 1)
+polygon = PackedVector2Array(0, 619, 3100, 619, 3100, 760, 0, 760)
+
+[node name="Floor2" type="StaticBody2D" parent="Floors"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floors/Floor2"]
+position = Vector2(3500, 636)
+shape = SubResource("ShapeFloor2")
+
+[node name="FloorVisual" type="Polygon2D" parent="Floors/Floor2"]
+z_index = -5
+color = Color(0.14, 0.17, 0.24, 1)
+polygon = PackedVector2Array(3220, 619, 3780, 619, 3780, 760, 3220, 760)
+
+[node name="Floor3" type="StaticBody2D" parent="Floors"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floors/Floor3"]
+position = Vector2(4230, 636)
+shape = SubResource("ShapeFloor3")
+
+[node name="FloorVisual" type="Polygon2D" parent="Floors/Floor3"]
+z_index = -5
+color = Color(0.14, 0.17, 0.24, 1)
+polygon = PackedVector2Array(3910, 619, 4550, 619, 4550, 760, 3910, 760)
+
+[node name="Floor4" type="StaticBody2D" parent="Floors"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Floors/Floor4"]
+position = Vector2(5295, 636)
+shape = SubResource("ShapeFloor4")
+
+[node name="FloorVisual" type="Polygon2D" parent="Floors/Floor4"]
+z_index = -5
+color = Color(0.14, 0.17, 0.24, 1)
+polygon = PackedVector2Array(4690, 619, 5900, 619, 5900, 760, 4690, 760)
+
+[node name="GapMarkers" type="Node2D" parent="."]
+
+[node name="Gap1" type="Polygon2D" parent="GapMarkers"]
+z_index = -4
+color = Color(0.04, 0.02, 0.06, 1)
+polygon = PackedVector2Array(3100, 619, 3220, 619, 3220, 760, 3100, 760)
+
+[node name="Gap2" type="Polygon2D" parent="GapMarkers"]
+z_index = -4
+color = Color(0.04, 0.02, 0.06, 1)
+polygon = PackedVector2Array(3780, 619, 3910, 619, 3910, 760, 3780, 760)
+
+[node name="Gap3" type="Polygon2D" parent="GapMarkers"]
+z_index = -4
+color = Color(0.04, 0.02, 0.06, 1)
+polygon = PackedVector2Array(4550, 619, 4690, 619, 4690, 760, 4550, 760)
+
+[node name="LeftWall" type="StaticBody2D" parent="."]
+position = Vector2(-20, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="LeftWall"]
+position = Vector2(15, 400)
+shape = SubResource("ShapeWallL")
+
+[node name="RightWall" type="StaticBody2D" parent="."]
+position = Vector2(5890, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
+position = Vector2(15, 400)
+shape = SubResource("ShapeWallR")
+
+[node name="Charges" type="Node2D" parent="."]
+
+[node name="Charge1" type="Area2D" parent="Charges"]
+position = Vector2(700, 607)
+script = ExtResource("5_charge")
+move_distance = 300.0
+move_speed = 0.65
+phase_offset = 0.0
+
+[node name="ChargeVisual" type="Polygon2D" parent="Charges/Charge1"]
+position = Vector2(0, 14)
+color = Color(0.05, 0.75, 1.0, 0.95)
+polygon = PackedVector2Array(-38, -2, -25, -8, -12, 0, 0, -8, 12, 0, 25, -8, 38, -2, 38, 7, -38, 7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Charges/Charge1"]
+position = Vector2(0, 14)
+shape = SubResource("ShapeCharge")
+
+[node name="Charge2" type="Area2D" parent="Charges"]
+position = Vector2(1150, 607)
+script = ExtResource("5_charge")
+move_distance = 220.0
+move_speed = 0.78
+phase_offset = 1.5
+
+[node name="ChargeVisual" type="Polygon2D" parent="Charges/Charge2"]
+position = Vector2(0, 14)
+color = Color(0.05, 0.75, 1.0, 0.95)
+polygon = PackedVector2Array(-38, -2, -25, -8, -12, 0, 0, -8, 12, 0, 25, -8, 38, -2, 38, 7, -38, 7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Charges/Charge2"]
+position = Vector2(0, 14)
+shape = SubResource("ShapeCharge")
+
+[node name="Charge3" type="Area2D" parent="Charges"]
+position = Vector2(1700, 607)
+script = ExtResource("5_charge")
+move_distance = 350.0
+move_speed = 0.58
+phase_offset = 3.0
+
+[node name="ChargeVisual" type="Polygon2D" parent="Charges/Charge3"]
+position = Vector2(0, 14)
+color = Color(0.05, 0.75, 1.0, 0.95)
+polygon = PackedVector2Array(-38, -2, -25, -8, -12, 0, 0, -8, 12, 0, 25, -8, 38, -2, 38, 7, -38, 7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Charges/Charge3"]
+position = Vector2(0, 14)
+shape = SubResource("ShapeCharge")
+
+[node name="Charge4" type="Area2D" parent="Charges"]
+position = Vector2(2250, 607)
+script = ExtResource("5_charge")
+move_distance = 260.0
+move_speed = 0.84
+phase_offset = 0.7
+
+[node name="ChargeVisual" type="Polygon2D" parent="Charges/Charge4"]
+position = Vector2(0, 14)
+color = Color(0.05, 0.75, 1.0, 0.95)
+polygon = PackedVector2Array(-38, -2, -25, -8, -12, 0, 0, -8, 12, 0, 25, -8, 38, -2, 38, 7, -38, 7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Charges/Charge4"]
+position = Vector2(0, 14)
+shape = SubResource("ShapeCharge")
+
+[node name="Charge5" type="Area2D" parent="Charges"]
+position = Vector2(2700, 607)
+script = ExtResource("5_charge")
+move_distance = 200.0
+move_speed = 0.71
+phase_offset = 2.4
+
+[node name="ChargeVisual" type="Polygon2D" parent="Charges/Charge5"]
+position = Vector2(0, 14)
+color = Color(0.05, 0.75, 1.0, 0.95)
+polygon = PackedVector2Array(-38, -2, -25, -8, -12, 0, 0, -8, 12, 0, 25, -8, 38, -2, 38, 7, -38, 7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Charges/Charge5"]
+position = Vector2(0, 14)
+shape = SubResource("ShapeCharge")
+
+[node name="Charge6" type="Area2D" parent="Charges"]
+position = Vector2(3500, 607)
+script = ExtResource("5_charge")
+move_distance = 190.0
+move_speed = 0.91
+phase_offset = 1.1
+
+[node name="ChargeVisual" type="Polygon2D" parent="Charges/Charge6"]
+position = Vector2(0, 14)
+color = Color(0.05, 0.75, 1.0, 0.95)
+polygon = PackedVector2Array(-38, -2, -25, -8, -12, 0, 0, -8, 12, 0, 25, -8, 38, -2, 38, 7, -38, 7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Charges/Charge6"]
+position = Vector2(0, 14)
+shape = SubResource("ShapeCharge")
+
+[node name="Rocks" type="Node2D" parent="."]
+
+[node name="Exit" type="Area2D" parent="."]
+position = Vector2(5800, 500)
+
+[node name="ExitVisual" type="Polygon2D" parent="Exit"]
+color = Color(0.1, 1, 0.55, 0.45)
+polygon = PackedVector2Array(-75, -150, 75, -150, 75, 150, -75, 150)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Exit"]
+shape = SubResource("ShapeExit")
+
+[node name="Player" type="CharacterBody2D" parent="."]
+position = Vector2(150, 560)
+script = ExtResource("4_player")
+
+[node name="AnimSprite" type="AnimatedSprite2D" parent="Player"]
+texture_filter = 1
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Player"]
+shape = SubResource("ShapePlayer")
