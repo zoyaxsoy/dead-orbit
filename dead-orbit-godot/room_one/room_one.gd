@@ -5,16 +5,45 @@ extends Node2D
 @onready var sol_rocks_label: Label = $CanvasLayer/SolRocksLabel
 @onready var luna_rocks_label: Label = $CanvasLayer/LunaRocksLabel
 
+const HOLD_DURATION: float = 3.0   # seconds both players must hold simultaneously
+
 var _sol_complete: bool = false
 var _luna_complete: bool = false
+var _sol_pressing: bool = false
+var _luna_pressing: bool = false
+var _button_timer: float = 0.0
+var _button_activated: bool = false
+var _prompt_cl: CanvasLayer = null
+var _progress_bar: ColorRect = null
+var _progress_label: Label = null
 
 func _ready() -> void:
 	sol_level.player_reached_exit.connect(_on_sol_at_exit)
 	luna_level.player_reached_exit.connect(_on_luna_at_exit)
+	sol_level.player_left_exit.connect(_on_sol_left_exit)
+	luna_level.player_left_exit.connect(_on_luna_left_exit)
+	sol_level.button_state_changed.connect(_on_sol_button)
+	luna_level.button_state_changed.connect(_on_luna_button)
 	sol_level.rocks_started.connect(_on_sol_rocks_started)
 	luna_level.rocks_started.connect(_on_luna_rocks_started)
 	sol_rocks_label.visible = false
 	luna_rocks_label.visible = false
+
+func _process(delta: float) -> void:
+	if not _sol_complete or not _luna_complete or _button_activated:
+		return
+	if _sol_pressing and _luna_pressing:
+		_button_timer = min(_button_timer + delta, HOLD_DURATION)
+	else:
+		# Drain twice as fast when either player releases
+		_button_timer = max(_button_timer - delta * 2.0, 0.0)
+	_update_prompt_bar()
+	if _button_timer >= HOLD_DURATION:
+		_button_activated = true
+		_hide_prompt()
+		_show_celebration()
+
+# ── Rocks label ───────────────────────────────────────────────────────────────
 
 func _on_sol_rocks_started() -> void:
 	sol_rocks_label.visible = true
@@ -24,6 +53,8 @@ func _on_luna_rocks_started() -> void:
 	luna_rocks_label.visible = true
 	get_tree().create_timer(2.5).timeout.connect(func(): luna_rocks_label.visible = false)
 
+# ── Exit state ────────────────────────────────────────────────────────────────
+
 func _on_sol_at_exit() -> void:
 	_sol_complete = true
 	_check_both_done()
@@ -32,7 +63,244 @@ func _on_luna_at_exit() -> void:
 	_luna_complete = true
 	_check_both_done()
 
+func _on_sol_left_exit() -> void:
+	_sol_complete = false
+	_sol_pressing = false
+	_button_timer = 0.0
+	_button_activated = false
+	_hide_prompt()
+
+func _on_luna_left_exit() -> void:
+	_luna_complete = false
+	_luna_pressing = false
+	_button_timer = 0.0
+	_button_activated = false
+	_hide_prompt()
+
+# ── Button state ──────────────────────────────────────────────────────────────
+
+func _on_sol_button(pressing: bool) -> void:
+	_sol_pressing = pressing
+
+func _on_luna_button(pressing: bool) -> void:
+	_luna_pressing = pressing
+
+# ── Coordination ──────────────────────────────────────────────────────────────
+
 func _check_both_done() -> void:
 	if _sol_complete and _luna_complete:
-		await get_tree().create_timer(1.0).timeout
-		get_tree().change_scene_to_file("res://room_two/room_two.tscn")
+		_show_button_prompt()
+
+# ── Button prompt (bottom-of-screen shared UI) ────────────────────────────────
+
+func _show_button_prompt() -> void:
+	if is_instance_valid(_prompt_cl) or _button_activated:
+		return   # already showing or already done
+	_button_timer = 0.0
+
+	# Dismiss the per-player banners and button sprites — shared prompt takes over
+	sol_level.hide_exit_ui()
+	luna_level.hide_exit_ui()
+
+	var cl := CanvasLayer.new()
+	cl.layer = 25   # above exit banners (10), below celebration (30)
+	add_child(cl)
+	_prompt_cl = cl
+
+	var root := Control.new()
+	root.anchor_right = 1.0
+	root.anchor_bottom = 1.0
+	cl.add_child(root)
+
+	# Same y-zone as the individual exit banners (TOP=110, BOTTOM=270)
+	const TOP: float    = 110.0
+	const BOTTOM: float = 270.0
+
+	# Dark banner background
+	var bg := ColorRect.new()
+	bg.anchor_right  = 1.0
+	bg.offset_top    = TOP
+	bg.offset_bottom = BOTTOM
+	bg.color = Color(0.0, 0.02, 0.08, 0.92)
+	root.add_child(bg)
+
+	# Cyan accent lines (top and bottom border)
+	var top_line := ColorRect.new()
+	top_line.anchor_right  = 1.0
+	top_line.offset_top    = TOP
+	top_line.offset_bottom = TOP + 3.0
+	top_line.color = Color(0.05, 0.85, 1.0, 1.0)
+	root.add_child(top_line)
+
+	var bot_line := ColorRect.new()
+	bot_line.anchor_right  = 1.0
+	bot_line.offset_top    = BOTTOM - 3.0
+	bot_line.offset_bottom = BOTTOM
+	bot_line.color = Color(0.05, 0.85, 1.0, 1.0)
+	root.add_child(bot_line)
+
+	# Row 1 — instruction
+	var instr := Label.new()
+	instr.text = "Both players need to press the button to move on to the next level"
+	instr.anchor_right = 1.0
+	instr.offset_top    = TOP + 14.0
+	instr.offset_bottom = TOP + 34.0
+	instr.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	instr.add_theme_color_override("font_color", Color(0.78, 0.84, 1.0, 0.9))
+	instr.add_theme_font_size_override("font_size", 12)
+	root.add_child(instr)
+
+	# Row 2 — percentage label (large, centered)
+	var pct_lbl := Label.new()
+	pct_lbl.text = "0%"
+	pct_lbl.anchor_right = 1.0
+	pct_lbl.offset_top    = TOP + 44.0
+	pct_lbl.offset_bottom = TOP + 70.0
+	pct_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	pct_lbl.add_theme_color_override("font_color", Color(0.05, 0.90, 1.0, 1.0))
+	pct_lbl.add_theme_font_size_override("font_size", 18)
+	root.add_child(pct_lbl)
+	_progress_label = pct_lbl
+
+	# Row 3 — progress bar background (centre 672 px of the 1152 px window)
+	var bar_bg := ColorRect.new()
+	bar_bg.offset_left   = 240.0
+	bar_bg.offset_right  = 912.0
+	bar_bg.offset_top    = TOP + 78.0
+	bar_bg.offset_bottom = TOP + 102.0
+	bar_bg.color = Color(0.08, 0.10, 0.16, 1.0)
+	root.add_child(bar_bg)
+
+	# Row 3 — progress bar fill (right edge driven by _update_prompt_bar)
+	var bar := ColorRect.new()
+	bar.offset_left   = 240.0
+	bar.offset_right  = 240.0    # starts empty
+	bar.offset_top    = TOP + 78.0
+	bar.offset_bottom = TOP + 102.0
+	bar.color = Color(0.05, 0.85, 1.0, 1.0)
+	root.add_child(bar)
+	_progress_bar = bar
+
+	# Fade in
+	root.modulate.a = 0.0
+	root.create_tween().tween_property(root, "modulate:a", 1.0, 0.3)
+
+func _prompt_side_label(parent: Control, txt: String, col: Color,
+		x_left: float, x_right: float, top_y: float) -> void:
+	var lbl := Label.new()
+	lbl.text = txt
+	lbl.offset_left   = x_left
+	lbl.offset_right  = x_right
+	lbl.offset_top    = top_y
+	lbl.offset_bottom = top_y + 26.0
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.vertical_alignment   = VERTICAL_ALIGNMENT_CENTER
+	lbl.add_theme_color_override("font_color", col)
+	lbl.add_theme_font_size_override("font_size", 13)
+	parent.add_child(lbl)
+
+func _update_prompt_bar() -> void:
+	if not is_instance_valid(_progress_bar):
+		return
+	var t: float = clamp(_button_timer / HOLD_DURATION, 0.0, 1.0)
+	# Bar grows from x=240 to x=912 (672 px total)
+	_progress_bar.offset_right = 240.0 + t * 672.0
+	# Brighter cyan while both pressing, dim when draining
+	_progress_bar.color = Color(0.05, 0.90, 1.0, 1.0) if (_sol_pressing and _luna_pressing) \
+						else Color(0.05, 0.55, 0.75, 1.0)
+	# Percentage label
+	if is_instance_valid(_progress_label):
+		_progress_label.text = str(int(t * 100)) + "%"
+
+func _hide_prompt() -> void:
+	if is_instance_valid(_prompt_cl):
+		_prompt_cl.queue_free()
+	_prompt_cl = null
+	_progress_bar = null
+	_progress_label = null
+
+# ── Celebration ───────────────────────────────────────────────────────────────
+
+func _show_celebration() -> void:
+	var cl := CanvasLayer.new()
+	cl.layer = 30   # above per-player exit overlays (layer 10)
+	add_child(cl)
+
+	var root := Control.new()
+	root.anchor_right = 1.0
+	root.anchor_bottom = 1.0
+	cl.add_child(root)
+
+	# Full-screen dark background
+	var bg := ColorRect.new()
+	bg.anchor_right = 1.0
+	bg.anchor_bottom = 1.0
+	bg.color = Color(0.0, 0.0, 0.04, 0.92)
+	root.add_child(bg)
+
+	# Top accent bar (cyan)
+	var top_bar := ColorRect.new()
+	top_bar.anchor_right = 1.0
+	top_bar.offset_bottom = 6.0
+	top_bar.color = Color(0.05, 0.85, 1.0, 1.0)
+	root.add_child(top_bar)
+
+	# Bottom accent bar (cyan)
+	var bot_bar := ColorRect.new()
+	bot_bar.anchor_top = 1.0
+	bot_bar.anchor_right = 1.0
+	bot_bar.anchor_bottom = 1.0
+	bot_bar.offset_top = -6.0
+	bot_bar.color = Color(0.05, 0.85, 1.0, 1.0)
+	root.add_child(bot_bar)
+
+	# Main heading
+	_cel_label(root, "CORRIDOR BREACHED", Color(0.05, 0.90, 1.0, 1.0), 44, 220.0)
+
+	# Per-player status — Sol on left half, Luna on right half (colour-coded)
+	_cel_label_half(root, "SOL  ✓",  Color(1.0, 0.55, 0.05, 1.0), 20, 292.0, true)
+	_cel_label_half(root, "LUNA  ✓", Color(0.3, 0.75, 1.0,  1.0), 20, 292.0, false)
+
+	# Blinking subtitle
+	var sub := _cel_label(root, "Entering next sector...", Color(0.72, 0.76, 0.88, 0.85), 14, 338.0)
+	var blink := sub.create_tween().set_loops()
+	blink.tween_property(sub, "modulate:a", 0.2, 0.6)
+	blink.tween_property(sub, "modulate:a", 1.0, 0.6)
+
+	# Fade in the overlay
+	root.modulate.a = 0.0
+	root.create_tween().tween_property(root, "modulate:a", 1.0, 0.5)
+
+	await get_tree().create_timer(3.5).timeout
+	get_tree().change_scene_to_file("res://room_two/room_two.tscn")
+
+# ── Label helpers ─────────────────────────────────────────────────────────────
+
+# Full-width centered label
+func _cel_label(parent: Control, txt: String, col: Color,
+		font_sz: int, y: float) -> Label:
+	var lbl := Label.new()
+	lbl.text = txt
+	lbl.anchor_right = 1.0
+	lbl.offset_top    = y
+	lbl.offset_bottom = y + font_sz + 10.0
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.add_theme_color_override("font_color", col)
+	lbl.add_theme_font_size_override("font_size", font_sz)
+	parent.add_child(lbl)
+	return lbl
+
+# Half-width label — left_half=true for Sol, false for Luna
+func _cel_label_half(parent: Control, txt: String, col: Color,
+		font_sz: int, y: float, left_half: bool) -> Label:
+	var lbl := Label.new()
+	lbl.text = txt
+	lbl.anchor_left  = 0.0 if left_half else 0.5
+	lbl.anchor_right = 0.5 if left_half else 1.0
+	lbl.offset_top    = y
+	lbl.offset_bottom = y + font_sz + 10.0
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	lbl.add_theme_color_override("font_color", col)
+	lbl.add_theme_font_size_override("font_size", font_sz)
+	parent.add_child(lbl)
+	return lbl
