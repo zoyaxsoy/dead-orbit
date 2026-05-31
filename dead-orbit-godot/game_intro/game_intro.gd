@@ -97,15 +97,15 @@ func _build_ui() -> void:
 	add_child(div2)
 
 	# ── Press any key ─────────────────────────────────────────────────────────
-	_hint = _lbl("Press Space to enter Room 1", 13, Color(1.0, 1.0, 1.0, 1.0), 442.0, 466.0)
+	_hint = _lbl("Press X to enter Room 1", 13, Color(1.0, 1.0, 1.0, 1.0), 442.0, 466.0)
 
 	# ── Controls — two-column SOL (left) / LUNA (right) ─────────────────────
 	_lbl_half("SOL",      14, Color(1.0,  0.45, 0.05, 1.0),  484.0, 504.0, true)
 	_lbl_half("LUNA",     14, Color(0.35, 0.82, 1.0,  1.0),  484.0, 504.0, false)
-	_lbl_half("A / D   move", 12, Color(0.55, 0.65, 0.85, 0.85), 506.0, 524.0, true)
-	_lbl_half("← / →   move", 12, Color(0.55, 0.65, 0.85, 0.85), 506.0, 524.0, false)
-	_lbl_half("W   jump",     12, Color(0.55, 0.65, 0.85, 0.85), 526.0, 544.0, true)
-	_lbl_half("↑   jump",     12, Color(0.55, 0.65, 0.85, 0.85), 526.0, 544.0, false)
+	_lbl_half("L. Stick   move", 12, Color(0.55, 0.65, 0.85, 0.85), 506.0, 524.0, true)
+	_lbl_half("L. Stick   move", 12, Color(0.55, 0.65, 0.85, 0.85), 506.0, 524.0, false)
+	_lbl_half("X   jump",        12, Color(0.55, 0.65, 0.85, 0.85), 526.0, 544.0, true)
+	_lbl_half("X   jump",        12, Color(0.55, 0.65, 0.85, 0.85), 526.0, 544.0, false)
 
 # Helper — half-width centred label (left or right half of screen)
 func _lbl_half(txt: String, font_sz: int, col: Color,

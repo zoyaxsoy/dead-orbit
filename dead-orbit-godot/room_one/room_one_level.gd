@@ -358,7 +358,7 @@ func _show_exit_reached_overlay() -> void:
 		add_child(hint_cl)
 		_button_hint_cl = hint_cl
 
-		var key_txt := "S  to press" if player_is_sol else "↓  to press"
+		var key_txt := "S / B  to press" if player_is_sol else "↓ / B  to press"
 		var lbl := Label.new()
 		lbl.text = key_txt
 		lbl.position = Vector2(sx - 32.0, sy - 130.0)  # above the astronaut's head

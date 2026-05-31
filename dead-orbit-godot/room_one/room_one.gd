@@ -38,15 +38,15 @@ func _setup_player_labels() -> void:
 
 	# ── Sol — left half ───────────────────────────────────────────────────────
 	_player_lbl(root, "SOL",           14, Color(1.0,  0.45, 0.05, 1.0),  true,  10.0)
-	_player_lbl(root, "A / D   move",  11, Color(0.50, 0.60, 0.80, 0.70), true,  30.0)
-	_player_lbl(root, "W   jump",      11, Color(0.50, 0.60, 0.80, 0.70), true,  46.0)
-	_player_lbl(root, "S   button",    11, Color(0.50, 0.60, 0.80, 0.70), true,  62.0)
+	_player_lbl(root, "L. Stick   move", 11, Color(0.50, 0.60, 0.80, 0.70), true,  30.0)
+	_player_lbl(root, "X   jump",        11, Color(0.50, 0.60, 0.80, 0.70), true,  46.0)
+	_player_lbl(root, "B   button",      11, Color(0.50, 0.60, 0.80, 0.70), true,  62.0)
 
 	# ── Luna — right half ─────────────────────────────────────────────────────
-	_player_lbl(root, "LUNA",           14, Color(0.35, 0.82, 1.0,  1.0),  false, 10.0)
-	_player_lbl(root, "← / →   move",  11, Color(0.50, 0.60, 0.80, 0.70), false, 30.0)
-	_player_lbl(root, "↑   jump",      11, Color(0.50, 0.60, 0.80, 0.70), false, 46.0)
-	_player_lbl(root, "↓   button",    11, Color(0.50, 0.60, 0.80, 0.70), false, 62.0)
+	_player_lbl(root, "LUNA",            14, Color(0.35, 0.82, 1.0,  1.0),  false, 10.0)
+	_player_lbl(root, "L. Stick   move", 11, Color(0.50, 0.60, 0.80, 0.70), false, 30.0)
+	_player_lbl(root, "X   jump",        11, Color(0.50, 0.60, 0.80, 0.70), false, 46.0)
+	_player_lbl(root, "B   button",      11, Color(0.50, 0.60, 0.80, 0.70), false, 62.0)
 
 func _player_lbl(parent: Control, txt: String, font_sz: int, col: Color,
 		left_half: bool, top_y: float) -> void:
