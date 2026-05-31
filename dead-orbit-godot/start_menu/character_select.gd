@@ -32,6 +32,7 @@ var sol_pos: Vector2
 @onready var confirm_graphic := $ConfirmGraphic
 
 func _ready():
+	modulate.a = 0.0
 	_fade_in()
 	confirm_graphic.visible = false
 	p1_status.visible = false
@@ -178,17 +179,9 @@ func _start_game():
 	_fade_out(FIRST_ROOM)
 
 func _fade_in():
-	var canvas = CanvasLayer.new()
-	canvas.layer = 10
-	add_child(canvas)
-	var overlay = ColorRect.new()
-	overlay.color = Color(0, 0, 0, 1)
-	overlay.anchor_right = 1.0
-	overlay.anchor_bottom = 1.0
-	canvas.add_child(overlay)
+	modulate.a = 0.0
 	var tween = create_tween()
-	tween.tween_property(overlay, "color", Color(0, 0, 0, 0), 0.8)
-	tween.tween_callback(canvas.queue_free)
+	tween.tween_property(self, "modulate:a", 1.0, 0.8)
 
 func _fade_out(next_scene: String):
 	var canvas = CanvasLayer.new()

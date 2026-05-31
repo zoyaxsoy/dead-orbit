@@ -13,7 +13,7 @@ func _fade_in():
 	overlay.anchor_bottom = 1.0
 	add_child(overlay)
 	var tween = create_tween()
-	tween.tween_property(overlay, "color", Color(0, 0, 0, 0), 0.8)
+	tween.tween_property(overlay, "color", Color(0, 0, 0, 0), 0.2)
 	tween.tween_callback(overlay.queue_free)
 
 func _fade_out(next_scene: String):
@@ -23,7 +23,7 @@ func _fade_out(next_scene: String):
 	overlay.anchor_bottom = 1.0
 	add_child(overlay)
 	var tween = create_tween()
-	tween.tween_property(overlay, "color", Color(0, 0, 0, 1), 0.8)
+	tween.tween_property(overlay, "color", Color(0, 0, 0, 1), 0.2)
 	tween.tween_callback(func(): get_tree().change_scene_to_file(next_scene))
 
 func _on_start_pressed():

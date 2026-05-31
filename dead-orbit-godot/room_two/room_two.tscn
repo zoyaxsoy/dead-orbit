@@ -11438,7 +11438,7 @@ position = Vector2(9.1552734e-05, 0)
 scale = Vector2(0.9999998, 0.9999998)
 
 [node name="Sol" type="CharacterBody2D" parent="Players" unique_id=1261697106 groups=["players"]]
-position = Vector2(5000, -269.42)
+position = Vector2(100, 0)
 scale = Vector2(0.1, 0.1)
 script = ExtResource("3_qrvlp")
 
@@ -11464,7 +11464,7 @@ scale = Vector2(0.9999996, 0.9999996)
 shape = SubResource("RectangleShape2D_bs57x")
 
 [node name="Luna" type="CharacterBody2D" parent="Players" unique_id=1450521674 groups=["players"]]
-position = Vector2(5000, -228.08)
+position = Vector2(150, 0)
 scale = Vector2(0.030000003, 0.030000003)
 script = ExtResource("5_411r1")
 
