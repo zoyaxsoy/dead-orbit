@@ -119,8 +119,7 @@ func _update_camera(delta: float) -> void:
 	camera.global_position.y = CAM_Y
 
 func _update_parallax() -> void:
-	if player.is_on_floor():
-		_parallax_ref_x = camera.global_position.x
+	_parallax_ref_x = camera.global_position.x
 	back_layer.scroll_offset = Vector2(-_parallax_ref_x * 0.12, 0.0)
 	mid_layer.scroll_offset = Vector2(-_parallax_ref_x * 0.32, 0.0)
 	front_layer.scroll_offset = Vector2(-_parallax_ref_x * 0.62, 0.0)
