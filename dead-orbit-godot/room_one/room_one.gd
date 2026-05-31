@@ -1,4 +1,4 @@
-extends Node2D
+extends Control
 
 @onready var sol_level = $CanvasLayer/LeftSVC/LeftViewport/SolLevel
 @onready var luna_level = $CanvasLayer/RightSVC/RightViewport/LunaLevel
@@ -18,6 +18,8 @@ var _progress_bar: ColorRect = null
 var _progress_label: Label = null
 
 func _ready() -> void:
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	FadeManager.fade_in()
 	sol_level.player_reached_exit.connect(_on_sol_at_exit)
 	luna_level.player_reached_exit.connect(_on_luna_at_exit)
 	sol_level.player_left_exit.connect(_on_sol_left_exit)
@@ -29,6 +31,10 @@ func _ready() -> void:
 	sol_rocks_label.visible = false
 	luna_rocks_label.visible = false
 	_setup_player_labels()
+
+func _input(event: InputEvent) -> void:
+	$CanvasLayer/LeftSVC/LeftViewport.push_input(event)
+	$CanvasLayer/RightSVC/RightViewport.push_input(event)
 
 func _setup_player_labels() -> void:
 	var root := Control.new()

@@ -21,6 +21,7 @@
 [ext_resource type="Script" uid="uid://dt5pfdmfublwb" path="res://room_two/area_scripts/area_two/rising_platform.gd" id="11_xh0de"]
 [ext_resource type="Script" uid="uid://cs28dpbnmbx4n" path="res://room_two/area_scripts/area_two/shield.gd" id="12_p78yq"]
 [ext_resource type="Script" uid="uid://b3cnoa86w83o5" path="res://room_two/area_scripts/area_two/moving_platform.gd" id="13_05bwp"]
+[ext_resource type="Texture2D" uid="uid://e8u1oitj88ht" path="res://room_two/graphics/dark_cyan_floor_tilesheet.png" id="16_2b7yf"]
 [ext_resource type="Script" uid="uid://dyc4tybwebmrp" path="res://room_two/area_scripts/kill_zone.gd" id="18_2xkmh"]
 [ext_resource type="Script" uid="uid://cq5t88656al20" path="res://room_two/area_scripts/area_two/shield_pop_up.gd" id="18_ys3rg"]
 [ext_resource type="Texture2D" uid="uid://cn06xli1wax7w" path="res://room_two/graphics/shield_instruction_popup_space_text_only.png" id="19_l16gl"]
@@ -33,6 +34,7 @@
 [ext_resource type="Texture2D" uid="uid://daiyayu0sgjg6" path="res://room_two/graphics/wall_energy_node_fill_animation_sheet.png" id="28_13ave"]
 [ext_resource type="Script" uid="uid://lt3yln68veq4" path="res://room_two/area_scripts/energy_node.gd" id="28_vhqpk"]
 [ext_resource type="Script" uid="uid://cnq6mcwh1xyt6" path="res://room_two/area_scripts/area_three/laser.gd" id="29_13ave"]
+[ext_resource type="Script" uid="uid://cgiexd3dqhxdl" path="res://room_two/end_zone.gd" id="34_l0ds2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hrltk"]
 atlas = ExtResource("3_nsqpp")
@@ -9770,12 +9772,58 @@ texture_region_size = Vector2i(87, 100)
 94:63/0 = 0
 95:63/0 = 0
 
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ir60l"]
+texture = ExtResource("16_2b7yf")
+0:0/0 = 0
+1:0/0 = 0
+2:0/0 = 0
+3:0/0 = 0
+4:0/0 = 0
+5:0/0 = 0
+6:0/0 = 0
+7:0/0 = 0
+8:0/0 = 0
+9:0/0 = 0
+10:0/0 = 0
+11:0/0 = 0
+0:1/0 = 0
+1:1/0 = 0
+2:1/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+8:1/0 = 0
+9:1/0 = 0
+10:1/0 = 0
+11:1/0 = 0
+0:2/0 = 0
+1:2/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+8:2/0 = 0
+9:2/0 = 0
+10:2/0 = 0
+11:2/0 = 0
+0:3/0 = 0
+1:3/0 = 0
+2:3/0 = 0
+3:3/0 = 0
+8:3/0 = 0
+9:3/0 = 0
+10:3/0 = 0
+11:3/0 = 0
+
 [sub_resource type="TileSet" id="TileSet_qrvlp"]
 physics_layer_0/collision_layer = 1
 sources/0 = SubResource("TileSetAtlasSource_aa6lu")
 sources/1 = SubResource("TileSetAtlasSource_0a3yq")
 sources/2 = SubResource("TileSetAtlasSource_nsqpp")
 sources/3 = SubResource("TileSetAtlasSource_kpevg")
+sources/4 = SubResource("TileSetAtlasSource_ir60l")
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_lrlxs"]
 atlas = ExtResource("28_13ave")
@@ -11371,6 +11419,9 @@ size = Vector2(138.39941, 92)
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_vhqpk"]
 size = Vector2(191.59985, 106.00002)
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_ir60l"]
+size = Vector2(171.60052, 56.550026)
+
 [node name="RoomTwo" type="Node2D" unique_id=1614500363]
 scale = Vector2(2.5, 2.5)
 script = ExtResource("1_4te54")
@@ -11434,7 +11485,7 @@ position = Vector2(9.1552734e-05, 0)
 scale = Vector2(0.9999998, 0.9999998)
 
 [node name="Sol" type="CharacterBody2D" parent="Players" unique_id=1261697106 groups=["players"]]
-position = Vector2(3000, -269.42)
+position = Vector2(5000, -300)
 scale = Vector2(0.1, 0.1)
 script = ExtResource("3_qrvlp")
 
@@ -11460,7 +11511,7 @@ scale = Vector2(0.9999996, 0.9999996)
 shape = SubResource("RectangleShape2D_bs57x")
 
 [node name="Luna" type="CharacterBody2D" parent="Players" unique_id=1450521674 groups=["players"]]
-position = Vector2(3000, -228.08)
+position = Vector2(5000, -300)
 scale = Vector2(0.030000003, 0.030000003)
 script = ExtResource("5_411r1")
 
@@ -11484,11 +11535,13 @@ width = 2.0
 [node name="Course" type="Node2D" parent="." unique_id=1650673078]
 
 [node name="BeginningFloor" type="TileMapLayer" parent="Course" unique_id=655996685]
+texture_filter = 1
 position = Vector2(0, 58)
 tile_map_data = PackedByteArray("AAACAP//AAAFAAEAAAADAP//AAAGAAEAAAAEAP//AAAFAAEAAAAFAP//AAAGAAEAAAAGAP//AAAFAAEAAAAHAP//AAAGAAEAAAAIAP//AAAFAAEAAAAJAP//AAAGAAEAAAAKAP//AAAFAAEAAAALAP//AAAGAAEAAAAMAP//AAAFAAEAAAANAP//AAAGAAEAAAAOAP//AAAFAAEAAAAPAP//AAAGAAEAAAAQAP//AAAFAAEAAAARAP//AAAGAAEAAAASAP//AAAFAAEAAAATAP//AAAGAAEAAAAUAP//AAAFAAEAAAAVAP//AAAGAAEAAAAWAP//AAAFAAEAAAAXAP//AAAGAAEAAAAYAP//AAAFAAEAAAAZAP//AAAGAAEAAAAaAP//AAAFAAEAAAAbAP//AAAGAAEAAAAcAP//AAAFAAEAAAAdAP//AAAGAAEAAAAeAP//AAAFAAEAAAAfAP//AAAGAAEAAAAgAP//AAAFAAEAAAAhAP//AAAGAAEAAAAiAP//AAAFAAEAAAAjAP//AAAGAAEAAAAkAP//AAAFAAEAAAAlAP//AAAGAAEAAAAmAP//AAAFAAEAAAAnAP//AAAGAAEAAAAoAP//AAAFAAEAAAApAP//AAAGAAEAAAAqAP//AAAFAAEAAAArAP//AAAGAAEAAAAsAP//AAAFAAEAAAAtAP//AAAGAAEAAAAuAP//AAAFAAEAAAAvAP//AAAGAAEAAAAwAP//AAAFAAEAAAAxAP//AAAGAAEAAAAyAP//AAAFAAEAAAAzAP//AAAGAAEAAAA0AP//AAAFAAEAAAA1AP//AAAGAAEAAAA2AP//AAAFAAEAAAA3AP//AAAGAAEAAAA4AP//AAAFAAEAAAA5AP//AAAGAAEAAAA6AP//AAAFAAEAAAA7AP//AAAGAAEAAAA8AP//AAAFAAEAAAA9AP//AAAGAAEAAAA+AP//AAAFAAEAAAA/AP//AAAGAAEAAABAAP//AAAFAAEAAABBAP//AAAGAAEAAABCAP//AAAFAAEAAABDAP//AAAGAAEAAABEAP//AAAFAAEAAABFAP//AAAGAAEAAABGAP//AAAFAAEAAABHAP//AAAGAAEAAAABAP//AAAGAAEAAAAAAP//AAAFAAEAAAA=")
 tile_set = SubResource("TileSet_qrvlp")
 
 [node name="EndingFloor" type="TileMapLayer" parent="Course" unique_id=1951709083]
+texture_filter = 1
 position = Vector2(4750, 58)
 tile_map_data = PackedByteArray("AAD///X/AAAFAAEAAAAAAPX/AAAGAAEAAAABAPX/AAAFAAEAAAACAPX/AAAGAAEAAAADAPX/AAAFAAEAAAAEAPX/AAAGAAEAAAAFAPX/AAAFAAEAAAAGAPX/AAAGAAEAAAAHAPX/AAAFAAEAAAAIAPX/AAAGAAEAAAAJAPX/AAAFAAEAAAAKAPX/AAAGAAEAAAALAPX/AAAFAAEAAAAMAPX/AAAGAAEAAAANAPX/AAAFAAEAAAAOAPX/AAAGAAEAAAAPAPX/AAAFAAEAAAAQAPX/AAAGAAEAAAARAPX/AAAFAAEAAAASAPX/AAAGAAEAAAATAPX/AAAFAAEAAAAUAPX/AAAGAAEAAAAVAPX/AAAFAAEAAAAWAPX/AAAGAAEAAAAXAPX/AAAFAAEAAAAYAPX/AAAGAAEAAAAZAPX/AAAFAAEAAAAaAPX/AAAGAAEAAAAbAPX/AAAFAAEAAAAcAPX/AAAGAAEAAAAdAPX/AAAFAAEAAAAeAPX/AAAGAAEAAAAfAPX/AAAFAAEAAAAgAPX/AAAGAAEAAAAhAPX/AAAFAAEAAAAiAPX/AAAGAAEAAAAjAPX/AAAFAAEAAAAkAPX/AAAGAAEAAAAlAPX/AAAFAAEAAAAmAPX/AAAGAAEAAAAnAPX/AAAFAAEAAAAoAPX/AAAGAAEAAAApAPX/AAAFAAEAAAAqAPX/AAAGAAEAAAArAPX/AAAFAAEAAAAsAPX/AAAGAAEAAAAtAPX/AAAFAAEAAAAuAPX/AAAGAAEAAAAvAPX/AAAFAAEAAAAwAPX/AAAGAAEAAAAxAPX/AAAFAAEAAAAyAPX/AAAGAAEAAAAzAPX/AAAFAAEAAAA0APX/AAAGAAEAAAA1APX/AAAFAAEAAAA2APX/AAAGAAEAAAA3APX/AAAFAAEAAAA4APX/AAAGAAEAAAA5APX/AAAFAAEAAAA6APX/AAAGAAEAAAA7APX/AAAFAAEAAAA8APX/AAAGAAEAAAA9APX/AAAFAAEAAAA+APX/AAAGAAEAAAA/APX/AAAFAAEAAABAAPX/AAAGAAEAAABBAPX/AAAFAAEAAABCAPX/AAAGAAEAAABDAPX/AAAFAAEAAABEAPX/AAAGAAEAAABFAPX/AAAFAAEAAABGAPX/AAAGAAEAAAA=")
 tile_set = SubResource("TileSet_qrvlp")
@@ -11592,10 +11645,12 @@ scale = Vector2(0.99999976, 0.99999976)
 shape = SubResource("RectangleShape2D_rkcg2")
 
 [node name="Layout" type="TileMapLayer" parent="Course/AreaTwo" unique_id=1088713690]
+texture_filter = 1
 tile_map_data = PackedByteArray("AACRAAIAAAAEAAEAAACRAAEAAAAGAAAAAACRAAAAAAADAAAAAACSAAAAAAAFAAAAAACTAAAAAAAFAAAAAACUAAAAAAAFAAAAAACVAAAAAAAFAAAAAACWAAAAAAAFAAAAAACXAAAAAAAFAAAAAACYAAAAAAAFAAAAAACZAAAAAAAFAAAAAACaAAAAAAAFAAAAAACbAAAAAAAFAAAAAACcAAAAAAAFAAAAAACdAAAAAAAFAAAAAACeAAAAAAAFAAAAAACfAAAAAAAFAAAAAACgAAAAAAAFAAAAAAChAAAAAAAGAAEAAAC3APT/AAAFAAEAAAC4APT/AAAGAAEAAAC5APT/AAAFAAEAAAC6APT/AAAGAAEAAAC7APT/AAAFAAEAAAC8APT/AAAGAAEAAAC9APT/AAAFAAEAAAC+APT/AAAGAAEAAAA=")
 tile_set = SubResource("TileSet_xh0de")
 
 [node name="RisingPlatform" type="TileMapLayer" parent="Course/AreaTwo" unique_id=972149250]
+texture_filter = 1
 tile_map_data = PackedByteArray("AACuAAUAAAAFAAEAAACvAAUAAAAGAAEAAACwAAUAAAAFAAEAAACxAAUAAAAGAAEAAACyAAUAAAAFAAEAAACzAAUAAAAGAAEAAAC0AAUAAAAFAAEAAAC1AAUAAAAGAAEAAACsAAUAAAAFAAEAAACtAAUAAAAGAAEAAAA=")
 tile_set = SubResource("TileSet_2xkmh")
 script = ExtResource("11_xh0de")
@@ -11608,6 +11663,7 @@ scale = Vector2(0.99999994, 0.99999994)
 shape = SubResource("RectangleShape2D_nsqpp")
 
 [node name="MovingPlatform" type="TileMapLayer" parent="Course/AreaTwo" unique_id=191833788]
+texture_filter = 1
 tile_map_data = PackedByteArray("AADUAPT/AAAFAAEAAADVAPT/AAAGAAEAAADWAPT/AAAFAAEAAADXAPT/AAAGAAEAAADYAPT/AAAFAAEAAADZAPT/AAAGAAEAAADaAPT/AAAFAAEAAADbAPT/AAAGAAEAAAA=")
 tile_set = SubResource("TileSet_nsqpp")
 script = ExtResource("13_05bwp")
@@ -11667,22 +11723,22 @@ texture = ExtResource("19_l16gl")
 [node name="AreaThree" type="Node2D" parent="Course" unique_id=1196799887]
 
 [node name="Floor" type="TileMapLayer" parent="Course/AreaThree" unique_id=548543278]
+texture_filter = 1
 tile_map_data = PackedByteArray("AADUAAIAAAAFAAEAAADVAAIAAAAGAAEAAADWAAIAAAAFAAEAAADXAAIAAAAGAAEAAADYAAIAAAAFAAEAAADZAAIAAAAGAAEAAADaAAIAAAAFAAEAAADbAAIAAAAGAAEAAADcAAIAAAAFAAEAAADdAAIAAAAGAAEAAADeAAIAAAAFAAEAAADfAAIAAAAGAAEAAADgAAIAAAAFAAEAAADhAAIAAAAGAAEAAADiAAIAAAAFAAEAAADjAAIAAAAGAAEAAADkAAIAAAAFAAEAAADlAAIAAAAGAAEAAADmAAIAAAAFAAEAAADnAAIAAAAGAAEAAADoAAIAAAAFAAEAAADpAAIAAAAGAAEAAADqAAIAAAAFAAEAAADrAAIAAAAGAAEAAADsAAIAAAAFAAEAAADtAAIAAAAGAAEAAADuAAIAAAAFAAEAAADvAAIAAAAGAAEAAADwAAIAAAAFAAEAAADxAAIAAAAGAAEAAADyAAIAAAAFAAEAAADzAAIAAAAGAAEAAAD0AAIAAAAFAAEAAAD1AAIAAAAGAAEAAAD2AAIAAAAFAAEAAAD3AAIAAAAGAAEAAAD4AAIAAAAFAAEAAAD5AAIAAAAGAAEAAAD6AAIAAAAFAAEAAAD7AAIAAAAGAAEAAAD8AAIAAAAFAAEAAAD9AAIAAAAGAAEAAAD+AAIAAAAFAAEAAAD/AAIAAAAGAAEAAAAAAQIAAAAFAAEAAAABAQIAAAAGAAEAAAACAQIAAAAFAAEAAAADAQIAAAAGAAEAAAAEAQIAAAAFAAEAAAAFAQIAAAAGAAEAAAAGAQIAAAAFAAEAAAAHAQIAAAAGAAEAAAAIAQIAAAAFAAEAAAAJAQIAAAAGAAEAAAAKAQIAAAAFAAEAAAALAQIAAAAGAAEAAAAMAQIAAAAFAAEAAAANAQIAAAAGAAEAAAAOAQIAAAAFAAEAAAAPAQIAAAAGAAEAAAAQAQIAAAAFAAEAAAARAQIAAAAGAAEAAAASAQIAAAAFAAEAAAATAQIAAAAGAAEAAAAUAQIAAAAFAAEAAAAVAQIAAAAGAAEAAAAWAQIAAAAFAAEAAAAXAQIAAAAGAAEAAAAYAQIAAAAFAAEAAAAZAQIAAAAGAAEAAAAaAQIAAAAFAAEAAAAbAQIAAAAGAAEAAAAcAQIAAAAFAAEAAAAdAQIAAAAGAAEAAAAeAQIAAAAFAAEAAAAfAQIAAAAGAAEAAAAgAQIAAAAFAAEAAAAhAQIAAAAGAAEAAAAiAQIAAAAFAAEAAAAjAQIAAAAGAAEAAAAkAQIAAAAFAAEAAAAlAQIAAAAGAAEAAAAmAQIAAAAFAAEAAAAnAQIAAAAGAAEAAAA=")
 tile_set = SubResource("TileSet_x8c52")
 
-[node name="Area2D" type="RigidBody2D" parent="Course/AreaThree" unique_id=1602548057]
+[node name="MetalBox" type="RigidBody2D" parent="Course/AreaThree" unique_id=1602548057]
 position = Vector2(3736.01, -356.16)
 scale = Vector2(0.99999994, 0.99999994)
 mass = 5.0
-gravity_scale = 2.0
 linear_damp = 5.0
 
-[node name="MetalBox" type="Sprite2D" parent="Course/AreaThree/Area2D" unique_id=606068378]
+[node name="MetalBox" type="Sprite2D" parent="Course/AreaThree/MetalBox" unique_id=606068378]
 texture_filter = 1
 scale = Vector2(4.367191, 4.367191)
 texture = ExtResource("19_x8c52")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaThree/Area2D" unique_id=1372373176]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaThree/MetalBox" unique_id=1372373176]
 position = Vector2(0, 17.599993)
 scale = Vector2(0.9999998, 0.9999998)
 shape = SubResource("RectangleShape2D_4og5j")
@@ -11855,3 +11911,13 @@ activates_lasers = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/CheckpointThree" unique_id=2135140413]
 scale = Vector2(0.99999976, 0.99999976)
 shape = SubResource("RectangleShape2D_vhqpk")
+
+[node name="EndZone" type="Area2D" parent="Checkpoints" unique_id=1315248899]
+position = Vector2(5293.29, -164.55)
+script = ExtResource("34_l0ds2")
+next_scene = "/Users/zoyasoy/Desktop/dead-orbit/dead-orbit-godot/rooms/room_three.tscn"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/EndZone" unique_id=1469349769]
+position = Vector2(-0.6904297, 18.274994)
+scale = Vector2(0.99999976, 0.99999976)
+shape = SubResource("RectangleShape2D_ir60l")

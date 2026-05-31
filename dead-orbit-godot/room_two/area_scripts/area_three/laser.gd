@@ -19,7 +19,7 @@ func _ready():
 	base_rotation = rotation_degrees
 	$RayCast2D.enabled = true
 	$RayCast2D.target_position = Vector2(beam_length, 0)
-	$Line2D.width = 5.0
+	$Line2D.width = 2.5
 	$Line2D.default_color = Color(1.0, 0.0, 0.0)
 	$DetectionArea.body_entered.connect(_on_body_entered)
 	$DetectionArea.body_exited.connect(_on_body_exited)

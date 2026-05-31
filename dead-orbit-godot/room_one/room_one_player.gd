@@ -56,9 +56,15 @@ func respawn() -> void:
 	global_position = start_position
 	velocity = Vector2.ZERO
 
+var _jump_requested: bool = false
+
+func _unhandled_input(event: InputEvent) -> void:
+	var up = "sol_up" if is_sol else "luna_up"
+	if event.is_action_pressed(up):
+		_jump_requested = true
+
 func _physics_process(delta: float) -> void:
 	var on_floor := is_on_floor()
-
 	if not on_floor:
 		velocity.y += GRAVITY * delta
 
@@ -66,18 +72,17 @@ func _physics_process(delta: float) -> void:
 	var left  = "sol_left"  if is_sol else "luna_left"
 	var right = "sol_right" if is_sol else "luna_right"
 
-	# Coyote time — restore double jump and reset window whenever on the floor
 	if on_floor:
 		_coyote_timer = COYOTE_TIME
 		_has_air_jump = true
 	else:
 		_coyote_timer = max(_coyote_timer - delta, 0.0)
 
-	# Jump: ground / coyote first; one air jump if neither applies
-	if Input.is_action_just_pressed(up):
+	if _jump_requested:
+		_jump_requested = false
 		if on_floor or _coyote_timer > 0.0:
 			velocity.y = JUMP_VELOCITY
-			_coyote_timer = 0.0   # consume the coyote window so it can't fire twice
+			_coyote_timer = 0.0
 		elif _has_air_jump:
 			velocity.y = JUMP_VELOCITY
 			_has_air_jump = false
