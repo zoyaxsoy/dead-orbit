@@ -1,15 +1,17 @@
 [gd_scene format=3 uid="uid://dly3h1g2ccujy"]
 
+[ext_resource type="Script" uid="uid://bsopmjbsokm84" path="res://start_menu/character_select.gd" id="1_erm03"]
 [ext_resource type="Script" uid="uid://cy62v0piyxeup" path="res://start_menu/background_scroll.gd" id="2_5w2ym"]
 [ext_resource type="Texture2D" uid="uid://dymhsss8y4dbf" path="res://rooms/room_three_graphics/room3_space_backdrop.png" id="2_hyjyy"]
 [ext_resource type="Texture2D" uid="uid://baorlk82311p3" path="res://start_menu/character_portraits/luna_standing_labeled.png" id="3_5w2ym"]
 [ext_resource type="Texture2D" uid="uid://casm2en838i3h" path="res://start_menu/character_portraits/sol_standing_labeled.png" id="4_yu1fn"]
-[ext_resource type="Texture2D" uid="uid://ey3fs448n4rr" path="res://start_menu/character_portraits/player_icon_p1.png" id="5_veja7"]
-[ext_resource type="Texture2D" uid="uid://c3rm47ifpspof" path="res://start_menu/character_portraits/player_icon_p2.png" id="6_erm03"]
+[ext_resource type="Texture2D" path="res://start_menu/character_portraits/player_icon_p1.png" id="5_veja7"]
+[ext_resource type="Texture2D" uid="uid://c3rm47ifpspof" path="res://start_menu/player_icon_states/player_icon_p2.png" id="7_erm03"]
 
 [node name="CharacterSelect" type="Control" unique_id=271560024]
 layout_mode = 3
 anchors_preset = 0
+script = ExtResource("1_erm03")
 
 [node name="BackgroundScroll" type="Node2D" parent="." unique_id=2078289111]
 script = ExtResource("2_5w2ym")
@@ -55,7 +57,7 @@ offset_left = 1346.0
 offset_top = 882.0
 offset_right = 1526.0
 offset_bottom = 966.0
-texture = ExtResource("6_erm03")
+texture = ExtResource("7_erm03")
 
 [node name="P1Status" type="TextureRect" parent="." unique_id=125198469]
 layout_mode = 0

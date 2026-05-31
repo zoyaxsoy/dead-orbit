@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ey3fs448n4rr"
-path="res://.godot/imported/player_icon_p1.png-1500a25ba56a91d2891683c201c6691c.ctex"
+uid="uid://dwsft10q00dyg"
+path="res://.godot/imported/status_locked_in_large_panel.png-3660ae932b9bdc5008b225a27a03f3b9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://start_menu/character_portraits/player_icon_p1.png"
-dest_files=["res://.godot/imported/player_icon_p1.png-1500a25ba56a91d2891683c201c6691c.ctex"]
+source_file="res://start_menu/buttons/status_locked_in_large_panel.png"
+dest_files=["res://.godot/imported/status_locked_in_large_panel.png-3660ae932b9bdc5008b225a27a03f3b9.ctex"]
 
 [params]
 
