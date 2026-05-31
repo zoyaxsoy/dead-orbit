@@ -1,0 +1,95 @@
+[gd_scene format=3 uid="uid://dvxwha6b15pu"]
+
+[ext_resource type="Script" uid="uid://c4twt5q5t08rj" path="res://room_one/room_one.gd" id="1_room"]
+[ext_resource type="PackedScene" path="res://room_one/room_one_level.tscn" id="2_level"]
+[ext_resource type="Script" uid="uid://cdbk6dsov6pkm" path="res://room_one/room_one_intro.gd" id="3_intro"]
+
+[node name="RoomOne" type="Node2D" unique_id=378510967]
+script = ExtResource("1_room")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1374361900]
+layer = 10
+
+[node name="BlackBg" type="ColorRect" parent="CanvasLayer" unique_id=1096800501]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 1)
+
+[node name="LeftSVC" type="SubViewportContainer" parent="CanvasLayer" unique_id=706725156]
+anchors_preset = -1
+anchor_right = 0.5
+anchor_bottom = 1.0
+stretch = true
+
+[node name="LeftViewport" type="SubViewport" parent="CanvasLayer/LeftSVC" unique_id=1869632481]
+handle_input_locally = false
+size = Vector2i(576, 648)
+render_target_update_mode = 4
+
+[node name="SolLevel" parent="CanvasLayer/LeftSVC/LeftViewport" unique_id=1036495263 instance=ExtResource("2_level")]
+
+[node name="RightSVC" type="SubViewportContainer" parent="CanvasLayer" unique_id=976078522]
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 1.0
+anchor_bottom = 1.0
+stretch = true
+
+[node name="RightViewport" type="SubViewport" parent="CanvasLayer/RightSVC" unique_id=1102700301]
+handle_input_locally = false
+size = Vector2i(576, 648)
+render_target_update_mode = 4
+
+[node name="LunaLevel" parent="CanvasLayer/RightSVC/RightViewport" unique_id=1134914041 instance=ExtResource("2_level")]
+player_is_sol = false
+
+[node name="Divider" type="ColorRect" parent="CanvasLayer" unique_id=1427452060]
+anchors_preset = 13
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_right = 2.0
+color = Color(0.8, 0.8, 0.85, 1)
+
+
+[node name="SolRocksLabel" type="Label" parent="CanvasLayer" unique_id=1496627357]
+visible = false
+anchors_preset = -1
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 16.0
+offset_top = -22.0
+offset_right = -16.0
+offset_bottom = 22.0
+theme_override_colors/font_color = Color(1, 0.35, 0.15, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 22
+text = "SPACE ROCKS INCOMING!"
+horizontal_alignment = 1
+
+[node name="LunaRocksLabel" type="Label" parent="CanvasLayer" unique_id=1663560767]
+visible = false
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = 16.0
+offset_top = -22.0
+offset_right = -16.0
+offset_bottom = 22.0
+theme_override_colors/font_color = Color(1, 0.35, 0.15, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 6
+theme_override_font_sizes/font_size = 22
+text = "SPACE ROCKS INCOMING!"
+horizontal_alignment = 1
+
+[node name="IntroLayer" type="CanvasLayer" parent="." unique_id=969447549]
+process_mode = 3
+layer = 20
+script = ExtResource("3_intro")
