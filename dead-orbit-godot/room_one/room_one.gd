@@ -28,6 +28,42 @@ func _ready() -> void:
 	luna_level.rocks_started.connect(_on_luna_rocks_started)
 	sol_rocks_label.visible = false
 	luna_rocks_label.visible = false
+	_setup_player_labels()
+
+func _setup_player_labels() -> void:
+	var root := Control.new()
+	root.anchor_right  = 1.0
+	root.anchor_bottom = 1.0
+	$CanvasLayer.add_child(root)
+
+	# ── Sol — left half ───────────────────────────────────────────────────────
+	_player_lbl(root, "SOL",           14, Color(1.0,  0.45, 0.05, 1.0),  true,  10.0)
+	_player_lbl(root, "A / D   move",  11, Color(0.50, 0.60, 0.80, 0.70), true,  30.0)
+	_player_lbl(root, "W   jump",      11, Color(0.50, 0.60, 0.80, 0.70), true,  46.0)
+	_player_lbl(root, "S   button",    11, Color(0.50, 0.60, 0.80, 0.70), true,  62.0)
+
+	# ── Luna — right half ─────────────────────────────────────────────────────
+	_player_lbl(root, "LUNA",           14, Color(0.35, 0.82, 1.0,  1.0),  false, 10.0)
+	_player_lbl(root, "← / →   move",  11, Color(0.50, 0.60, 0.80, 0.70), false, 30.0)
+	_player_lbl(root, "↑   jump",      11, Color(0.50, 0.60, 0.80, 0.70), false, 46.0)
+	_player_lbl(root, "↓   button",    11, Color(0.50, 0.60, 0.80, 0.70), false, 62.0)
+
+func _player_lbl(parent: Control, txt: String, font_sz: int, col: Color,
+		left_half: bool, top_y: float) -> void:
+	var lbl := Label.new()
+	lbl.text = txt
+	lbl.anchor_left  = 0.0 if left_half else 0.5
+	lbl.anchor_right = 0.5 if left_half else 1.0
+	lbl.offset_left  = 16.0 if left_half else 0.0
+	lbl.offset_right = 0.0 if left_half else -16.0
+	lbl.offset_top    = top_y
+	lbl.offset_bottom = top_y + font_sz + 4.0
+	lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT if left_half else HORIZONTAL_ALIGNMENT_RIGHT
+	lbl.add_theme_font_size_override("font_size", font_sz)
+	lbl.add_theme_color_override("font_color", col)
+	lbl.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+	lbl.add_theme_constant_override("outline_size", 3)
+	parent.add_child(lbl)
 
 func _process(delta: float) -> void:
 	if not _sol_complete or not _luna_complete or _button_activated:
