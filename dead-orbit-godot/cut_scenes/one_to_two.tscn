@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://d2eq4s7asjkfk"]
+
+[ext_resource type="Script" uid="uid://ox27xwxn4j76" path="res://cut_scenes/one_to_two.gd" id="1_7kxlb"]
+
+[node name="OneToTwo" type="Control" unique_id=1069664713]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_7kxlb")

@@ -1,6 +1,6 @@
 extends Control
 
-const FIRST_ROOM := "res://rooms/room_two/room_two.tscn"
+const FIRST_ROOM := "res://cut_scenes/start_to_one.tscn"
 const LUNA_PORTRAIT := preload("res://start_menu/character_portraits/luna_standing_labeled.png")
 const SOL_PORTRAIT := preload("res://start_menu/character_portraits/sol_standing_labeled.png")
 const P1_DEFAULT := preload("res://start_menu/player_icon_states/player_icon_p1.png")
@@ -32,8 +32,7 @@ var sol_pos: Vector2
 @onready var confirm_graphic := $ConfirmGraphic
 
 func _ready():
-	modulate.a = 0.0
-	_fade_in()
+	FadeManager.fade_in()
 	confirm_graphic.visible = false
 	p1_status.visible = false
 	p2_status.visible = false
@@ -145,6 +144,8 @@ func _get_target_pos(hover: int, icon_size: Vector2) -> Vector2:
 func _remap_inputs():
 	var luna_device := 0 if p1_hover == 1 else 1
 	var sol_device := 1 if p1_hover == 1 else 0
+	print("luna device: ", luna_device, " sol device: ", sol_device)
+	print("p1_hover: ", p1_hover, " p2_hover: ", p2_hover)
 
 	_reassign_action("luna_left", luna_device, JOY_AXIS_LEFT_X, -1)
 	_reassign_action("luna_right", luna_device, JOY_AXIS_LEFT_X, 1)
@@ -175,7 +176,6 @@ func _reassign_action(action: String, device: int, axis_or_button: int, axis_val
 	InputMap.action_add_event(action, event)
 
 func _start_game():
-	_remap_inputs()
 	_fade_out(FIRST_ROOM)
 
 func _fade_in():

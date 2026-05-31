@@ -4,7 +4,14 @@
 [ext_resource type="PackedScene" path="res://room_one/room_one_level.tscn" id="2_level"]
 [ext_resource type="Script" uid="uid://cdbk6dsov6pkm" path="res://room_one/room_one_intro.gd" id="3_intro"]
 
-[node name="RoomOne" type="Node2D" unique_id=378510967]
+[node name="RoomOne" type="Control" unique_id=609616050]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_room")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1374361900]
@@ -17,9 +24,12 @@ anchor_bottom = 1.0
 color = Color(0, 0, 0, 1)
 
 [node name="LeftSVC" type="SubViewportContainer" parent="CanvasLayer" unique_id=706725156]
+custom_minimum_size = Vector2(576, 648)
 anchors_preset = -1
 anchor_right = 0.5
 anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 stretch = true
 
 [node name="LeftViewport" type="SubViewport" parent="CanvasLayer/LeftSVC" unique_id=1869632481]
@@ -30,10 +40,13 @@ render_target_update_mode = 4
 [node name="SolLevel" parent="CanvasLayer/LeftSVC/LeftViewport" unique_id=1036495263 instance=ExtResource("2_level")]
 
 [node name="RightSVC" type="SubViewportContainer" parent="CanvasLayer" unique_id=976078522]
+custom_minimum_size = Vector2(576, 648)
 anchors_preset = -1
 anchor_left = 0.5
 anchor_right = 1.0
 anchor_bottom = 1.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
 stretch = true
 
 [node name="RightViewport" type="SubViewport" parent="CanvasLayer/RightSVC" unique_id=1102700301]
@@ -52,7 +65,6 @@ anchor_bottom = 1.0
 offset_left = -2.0
 offset_right = 2.0
 color = Color(0.8, 0.8, 0.85, 1)
-
 
 [node name="SolRocksLabel" type="Label" parent="CanvasLayer" unique_id=1496627357]
 visible = false

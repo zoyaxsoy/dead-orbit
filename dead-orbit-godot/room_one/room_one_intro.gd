@@ -1,14 +1,19 @@
 extends CanvasLayer
 
-# Room 1 intro — overlaid on top of the live split-screen viewport.
-# process_mode is ALWAYS (set in .tscn) so this runs while the tree is paused.
-
 var _hint: Label
+var _dismissed: bool = false
 
 func _ready() -> void:
-	get_tree().paused = true
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	_build_ui()
 	_blink_hint()
+
+func _input(event: InputEvent) -> void:
+	print("input received: ", event)
+	if event.is_action_pressed("dismiss_action") or event.is_action_pressed("luna_up") or event.is_action_pressed("sol_up"):
+		print("dismissing")
+		_dismissed = true
+		queue_free()
 
 func _build_ui() -> void:
 	# ── Semi-transparent dark scrim — lets the actual room show through ──────
@@ -164,8 +169,3 @@ func _blink_hint() -> void:
 	var tw := create_tween().set_loops()
 	tw.tween_property(_hint, "modulate:a", 0.15, 0.7)
 	tw.tween_property(_hint, "modulate:a", 1.0,  0.7)
-
-func _process(_delta: float) -> void:
-	if Input.is_action_just_pressed("ui_accept"):
-		get_tree().paused = false
-		queue_free()

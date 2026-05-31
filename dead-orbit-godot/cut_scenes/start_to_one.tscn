@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://by1ldsthyvruu"]
+
+[ext_resource type="Script" uid="uid://c7x1m2r7d1x3y" path="res://cut_scenes/start_to_one.gd" id="1_mwuym"]
+
+[node name="StartToOne" type="Control" unique_id=1022879008]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_mwuym")
