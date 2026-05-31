@@ -21,7 +21,6 @@
 [ext_resource type="Script" uid="uid://dt5pfdmfublwb" path="res://room_two/area_scripts/area_two/rising_platform.gd" id="11_xh0de"]
 [ext_resource type="Script" uid="uid://cs28dpbnmbx4n" path="res://room_two/area_scripts/area_two/shield.gd" id="12_p78yq"]
 [ext_resource type="Script" uid="uid://b3cnoa86w83o5" path="res://room_two/area_scripts/area_two/moving_platform.gd" id="13_05bwp"]
-[ext_resource type="Texture2D" uid="uid://e8u1oitj88ht" path="res://room_two/graphics/dark_cyan_floor_tilesheet.png" id="16_2b7yf"]
 [ext_resource type="Script" uid="uid://dyc4tybwebmrp" path="res://room_two/area_scripts/kill_zone.gd" id="18_2xkmh"]
 [ext_resource type="Script" uid="uid://cq5t88656al20" path="res://room_two/area_scripts/area_two/shield_pop_up.gd" id="18_ys3rg"]
 [ext_resource type="Texture2D" uid="uid://cn06xli1wax7w" path="res://room_two/graphics/shield_instruction_popup_space_text_only.png" id="19_l16gl"]
@@ -9773,7 +9772,6 @@ texture_region_size = Vector2i(87, 100)
 95:63/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_ir60l"]
-texture = ExtResource("16_2b7yf")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0

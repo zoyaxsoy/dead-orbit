@@ -9,23 +9,26 @@ func _ready():
 	FadeManager.fade_in()
 	_update_button_highlight()
 
-func _process(_delta):
-	if $CreditsPanel.visible:
-		if Input.is_action_just_pressed("luna_up") or Input.is_action_just_pressed("sol_up") or Input.is_action_just_pressed("dismiss_action"):
-			_on_credits_back()
-		return
+var _joy_moved := false
 
-	if Input.is_action_just_pressed("luna_left") or Input.is_action_just_pressed("sol_left"):
-		print("left pressed")
-		selected_button = 0
-		_update_button_highlight()
-	elif Input.is_action_just_pressed("luna_right") or Input.is_action_just_pressed("sol_right"):
-		print("right pressed")
+func _process(_delta):
+	var axis := Input.get_joy_axis(0, JOY_AXIS_LEFT_X)
+
+	if axis > 0.5 and not _joy_moved:
+		_joy_moved = true
 		selected_button = 1
 		_update_button_highlight()
+	elif axis < -0.5 and not _joy_moved:
+		_joy_moved = true
+		selected_button = 0
+		_update_button_highlight()
+	elif absf(axis) < 0.3:
+		_joy_moved = false
 
-	if Input.is_action_just_pressed("luna_up") or Input.is_action_just_pressed("sol_up") or Input.is_action_just_pressed("dismiss_action"):
-		if selected_button == 0:
+	if Input.is_action_just_pressed("luna_up") or Input.is_action_just_pressed("sol_up"):
+		if $CreditsPanel.visible:
+			_on_credits_back()
+		elif selected_button == 0:
 			_on_start_pressed()
 		else:
 			_on_credits_pressed()
