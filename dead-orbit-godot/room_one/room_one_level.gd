@@ -52,6 +52,10 @@ var _button_pressing: bool = false        # is this player currently holding the
 var _floor_segs: Array = []
 # Visual nodes added by _add_impact_visuals — cleared on respawn
 var _hole_visuals: Array = []
+# Tile sprite tracking: {x1, x2, node} for every currently-visible tile strip
+var _floor_tile_sprites: Array = []
+# x1/x2 ranges of original tiles destroyed by a pit — recreated fresh on clear
+var _split_original_ranges: Array = []
 
 var _rock_script = preload("res://room_one/rock.gd")
 
@@ -77,6 +81,7 @@ func _ready() -> void:
 	exit_area.body_entered.connect(_on_exit_body_entered)
 	_setup_exit_visual()
 	_setup_button()
+	_setup_floor_visuals()
 
 func _process(delta: float) -> void:
 	if _is_dying:
@@ -456,9 +461,14 @@ func _fill_static_gaps() -> void:
 			Vector2(gx1, _FLOOR_TOP), Vector2(gx2, _FLOOR_TOP),
 			Vector2(gx2, 760.0), Vector2(gx1, 760.0),
 		])
-		vis.color = Color(0.14, 0.17, 0.24, 1.0)
+		vis.color = Color("#0E121E")
 		vis.z_index = -5
 		sb.add_child(vis)
+
+		# Tile the floor texture over the gap fill so it matches the main floor
+		var tile_spr = _make_floor_tile_sprite(gx1, gx2)
+		add_child(tile_spr)   # level-node child, lifecycle managed via _floor_tile_sprites
+		_floor_tile_sprites.append({"x1": gx1, "x2": gx2, "node": tile_spr})
 
 		_floor_segs.append({"x1": gx1, "x2": gx2, "body": sb, "shape": cs})
 
@@ -466,6 +476,7 @@ func _fill_static_gaps() -> void:
 
 func create_rock_hole(ix: float, sprite_col: int = 0) -> void:
 	_punch_floor_at(ix)
+	_punch_tile_at(ix)
 	_add_impact_visuals(ix, sprite_col)
 	_check_floor_clearance()
 
@@ -491,6 +502,32 @@ func _punch_floor_at(ix: float) -> void:
 			_split_seg(seg, ix)
 			return
 
+func _punch_tile_at(ix: float) -> void:
+	for i in range(_floor_tile_sprites.size()):
+		var entry = _floor_tile_sprites[i]
+		if ix > entry.x1 and ix < entry.x2:
+			_floor_tile_sprites.remove_at(i)
+			# If it's a fresh original, record its range for recreation on clear.
+			if not _hole_visuals.has(entry.node):
+				_hole_visuals.append(entry.node)
+				_split_original_ranges.append({"x1": entry.x1, "x2": entry.x2})
+			# Free the punched tile immediately so the pit shows through right away.
+			if is_instance_valid(entry.node) and not entry.node.is_queued_for_deletion():
+				entry.node.queue_free()
+			# Left piece — from segment start to left edge of hole.
+			if ix - HOLE_RADIUS > entry.x1:
+				var lspr = _make_floor_tile_sprite(entry.x1, ix - HOLE_RADIUS)
+				add_child(lspr)
+				_floor_tile_sprites.append({"x1": entry.x1, "x2": ix - HOLE_RADIUS, "node": lspr})
+				_hole_visuals.append(lspr)
+			# Right piece — from right edge of hole to segment end.
+			if ix + HOLE_RADIUS < entry.x2:
+				var rspr = _make_floor_tile_sprite(ix + HOLE_RADIUS, entry.x2)
+				add_child(rspr)
+				_floor_tile_sprites.append({"x1": ix + HOLE_RADIUS, "x2": entry.x2, "node": rspr})
+				_hole_visuals.append(rspr)
+			return
+
 func _split_seg(seg: Dictionary, ix: float) -> void:
 	seg.shape.disabled = true
 
@@ -509,46 +546,21 @@ func _add_floor_piece(body: StaticBody2D, x1: float, x2: float) -> CollisionShap
 	body.add_child(cs)
 	return cs
 
-func _add_impact_visuals(ix: float, sprite_col: int) -> void:
-	# Orange heat glow ring (behind hole)
-	var ring = Polygon2D.new()
-	var rp = PackedVector2Array()
-	for i in 12:
-		var a = i * TAU / 12.0
-		rp.append(Vector2(ix + cos(a) * (HOLE_RADIUS + 8.0), _FLOOR_TOP + sin(a) * 15.0))
-	ring.polygon = rp
-	ring.color = Color(1.0, 0.38, 0.05, 0.42)
-	ring.z_index = 0
-	add_child(ring)
-	_hole_visuals.append(ring)
-
-	# Dark hole ellipse on top of floor
-	var hole = Polygon2D.new()
-	var hp = PackedVector2Array()
-	for i in 12:
-		var a = i * TAU / 12.0
-		hp.append(Vector2(ix + cos(a) * (HOLE_RADIUS + 2.0), _FLOOR_TOP + sin(a) * 13.0))
-	hole.polygon = hp
-	hole.color = Color(0.03, 0.02, 0.04, 1.0)
-	hole.z_index = 1
-	add_child(hole)
-	_hole_visuals.append(hole)
-
-	# Embedded rock — same sprite column as the rock that caused this hole.
-	# Squished vertically so it looks half-buried in the floor.
-	var rk = Sprite2D.new()
-	rk.texture = load("res://room_one/room_one_graphics/rocks_sheet.png")
-	rk.region_enabled = true
-	rk.region_rect = Rect2(sprite_col * 85, 0, 85, 90)
-	rk.scale = Vector2(0.55, 0.38)   # narrower + flatter = embedded look
-	rk.position = Vector2(ix, _FLOOR_TOP - 6.0)
-	rk.z_index = 2
-	add_child(rk)
-	_hole_visuals.append(rk)
-
-	# Wire stubs at hole edges
-	_add_impact_wire(ix - HOLE_RADIUS - 2.0, 1.0)
-	_add_impact_wire(ix + HOLE_RADIUS + 2.0, -1.0)
+func _add_impact_visuals(ix: float, _sprite_col: int) -> void:
+	# Pit crater sprite (666×375 px source).
+	# Uniform scale 0.28 → ~187 px wide, ~105 px tall.
+	# Only the top ~29 px (the orange-glowing rim) is visible at floor level;
+	# the rocky depth disappears below the viewport into the abyss — perfect.
+	# pitt.png: 1500×375 px.  Squash vertically (y=0.12) to reduce wing height.
+	# → 225×45 px.  Centre 8 px below _FLOOR_TOP so top≈604 (inside floor tile
+	# band), bottom≈649 — entirely visible, wings don't bleed into the background.
+	var pit := Sprite2D.new()
+	pit.texture  = load("res://room_one/room_one_graphics/pit_crater.png")
+	pit.scale    = Vector2(0.15, 0.12)   # 225 × 45 px
+	pit.position = Vector2(ix, _FLOOR_TOP + 8.0)   # top≈604, bottom≈649
+	pit.z_index  = 5   # above charges (z=0) and floor tile (z=-1)
+	add_child(pit)
+	_hole_visuals.append(pit)
 
 func _add_impact_wire(wx: float, dir: float) -> void:
 	var pts = PackedVector2Array([
@@ -573,10 +585,28 @@ func _add_impact_wire(wx: float, dir: float) -> void:
 	_hole_visuals.append(wire)
 
 func _clear_rock_holes() -> void:
+	# Remove any _floor_tile_sprites entries that are about to be freed.
+	var hole_set: Dictionary = {}
 	for n in _hole_visuals:
-		if is_instance_valid(n):
+		hole_set[n] = true
+	var kept: Array = []
+	for entry in _floor_tile_sprites:
+		if not hole_set.has(entry.node):
+			kept.append(entry)
+	_floor_tile_sprites = kept
+
+	# Free pit sprites, split pieces, and original tiles that were punched through.
+	for n in _hole_visuals:
+		if is_instance_valid(n) and not n.is_queued_for_deletion():
 			n.queue_free()
 	_hole_visuals.clear()
+
+	# Recreate original tile strips from stored ranges — fresh nodes, no stale refs.
+	for r in _split_original_ranges:
+		var spr := _make_floor_tile_sprite(r.x1, r.x2)
+		add_child(spr)
+		_floor_tile_sprites.append({"x1": r.x1, "x2": r.x2, "node": spr})
+	_split_original_ranges.clear()
 
 	# Synchronously restore each original floor body's collision shape
 	for seg_name in ["Floor1", "Floor2", "Floor3", "Floor4"]:
@@ -660,3 +690,39 @@ func _death_label(parent: Control, txt: String, col: Color,
 	lbl.add_theme_font_size_override("font_size", font_sz)
 	parent.add_child(lbl)
 	return lbl
+
+# ── Floor tile visuals ────────────────────────────────────────────────────────
+
+func _setup_floor_visuals() -> void:
+	# Recolour the scene FloorVisual polygons to #10141F — this is the "abyss"
+	# colour that shows below the floor tile and through pit holes.
+	var abyss := Color("#0E121E")
+	for floor_name in ["Floor1", "Floor2", "Floor3", "Floor4"]:
+		var vis: Polygon2D = $Floors.get_node(floor_name).get_node("FloorVisual")
+		vis.color   = abyss
+		vis.z_index = -2   # behind tile strip (z=-1) and player (z=0)
+
+	# Tile strips sit ABOVE _FLOOR_TOP so they're fully in the viewport.
+	# The tile's bottom edge = _FLOOR_TOP (floor surface); it extends 64 px upward.
+	var segs: Array = [
+		[0.0,    3100.0],
+		[3220.0, 3780.0],
+		[3910.0, 4550.0],
+		[4690.0, 5900.0],
+	]
+	for s in segs:
+		var spr := _make_floor_tile_sprite(s[0], s[1])
+		add_child(spr)
+		_floor_tile_sprites.append({"x1": s[0], "x2": s[1], "node": spr})
+
+func _make_floor_tile_sprite(x1: float, x2: float) -> Sprite2D:
+	const TILE_H: float = 32.0   # exactly one tile row — no vertical repeat, single stripe
+	var spr := Sprite2D.new()
+	spr.texture        = load("res://room_one/room_one_graphics/floor_tile.png")
+	spr.texture_repeat = CanvasItem.TEXTURE_REPEAT_ENABLED
+	spr.region_enabled = true
+	spr.region_rect    = Rect2(0.0, 0.0, x2 - x1, TILE_H)
+	# Bottom of sprite = _FLOOR_TOP; the stripe sits above the floor surface
+	spr.position = Vector2((x1 + x2) * 0.5, _FLOOR_TOP - TILE_H * 0.5)
+	spr.z_index  = -1   # above abyss polygon (z=-2), below player (z=0)
+	return spr
