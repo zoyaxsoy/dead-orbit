@@ -362,7 +362,7 @@ func _show_celebration() -> void:
 	fade.parallel().tween_property(tether,   "modulate:a", 1.0, 0.5)
 
 	await get_tree().create_timer(3.5).timeout
-	get_tree().change_scene_to_file("res://room_two/room_two.tscn")
+	FadeManager.fade_to_scene("res://cut_scenes/one_to_two.tscn")
 
 # ── Label helpers ─────────────────────────────────────────────────────────────
 

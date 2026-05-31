@@ -46,6 +46,7 @@ func _physics_process(delta):
 			player_b.velocity += -direction * pull_strength * delta
 
 func _ready():
+	FadeManager.fade_in()
 	$Course/AreaTwo/Shield.activated.connect($Course/AreaTwo/MovingPlatform.activate)
 	$Course/AreaTwo/Shield.activated.connect($Course/AreaTwo/CanvasLayer/ShieldPopUp.show_popup)
 	$Course/AreaTwo/Shield.collected_by.connect(_on_shield_collected)
