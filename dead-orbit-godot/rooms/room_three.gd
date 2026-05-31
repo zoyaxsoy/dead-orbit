@@ -78,6 +78,7 @@ var room_four_transition_overlay: ColorRect
 var room_four_transition_label: Label
 
 func _ready() -> void:
+	FadeManager.fade_in()
 	_build_level_data()
 	_build_world()
 	_build_hull_visuals()
