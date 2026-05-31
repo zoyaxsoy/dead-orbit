@@ -23,6 +23,7 @@ var _anim:   AnimatedSprite2D
 
 func _ready() -> void:
 	start_x = global_position.x
+	phase_offset = randf_range(0.0, TAU)   # randomise every run — pattern can't be memorised
 	$ChargeVisual.visible = false
 
 	var sf := _build_frames(12.0)

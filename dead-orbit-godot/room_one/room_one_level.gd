@@ -7,9 +7,10 @@ signal button_state_changed(is_pressing: bool)  # player holding exit button
 
 const CAM_Y = 324.0
 const CAM_MIN_X = 288.0
-const CAM_MAX_X = 5612.0
-const HALFWAY_X = 2950.0
-const MID_RESPAWN_X = 2950.0
+const CAM_MAX_X = 8612.0
+const HALFWAY_X = 4900.0           # rocks trigger here — end of extended first half
+const MID_RESPAWN_X = 4900.0       # respawn point once in the rocks zone
+const FIRST_CHECKPOINT_X = 2500.0  # respawn point once past the midway charges
 const DEATH_Y = 720.0
 const ROCK_SPEED_BASE = 80.0
 const ROCK_INTERVAL_MIN = 0.8
@@ -17,13 +18,14 @@ const ROCK_INTERVAL_MAX = 1.5
 const ROCK_SPAWN_Y = 50.0
 const HOLE_RADIUS = 48.0
 const ROCK_GRACE_SECONDS = 0.8
-const ROCK_SPAWN_CUTOFF = 5800.0   # hazard spawn-ahead cap (= exit x so rocks fall right to door)
-const EXIT_X = 5800.0              # matches Exit node position.x
+const ROCK_SPAWN_CUTOFF = 8800.0   # hazard spawn-ahead cap (= exit x so rocks fall right to door)
+const EXIT_X = 8800.0              # matches Exit node position.x
 const ROCK_STOP_DIST = 50.0        # stop ALL rocks within the last 50 px of exit
-const _BUTTON_X = 5830.0           # floor button world x — right at the exit wall
+const _BUTTON_X = 8830.0           # floor button world x — right at the exit wall
 
 # Static gap x-ranges — filled in at runtime so only dynamic rock holes exist
-const _GAPS = [[3100.0, 3220.0], [3780.0, 3910.0], [4550.0, 4690.0]]
+# Gaps widened from ~120 px to ~220 px so they require a proper jump
+const _GAPS = [[3100.0, 3320.0], [3780.0, 4000.0], [4550.0, 4770.0]]
 const _FLOOR_TOP = 619.0
 
 @export var player_is_sol: bool = true
@@ -198,21 +200,19 @@ func _respawn() -> void:
 	_is_dying = false
 
 func _execute_respawn() -> void:
+	# No checkpoints — every death restarts from the very beginning.
 	if _rocks_active:
+		# Clear rocks so the player restarts a clean run
 		for rock in rocks.get_children():
 			rock.queue_free()
 		_clear_rock_holes()
 		_rock_timer = 0.0
 		_next_rock_time = randf_range(ROCK_INTERVAL_MIN, ROCK_INTERVAL_MAX)
-		_rock_pause = ROCK_GRACE_SECONDS
-		player.global_position = Vector2(MID_RESPAWN_X, _FLOOR_TOP - 32.0)
-		player.velocity = Vector2.ZERO
-		camera.global_position = Vector2(clamp(MID_RESPAWN_X, CAM_MIN_X, CAM_MAX_X), CAM_Y)
-		_parallax_ref_x = MID_RESPAWN_X
-	else:
-		player.respawn()
-		camera.global_position = Vector2(CAM_MIN_X, CAM_Y)
-		_parallax_ref_x = 0.0
+		_rock_pause = 0.0
+		_rocks_active = false
+	player.respawn()
+	camera.global_position = Vector2(CAM_MIN_X, CAM_Y)
+	_parallax_ref_x = 0.0
 
 func _execute_full_restart() -> void:
 	# Player died at/near the exit — restart from the very beginning of the level.
@@ -435,9 +435,9 @@ func hide_exit_ui() -> void:
 func _build_floor_segs() -> void:
 	var defs = [
 		["Floor1", 0.0,    3100.0],
-		["Floor2", 3220.0, 3780.0],
-		["Floor3", 3910.0, 4550.0],
-		["Floor4", 4690.0, 5900.0],
+		["Floor2", 3320.0, 3780.0],
+		["Floor3", 4000.0, 4550.0],
+		["Floor4", 4770.0, 8900.0],
 	]
 	for d in defs:
 		var body: StaticBody2D = $Floors.get_node(d[0])
@@ -711,9 +711,9 @@ func _setup_floor_visuals() -> void:
 	# The tile's bottom edge = _FLOOR_TOP (floor surface); it extends 64 px upward.
 	var segs: Array = [
 		[0.0,    3100.0],
-		[3220.0, 3780.0],
-		[3910.0, 4550.0],
-		[4690.0, 5900.0],
+		[3320.0, 3780.0],
+		[4000.0, 4550.0],
+		[4770.0, 8900.0],
 	]
 	for s in segs:
 		var spr := _make_floor_tile_sprite(s[0], s[1])

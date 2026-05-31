@@ -5,7 +5,7 @@ extends Node2D
 @onready var sol_rocks_label: Label = $CanvasLayer/SolRocksLabel
 @onready var luna_rocks_label: Label = $CanvasLayer/LunaRocksLabel
 
-const HOLD_DURATION: float = 3.0   # seconds both players must hold simultaneously
+const HOLD_DURATION: float = 5.0   # seconds both players must hold simultaneously
 
 var _sol_complete: bool = false
 var _luna_complete: bool = false

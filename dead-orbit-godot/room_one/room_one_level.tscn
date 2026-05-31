@@ -10,13 +10,13 @@
 size = Vector2(3100, 30)
 
 [sub_resource type="RectangleShape2D" id="ShapeFloor2"]
-size = Vector2(560, 30)
+size = Vector2(460, 30)
 
 [sub_resource type="RectangleShape2D" id="ShapeFloor3"]
-size = Vector2(640, 30)
+size = Vector2(550, 30)
 
 [sub_resource type="RectangleShape2D" id="ShapeFloor4"]
-size = Vector2(1210, 30)
+size = Vector2(4130, 30)
 
 [sub_resource type="RectangleShape2D" id="ShapeWallL"]
 size = Vector2(30, 800)
@@ -84,52 +84,52 @@ polygon = PackedVector2Array(0, 619, 3100, 619, 3100, 760, 0, 760)
 [node name="Floor2" type="StaticBody2D" parent="Floors"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floors/Floor2"]
-position = Vector2(3500, 636)
+position = Vector2(3550, 636)
 shape = SubResource("ShapeFloor2")
 
 [node name="FloorVisual" type="Polygon2D" parent="Floors/Floor2"]
 z_index = -5
 color = Color(0.14, 0.17, 0.24, 1)
-polygon = PackedVector2Array(3220, 619, 3780, 619, 3780, 760, 3220, 760)
+polygon = PackedVector2Array(3320, 619, 3780, 619, 3780, 760, 3320, 760)
 
 [node name="Floor3" type="StaticBody2D" parent="Floors"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floors/Floor3"]
-position = Vector2(4230, 636)
+position = Vector2(4275, 636)
 shape = SubResource("ShapeFloor3")
 
 [node name="FloorVisual" type="Polygon2D" parent="Floors/Floor3"]
 z_index = -5
 color = Color(0.14, 0.17, 0.24, 1)
-polygon = PackedVector2Array(3910, 619, 4550, 619, 4550, 760, 3910, 760)
+polygon = PackedVector2Array(4000, 619, 4550, 619, 4550, 760, 4000, 760)
 
 [node name="Floor4" type="StaticBody2D" parent="Floors"]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Floors/Floor4"]
-position = Vector2(5295, 636)
+position = Vector2(6835, 636)
 shape = SubResource("ShapeFloor4")
 
 [node name="FloorVisual" type="Polygon2D" parent="Floors/Floor4"]
 z_index = -5
 color = Color(0.14, 0.17, 0.24, 1)
-polygon = PackedVector2Array(4690, 619, 5900, 619, 5900, 760, 4690, 760)
+polygon = PackedVector2Array(4770, 619, 8900, 619, 8900, 760, 4770, 760)
 
 [node name="GapMarkers" type="Node2D" parent="."]
 
 [node name="Gap1" type="Polygon2D" parent="GapMarkers"]
 z_index = -4
 color = Color(0.04, 0.02, 0.06, 1)
-polygon = PackedVector2Array(3100, 619, 3220, 619, 3220, 760, 3100, 760)
+polygon = PackedVector2Array(3100, 619, 3320, 619, 3320, 760, 3100, 760)
 
 [node name="Gap2" type="Polygon2D" parent="GapMarkers"]
 z_index = -4
 color = Color(0.04, 0.02, 0.06, 1)
-polygon = PackedVector2Array(3780, 619, 3910, 619, 3910, 760, 3780, 760)
+polygon = PackedVector2Array(3780, 619, 4000, 619, 4000, 760, 3780, 760)
 
 [node name="Gap3" type="Polygon2D" parent="GapMarkers"]
 z_index = -4
 color = Color(0.04, 0.02, 0.06, 1)
-polygon = PackedVector2Array(4550, 619, 4690, 619, 4690, 760, 4550, 760)
+polygon = PackedVector2Array(4550, 619, 4770, 619, 4770, 760, 4550, 760)
 
 [node name="LeftWall" type="StaticBody2D" parent="."]
 position = Vector2(-20, 0)
@@ -139,7 +139,7 @@ position = Vector2(15, 400)
 shape = SubResource("ShapeWallL")
 
 [node name="RightWall" type="StaticBody2D" parent="."]
-position = Vector2(5890, 0)
+position = Vector2(8980, 0)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="RightWall"]
 position = Vector2(15, 400)
@@ -151,7 +151,7 @@ shape = SubResource("ShapeWallR")
 position = Vector2(700, 607)
 script = ExtResource("5_charge")
 move_distance = 300.0
-move_speed = 0.65
+move_speed = 1.0
 phase_offset = 0.0
 
 [node name="ChargeVisual" type="Polygon2D" parent="Charges/Charge1"]
@@ -167,7 +167,7 @@ shape = SubResource("ShapeCharge")
 position = Vector2(1150, 607)
 script = ExtResource("5_charge")
 move_distance = 220.0
-move_speed = 0.78
+move_speed = 1.2
 phase_offset = 1.5
 
 [node name="ChargeVisual" type="Polygon2D" parent="Charges/Charge2"]
@@ -183,7 +183,7 @@ shape = SubResource("ShapeCharge")
 position = Vector2(1700, 607)
 script = ExtResource("5_charge")
 move_distance = 350.0
-move_speed = 0.58
+move_speed = 1.1
 phase_offset = 3.0
 
 [node name="ChargeVisual" type="Polygon2D" parent="Charges/Charge3"]
@@ -198,8 +198,8 @@ shape = SubResource("ShapeCharge")
 [node name="Charge4" type="Area2D" parent="Charges"]
 position = Vector2(2250, 607)
 script = ExtResource("5_charge")
-move_distance = 260.0
-move_speed = 0.84
+move_distance = 280.0
+move_speed = 1.6
 phase_offset = 0.7
 
 [node name="ChargeVisual" type="Polygon2D" parent="Charges/Charge4"]
@@ -215,7 +215,7 @@ shape = SubResource("ShapeCharge")
 position = Vector2(2700, 607)
 script = ExtResource("5_charge")
 move_distance = 200.0
-move_speed = 0.71
+move_speed = 1.1
 phase_offset = 2.4
 
 [node name="ChargeVisual" type="Polygon2D" parent="Charges/Charge5"]
@@ -231,7 +231,7 @@ shape = SubResource("ShapeCharge")
 position = Vector2(3500, 607)
 script = ExtResource("5_charge")
 move_distance = 190.0
-move_speed = 0.91
+move_speed = 1.4
 phase_offset = 1.1
 
 [node name="ChargeVisual" type="Polygon2D" parent="Charges/Charge6"]
@@ -243,10 +243,106 @@ polygon = PackedVector2Array(-38, -2, -25, -8, -12, 0, 0, -8, 12, 0, 25, -8, 38,
 position = Vector2(0, 14)
 shape = SubResource("ShapeCharge")
 
+[node name="Charge7" type="Area2D" parent="Charges"]
+position = Vector2(3000, 607)
+script = ExtResource("5_charge")
+move_distance = 200.0
+move_speed = 1.1
+phase_offset = 0.9
+
+[node name="ChargeVisual" type="Polygon2D" parent="Charges/Charge7"]
+position = Vector2(0, 14)
+color = Color(0.05, 0.75, 1.0, 0.95)
+polygon = PackedVector2Array(-38, -2, -25, -8, -12, 0, 0, -8, 12, 0, 25, -8, 38, -2, 38, 7, -38, 7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Charges/Charge7"]
+position = Vector2(0, 14)
+shape = SubResource("ShapeCharge")
+
+[node name="Charge8" type="Area2D" parent="Charges"]
+position = Vector2(4140, 607)
+script = ExtResource("5_charge")
+move_distance = 140.0
+move_speed = 1.2
+phase_offset = 2.7
+
+[node name="ChargeVisual" type="Polygon2D" parent="Charges/Charge8"]
+position = Vector2(0, 14)
+color = Color(0.05, 0.75, 1.0, 0.95)
+polygon = PackedVector2Array(-38, -2, -25, -8, -12, 0, 0, -8, 12, 0, 25, -8, 38, -2, 38, 7, -38, 7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Charges/Charge8"]
+position = Vector2(0, 14)
+shape = SubResource("ShapeCharge")
+
+[node name="Charge9" type="Area2D" parent="Charges"]
+position = Vector2(4380, 607)
+script = ExtResource("5_charge")
+move_distance = 120.0
+move_speed = 1.0
+phase_offset = 1.3
+
+[node name="ChargeVisual" type="Polygon2D" parent="Charges/Charge9"]
+position = Vector2(0, 14)
+color = Color(0.05, 0.75, 1.0, 0.95)
+polygon = PackedVector2Array(-38, -2, -25, -8, -12, 0, 0, -8, 12, 0, 25, -8, 38, -2, 38, 7, -38, 7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Charges/Charge9"]
+position = Vector2(0, 14)
+shape = SubResource("ShapeCharge")
+
+[node name="Charge10" type="Area2D" parent="Charges"]
+position = Vector2(4870, 607)
+script = ExtResource("5_charge")
+move_distance = 160.0
+move_speed = 1.3
+phase_offset = 0.5
+
+[node name="ChargeVisual" type="Polygon2D" parent="Charges/Charge10"]
+position = Vector2(0, 14)
+color = Color(0.05, 0.75, 1.0, 0.95)
+polygon = PackedVector2Array(-38, -2, -25, -8, -12, 0, 0, -8, 12, 0, 25, -8, 38, -2, 38, 7, -38, 7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Charges/Charge10"]
+position = Vector2(0, 14)
+shape = SubResource("ShapeCharge")
+
+[node name="Charge11" type="Area2D" parent="Charges"]
+position = Vector2(3200, 607)
+script = ExtResource("5_charge")
+move_distance = 130.0
+move_speed = 1.3
+phase_offset = 2.0
+
+[node name="ChargeVisual" type="Polygon2D" parent="Charges/Charge11"]
+position = Vector2(0, 14)
+color = Color(0.05, 0.75, 1.0, 0.95)
+polygon = PackedVector2Array(-38, -2, -25, -8, -12, 0, 0, -8, 12, 0, 25, -8, 38, -2, 38, 7, -38, 7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Charges/Charge11"]
+position = Vector2(0, 14)
+shape = SubResource("ShapeCharge")
+
+[node name="Charge12" type="Area2D" parent="Charges"]
+position = Vector2(4270, 607)
+script = ExtResource("5_charge")
+move_distance = 60.0
+move_speed = 1.1
+phase_offset = 0.6
+
+[node name="ChargeVisual" type="Polygon2D" parent="Charges/Charge12"]
+position = Vector2(0, 14)
+color = Color(0.05, 0.75, 1.0, 0.95)
+polygon = PackedVector2Array(-38, -2, -25, -8, -12, 0, 0, -8, 12, 0, 25, -8, 38, -2, 38, 7, -38, 7)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Charges/Charge12"]
+position = Vector2(0, 14)
+shape = SubResource("ShapeCharge")
+
 [node name="Rocks" type="Node2D" parent="."]
 
 [node name="Exit" type="Area2D" parent="."]
-position = Vector2(5800, 500)
+position = Vector2(8800, 500)
 
 [node name="ExitVisual" type="Polygon2D" parent="Exit"]
 color = Color(0.1, 1, 0.55, 0.45)

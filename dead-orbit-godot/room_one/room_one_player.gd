@@ -2,11 +2,14 @@ extends CharacterBody2D
 
 @export var is_sol: bool = true
 
-const SPEED = 400.0
+const SPEED = 250.0
 const JUMP_VELOCITY = -560.0
 const GRAVITY = 1200.0
+const COYOTE_TIME = 0.12   # seconds after leaving floor where a ground jump still fires
 
 var start_position: Vector2
+var _coyote_timer: float = 0.0
+var _has_air_jump: bool = true   # one double-jump available while airborne
 
 @onready var anim_sprite: AnimatedSprite2D = $AnimSprite
 
@@ -54,15 +57,30 @@ func respawn() -> void:
 	velocity = Vector2.ZERO
 
 func _physics_process(delta: float) -> void:
-	if not is_on_floor():
+	var on_floor := is_on_floor()
+
+	if not on_floor:
 		velocity.y += GRAVITY * delta
 
 	var up    = "sol_up"    if is_sol else "luna_up"
 	var left  = "sol_left"  if is_sol else "luna_left"
 	var right = "sol_right" if is_sol else "luna_right"
 
-	if Input.is_action_just_pressed(up) and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+	# Coyote time — restore double jump and reset window whenever on the floor
+	if on_floor:
+		_coyote_timer = COYOTE_TIME
+		_has_air_jump = true
+	else:
+		_coyote_timer = max(_coyote_timer - delta, 0.0)
+
+	# Jump: ground / coyote first; one air jump if neither applies
+	if Input.is_action_just_pressed(up):
+		if on_floor or _coyote_timer > 0.0:
+			velocity.y = JUMP_VELOCITY
+			_coyote_timer = 0.0   # consume the coyote window so it can't fire twice
+		elif _has_air_jump:
+			velocity.y = JUMP_VELOCITY
+			_has_air_jump = false
 
 	var direction := Input.get_axis(left, right)
 	if direction != 0:
