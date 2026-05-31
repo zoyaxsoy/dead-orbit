@@ -250,6 +250,12 @@ func _on_hazard_body_entered(body: Node) -> void:
 	if body == player:
 		_respawn()
 
+# Called by a hazard rock the moment it hits the floor — catches the case where
+# body_entered fires too late (after queue_free) for rocks landing on a standing player.
+func rock_hit_floor(ix: float) -> void:
+	if abs(player.global_position.x - ix) <= 44.0:
+		_respawn()
+
 func _on_exit_body_entered(body: Node) -> void:
 	if body == player and not _level_complete:
 		_level_complete = true

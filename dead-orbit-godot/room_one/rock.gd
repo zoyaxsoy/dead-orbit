@@ -68,12 +68,22 @@ func _physics_process(delta: float) -> void:
 
 	if global_position.y >= FLOOR_Y:
 		_hit = true
+		_check_floor_kill()
 		_create_impact_hole()
 		queue_free()
 
 func _create_impact_hole() -> void:
-	if not is_hazard:
-		return
+	# All rocks punch a pit — hazard flag only controls whether the rock kills.
 	var level_node = get_parent().get_parent()
 	if level_node and level_node.has_method("create_rock_hole"):
 		level_node.create_rock_hole(global_position.x, _col)
+
+func _check_floor_kill() -> void:
+	# body_entered is deferred in Godot 4 — when we call queue_free() the signal
+	# fires too late for rocks that land right on a standing player.
+	# Manually check proximity at the moment of impact instead.
+	if not is_hazard:
+		return
+	var level_node = get_parent().get_parent()
+	if level_node and level_node.has_method("rock_hit_floor"):
+		level_node.rock_hit_floor(global_position.x)
