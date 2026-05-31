@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dvxwha6b15pu"]
 
 [ext_resource type="Texture2D" uid="uid://cjraou3sxwypx" path="res://room_one/room_one_graphics/V0e0ONd2QIepXdb5sAsCgw.webp" id="1_cugct"]
-[ext_resource type="PackedScene" path="res://room_one/player_sol.tscn" id="1_l2ry5"]
+[ext_resource type="PackedScene" uid="uid://dhbnlkunpatxd" path="res://room_one/player_sol.tscn" id="1_l2ry5"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_left_wall"]
 size = Vector2(30, 680)

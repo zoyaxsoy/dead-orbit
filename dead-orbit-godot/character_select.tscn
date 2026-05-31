@@ -1,28 +1,28 @@
-[gd_scene format=3 uid="uid://dly3h1g2ccujy"]
+[gd_scene format=3 uid="uid://db37v687iw264"]
 
-[ext_resource type="Script" uid="uid://bsopmjbsokm84" path="res://start_menu/character_select.gd" id="1_erm03"]
-[ext_resource type="Script" uid="uid://cy62v0piyxeup" path="res://start_menu/background_scroll.gd" id="2_5w2ym"]
-[ext_resource type="Texture2D" uid="uid://dymhsss8y4dbf" path="res://rooms/room_three_graphics/room3_space_backdrop.png" id="2_hyjyy"]
-[ext_resource type="Texture2D" uid="uid://baorlk82311p3" path="res://start_menu/character_portraits/luna_standing_labeled.png" id="3_5w2ym"]
-[ext_resource type="Texture2D" uid="uid://casm2en838i3h" path="res://start_menu/character_portraits/sol_standing_labeled.png" id="4_yu1fn"]
-[ext_resource type="Texture2D" uid="uid://ey3fs448n4rr" path="res://start_menu/player_icon_states/player_icon_p1.png" id="5_veja7"]
-[ext_resource type="Texture2D" uid="uid://c3rm47ifpspof" path="res://start_menu/player_icon_states/player_icon_p2.png" id="7_erm03"]
+[ext_resource type="Script" uid="uid://bsopmjbsokm84" path="res://start_menu/character_select.gd" id="1_4hbjg"]
+[ext_resource type="Script" uid="uid://cy62v0piyxeup" path="res://start_menu/background_scroll.gd" id="2_lqqhx"]
+[ext_resource type="Texture2D" uid="uid://dymhsss8y4dbf" path="res://rooms/room_three_graphics/room3_space_backdrop.png" id="3_8vty7"]
+[ext_resource type="Texture2D" uid="uid://baorlk82311p3" path="res://start_menu/character_portraits/luna_standing_labeled.png" id="4_8d0rx"]
+[ext_resource type="Texture2D" uid="uid://casm2en838i3h" path="res://start_menu/character_portraits/sol_standing_labeled.png" id="5_jdigy"]
+[ext_resource type="Texture2D" uid="uid://ey3fs448n4rr" path="res://start_menu/player_icon_states/player_icon_p1.png" id="6_aq61o"]
+[ext_resource type="Texture2D" uid="uid://c3rm47ifpspof" path="res://start_menu/player_icon_states/player_icon_p2.png" id="7_fes3t"]
 
 [node name="CharacterSelect" type="Control" unique_id=271560024]
 layout_mode = 3
 anchors_preset = 0
-script = ExtResource("1_erm03")
+script = ExtResource("1_4hbjg")
 
 [node name="BackgroundScroll" type="Node2D" parent="." unique_id=2078289111]
-script = ExtResource("2_5w2ym")
+script = ExtResource("2_lqqhx")
 
 [node name="BG1" type="Sprite2D" parent="BackgroundScroll" unique_id=2084699281]
-texture = ExtResource("2_hyjyy")
+texture = ExtResource("3_8vty7")
 centered = false
 
 [node name="BG2" type="Sprite2D" parent="BackgroundScroll" unique_id=1234137602]
 position = Vector2(12287, -4)
-texture = ExtResource("2_hyjyy")
+texture = ExtResource("3_8vty7")
 centered = false
 
 [node name="LunaPortrait" type="TextureRect" parent="." unique_id=717401153]
@@ -32,7 +32,7 @@ offset_left = 598.0
 offset_top = 558.0
 offset_right = 984.0
 offset_bottom = 1008.33325
-texture = ExtResource("3_5w2ym")
+texture = ExtResource("4_8d0rx")
 
 [node name="SolPortrait" type="TextureRect" parent="." unique_id=1426077818]
 texture_filter = 1
@@ -41,7 +41,7 @@ offset_left = 1871.0
 offset_top = 554.0
 offset_right = 2281.0
 offset_bottom = 1010.57007
-texture = ExtResource("4_yu1fn")
+texture = ExtResource("5_jdigy")
 
 [node name="P1Icon" type="TextureRect" parent="." unique_id=1893415583]
 layout_mode = 0
@@ -49,7 +49,7 @@ offset_left = 1347.0
 offset_top = 766.0
 offset_right = 1527.0
 offset_bottom = 850.0
-texture = ExtResource("5_veja7")
+texture = ExtResource("6_aq61o")
 
 [node name="P2Icon" type="TextureRect" parent="." unique_id=1038938039]
 layout_mode = 0
@@ -57,7 +57,7 @@ offset_left = 1346.0
 offset_top = 882.0
 offset_right = 1526.0
 offset_bottom = 966.0
-texture = ExtResource("7_erm03")
+texture = ExtResource("7_fes3t")
 
 [node name="P1Status" type="TextureRect" parent="." unique_id=125198469]
 layout_mode = 0
