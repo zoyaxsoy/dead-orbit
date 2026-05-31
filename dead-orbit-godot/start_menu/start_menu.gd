@@ -16,9 +16,11 @@ func _process(_delta):
 		return
 
 	if Input.is_action_just_pressed("luna_left") or Input.is_action_just_pressed("sol_left"):
+		print("left pressed")
 		selected_button = 0
 		_update_button_highlight()
 	elif Input.is_action_just_pressed("luna_right") or Input.is_action_just_pressed("sol_right"):
+		print("right pressed")
 		selected_button = 1
 		_update_button_highlight()
 
