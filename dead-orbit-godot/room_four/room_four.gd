@@ -103,6 +103,7 @@ var audio_debug_contexts := {}
 var static_noise_phase: float = 0.0
 
 func _ready() -> void:
+	FadeManager.fade_in()
 	var intro = preload("res://room_four/room_four_intro.gd").new()
 	add_child(intro)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE

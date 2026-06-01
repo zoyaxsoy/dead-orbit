@@ -78,6 +78,7 @@ var room_four_transition_overlay: ColorRect
 var room_four_transition_label: Label
 
 func _ready() -> void:
+	FadeManager.fade_in()
 	var intro = preload("res://rooms/room_three_intro.gd").new()
 	add_child(intro)
 	_build_level_data()
@@ -748,7 +749,7 @@ func _update_room_four_transition(delta: float) -> void:
 		room_four_transition_label.text = "Restore the relay together. Luna follows the dark corridor. Sol tunes the interference."
 
 	if room_four_transition_elapsed >= 7.0:
-		get_tree().change_scene_to_file("res://room_four/room_four.tscn")
+		FadeManager.fade_to_scene("res://room_four/room_four.tscn")
 
 func _update_failures() -> void:
 	var luna_body: CharacterBody2D = players["luna"]["body"] as CharacterBody2D
