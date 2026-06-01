@@ -1,6 +1,6 @@
 extends Control
 
-const FIRST_ROOM := "res://room_one/room_one.tscn"
+const FIRST_ROOM := "res://rooms/room_three.tscn"
 
 var elapsed: float = 0.0
 var skipped: bool = false
