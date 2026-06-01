@@ -103,9 +103,17 @@ var audio_debug_contexts := {}
 var static_noise_phase: float = 0.0
 
 func _ready() -> void:
+	var intro = preload("res://room_four/room_four_intro.gd").new()
+	add_child(intro)
 	mouse_filter = Control.MOUSE_FILTER_IGNORE
 	_ensure_room_audio_bus()
 	_build_nodes()
+	# Hide status label while intro is showing; reveal it once intro dismisses
+	status_label.visible = false
+	intro.tree_exited.connect(func():
+		if is_instance_valid(status_label):
+			status_label.visible = true
+	)
 	_reset_section(true, false)
 	_set_message("Signal Relay: follow the dark corridors to recover the crew code.", 3.0)
 	_start_ambient_static("ready")

@@ -3,7 +3,6 @@
 [ext_resource type="Script" uid="uid://4ii04iwp8256" path="res://room_two/room_two.gd" id="1_4te54"]
 [ext_resource type="Texture2D" uid="uid://bpmo56jbgd7fm" path="res://room_two/graphics/industrial-sprite-sheet-DeadEnd-LMZ.png" id="1_kjqpv"]
 [ext_resource type="Script" uid="uid://b0ospsoxetshc" path="res://room_two/cut_scenes/beg_cut_scene.gd" id="2_4u6g1"]
-[ext_resource type="Texture2D" uid="uid://dr8p2gnynx12f" path="res://room_two/graphics/metal.png" id="2_aa6lu"]
 [ext_resource type="Texture2D" uid="uid://326k827mfvf0" path="res://room_two/graphics/dark-blue-parallax1.png" id="2_c2jje"]
 [ext_resource type="Texture2D" uid="uid://tcp7fp0ar0sh" path="res://room_two/graphics/MetalPixel.png" id="2_lvae0"]
 [ext_resource type="Texture2D" uid="uid://bgwyjcjolu3mo" path="res://room_two/graphics/cass_beginning_cutscene_dialogue_box_clean.png" id="3_l0ds2"]
@@ -21,7 +20,7 @@
 [ext_resource type="Script" uid="uid://dt5pfdmfublwb" path="res://room_two/area_scripts/area_two/rising_platform.gd" id="11_xh0de"]
 [ext_resource type="Script" uid="uid://cs28dpbnmbx4n" path="res://room_two/area_scripts/area_two/shield.gd" id="12_p78yq"]
 [ext_resource type="Script" uid="uid://b3cnoa86w83o5" path="res://room_two/area_scripts/area_two/moving_platform.gd" id="13_05bwp"]
-[ext_resource type="Texture2D" uid="uid://e8u1oitj88ht" path="res://room_two/graphics/dark_cyan_floor_tilesheet.png" id="16_2b7yf"]
+[ext_resource type="Texture2D" uid="uid://dr8p2gnynx12f" path="res://room_two/graphics/metal.png" id="16_2b7yf"]
 [ext_resource type="Script" uid="uid://dyc4tybwebmrp" path="res://room_two/area_scripts/kill_zone.gd" id="18_2xkmh"]
 [ext_resource type="Script" uid="uid://cq5t88656al20" path="res://room_two/area_scripts/area_two/shield_pop_up.gd" id="18_ys3rg"]
 [ext_resource type="Texture2D" uid="uid://cn06xli1wax7w" path="res://room_two/graphics/shield_instruction_popup_space_text_only.png" id="19_l16gl"]
@@ -34,7 +33,7 @@
 [ext_resource type="Texture2D" uid="uid://daiyayu0sgjg6" path="res://room_two/graphics/wall_energy_node_fill_animation_sheet.png" id="28_13ave"]
 [ext_resource type="Script" uid="uid://lt3yln68veq4" path="res://room_two/area_scripts/energy_node.gd" id="28_vhqpk"]
 [ext_resource type="Script" uid="uid://cnq6mcwh1xyt6" path="res://room_two/area_scripts/area_three/laser.gd" id="29_13ave"]
-[ext_resource type="Script" uid="uid://cgiexd3dqhxdl" path="res://room_two/end_zone.gd" id="34_l0ds2"]
+[ext_resource type="Script" path="res://room_two/end_zone.gd" id="34_l0ds2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hrltk"]
 atlas = ExtResource("3_nsqpp")
@@ -10035,7 +10034,7 @@ texture = ExtResource("1_kjqpv")
 5:16/0 = 0
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_4te54"]
-texture = ExtResource("2_aa6lu")
+texture = ExtResource("16_2b7yf")
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -2.6709023, -8, -8, 8, -8, 8, 8, -8, 8)
 1:0/0 = 0
@@ -10122,7 +10121,7 @@ sources/1 = SubResource("TileSetAtlasSource_4te54")
 sources/2 = SubResource("TileSetAtlasSource_qqy8t")
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_xh0de"]
-texture = ExtResource("2_aa6lu")
+texture = ExtResource("16_2b7yf")
 0:0/0 = 0
 0:0/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 1:0/0 = 0
@@ -10481,7 +10480,7 @@ texture = ExtResource("1_kjqpv")
 6:1/0/physics_layer_0/polygon_0/points = PackedVector2Array(-8, -8, 8, -8, 8, 8, -8, 8)
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_05bwp"]
-texture = ExtResource("2_aa6lu")
+texture = ExtResource("16_2b7yf")
 0:0/0 = 0
 1:0/0 = 0
 2:0/0 = 0
