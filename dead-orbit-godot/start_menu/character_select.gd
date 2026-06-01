@@ -32,7 +32,7 @@ var sol_pos: Vector2
 @onready var confirm_graphic := $ConfirmGraphic
 
 func _ready():
-	FadeManager.fade_in()
+	FadeManager.fade_in(0.1)
 	confirm_graphic.visible = false
 	p1_status.visible = false
 	p2_status.visible = false

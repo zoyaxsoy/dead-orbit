@@ -1,6 +1,6 @@
 extends Control
 
-const FIRST_ROOM := "res://room_one/room_one.tscn"
+const THIRD_ROOM := "res://rooms/room_three.tscn"
 
 var elapsed: float = 0.0
 var skipped: bool = false
@@ -49,21 +49,15 @@ func _process(delta: float) -> void:
 	elapsed += delta
 
 	if elapsed < 2.2:
-		label.text = "ISS Meridian. Deep space research station. Day 847."
+		label.text = "The sequence is complete."
 	elif elapsed < 4.8:
-		label.text = "An uncharted debris field struck the station without warning."
-	elif elapsed < 7.4:
-		label.text = "Reactor containment failed. The crew evacuated."
-	elif elapsed < 10.0:
-		label.text = "You were in stasis. You missed the window."
-	else:
-		label.text = "You have one chance. Restore the systems manually."
+		label.text = "Proceed to the hull. Immediately."
 
-	if elapsed >= 13.0 or Input.is_action_just_pressed("dismiss_action"):
+	if elapsed >= 9.0 or Input.is_action_just_pressed("dismiss_action"):
 		_transition()
 
 func _transition() -> void:
 	if skipped:
 		return
 	skipped = true
-	FadeManager.fade_to_scene(FIRST_ROOM)
+	FadeManager.fade_to_scene(THIRD_ROOM)

@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://dua6nae7ofaxw"]
+
+[ext_resource type="Script" uid="uid://blf3ui30tov88" path="res://cut_scenes/two_to_three.gd" id="1_fa35f"]
+
+[node name="TwoToThree" type="Control" unique_id=204092474]
+layout_mode = 3
+anchors_preset = 0
+script = ExtResource("1_fa35f")
