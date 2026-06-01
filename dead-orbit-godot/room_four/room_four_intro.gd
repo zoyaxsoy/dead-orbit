@@ -6,9 +6,6 @@ var _dismissed: bool = false
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	get_tree().paused = true
-	# Hide legacy TextureRect child from the old cut-scene
-	for child in get_children():
-		child.visible = false
 	_build_ui()
 	_blink_hint()
 
@@ -47,10 +44,10 @@ func _build_ui() -> void:
 	add_child(bot_bar)
 
 	# ── Room badge ────────────────────────────────────────────────────────────
-	_lbl("ROOM  2", 11, Color(0.05, 0.85, 1.0, 0.70), 18.0, 36.0)
+	_lbl("ROOM  4", 11, Color(0.05, 0.85, 1.0, 0.70), 18.0, 36.0)
 
 	# ── Room title ────────────────────────────────────────────────────────────
-	_lbl("ENGINE BAY ASCENT", 40, Color(0.90, 0.95, 1.00, 1.0), 40.0, 98.0,
+	_lbl("LAST TRANSMISSION", 40, Color(0.90, 0.95, 1.00, 1.0), 40.0, 98.0,
 		Color(0.0, 0.0, 0.0, 1.0), 4)
 
 	# ── Cyan divider under title ──────────────────────────────────────────────
@@ -67,26 +64,25 @@ func _build_ui() -> void:
 	# ── Objective section ─────────────────────────────────────────────────────
 	_lbl("OBJECTIVE", 10, Color(0.35, 0.82, 1.0, 0.65), 118.0, 134.0)
 
-	_lbl("Work together while tethered to refill all engine nodes and restart the backup generator.",
-		13, Color(0.90, 0.88, 0.80, 0.95), 142.0, 164.0)
-
-	_lbl("Watch for tools that may help you along the way.",
-		13, Color(0.90, 0.88, 0.80, 0.95), 168.0, 188.0)
+	var obj_lbl := _lbl("Navigate pitch-black relay corridors using only your headlamp. Luna reaches the relay door while Sol tunes the radio signal to recover the crew code. Both players enter the code together to unlock each section. Complete all four sections and reach the escape pod.",
+		13, Color(0.90, 0.88, 0.80, 0.95), 142.0, 202.0)
+	obj_lbl.offset_left  = 130.0
+	obj_lbl.offset_right = -130.0
 
 	# ── Hazards section ───────────────────────────────────────────────────────
-	_lbl("HAZARDS", 10, Color(1.0, 0.45, 0.05, 0.65), 210.0, 226.0)
+	_lbl("HAZARDS", 10, Color(1.0, 0.45, 0.05, 0.65), 214.0, 230.0)
 
-	_lbl_icon("•", "Broken flooring — Falling through damaged sections resets you to the last checkpoint.",
-		Color(0.90, 0.88, 0.80, 0.95), 234.0, 266.0)
+	_lbl_icon("•", "Near-total darkness — only your headlamp illuminates nearby platforms. The room is almost invisible without it.",
+		Color(0.90, 0.88, 0.80, 0.95), 238.0, 274.0)
 
-	_lbl_icon("•", "Tether limit — Moving too far apart snaps both players back.",
-		Color(0.90, 0.88, 0.80, 0.95), 272.0, 294.0)
+	_lbl_icon("•", "Platform gaps — missing a platform resets you to the start of the current section.",
+		Color(0.90, 0.88, 0.80, 0.95), 278.0, 298.0)
 
-	_lbl_icon("•", "Tool dependency — Players must find and use tools to progress.",
-		Color(0.90, 0.88, 0.80, 0.95), 300.0, 322.0)
+	_lbl_icon("•", "Signal drift — the clean tuning window constantly shifts. Miss it and Sol must re-tune.",
+		Color(0.90, 0.88, 0.80, 0.95), 302.0, 322.0)
 
-	_lbl_icon("•", "Coordination pressure — Both players need to move carefully together to activate nodes efficiently.",
-		Color(0.90, 0.88, 0.80, 0.95), 328.0, 362.0)
+	_lbl_icon("•", "Code sync pressure — both players must submit the same crew code within 3 seconds of each other. A mismatch or wrong digit resets the attempt.",
+		Color(0.90, 0.88, 0.80, 0.95), 326.0, 362.0)
 
 	# ── Cyan divider above hint ───────────────────────────────────────────────
 	var div2 := ColorRect.new()
@@ -94,23 +90,25 @@ func _build_ui() -> void:
 	div2.anchor_right = 0.5
 	div2.offset_left  = -280.0
 	div2.offset_right =  280.0
-	div2.offset_top   =  398.0
-	div2.offset_bottom = 400.0
+	div2.offset_top   =  418.0
+	div2.offset_bottom = 420.0
 	div2.color = Color(0.05, 0.85, 1.0, 0.30)
 	add_child(div2)
 
 	# ── Press X hint (blinking) ───────────────────────────────────────────────
-	_hint = _lbl("Press X to begin", 13, Color(1.0, 1.0, 1.0, 1.0), 410.0, 434.0)
+	_hint = _lbl("Press X to begin", 13, Color(1.0, 1.0, 1.0, 1.0), 430.0, 454.0)
 
-	# ── Control reminder — two-column SOL / LUNA ──────────────────────────────
-	_lbl_half("SOL",             12, Color(1.0,  0.45, 0.05, 0.85), 448.0, 464.0, true)
-	_lbl_half("LUNA",            12, Color(0.35, 0.82, 1.0,  0.85), 448.0, 464.0, false)
-	_lbl_half("L. Stick   move", 11, Color(0.50, 0.60, 0.80, 0.70), 468.0, 484.0, true)
-	_lbl_half("L. Stick   move", 11, Color(0.50, 0.60, 0.80, 0.70), 468.0, 484.0, false)
-	_lbl_half("X   jump",        11, Color(0.50, 0.60, 0.80, 0.70), 488.0, 504.0, true)
-	_lbl_half("X   jump",        11, Color(0.50, 0.60, 0.80, 0.70), 488.0, 504.0, false)
-	_lbl_half("L3   shield",     11, Color(0.50, 0.60, 0.80, 0.70), 508.0, 524.0, true)
-	_lbl_half("L3   shield",     11, Color(0.50, 0.60, 0.80, 0.70), 508.0, 524.0, false)
+	# ── Control reminder — asymmetric SOL / LUNA columns ─────────────────────
+	_lbl_half("SOL",            12, Color(1.0,  0.45, 0.05, 0.85), 468.0, 484.0, true)
+	_lbl_half("LUNA",           12, Color(0.35, 0.82, 1.0,  0.85), 468.0, 484.0, false)
+	_lbl_half("L. Stick   move", 11, Color(0.50, 0.60, 0.80, 0.70), 488.0, 504.0, true)
+	_lbl_half("L. Stick   move", 11, Color(0.50, 0.60, 0.80, 0.70), 488.0, 504.0, false)
+	_lbl_half("X   jump",        11, Color(0.50, 0.60, 0.80, 0.70), 508.0, 524.0, true)
+	_lbl_half("X   jump",        11, Color(0.50, 0.60, 0.80, 0.70), 508.0, 524.0, false)
+	_lbl_half("Q / E   tune signal", 11, Color(0.50, 0.60, 0.80, 0.70), 528.0, 544.0, true)
+	_lbl_half("D-pad   digit entry", 11, Color(0.50, 0.60, 0.80, 0.70), 528.0, 544.0, false)
+	_lbl_half("F   capture / submit", 11, Color(0.50, 0.60, 0.80, 0.70), 548.0, 564.0, true)
+	_lbl_half("Enter   submit",       11, Color(0.50, 0.60, 0.80, 0.70), 548.0, 564.0, false)
 
 # ── Icon + text row ───────────────────────────────────────────────────────────
 func _lbl_icon(icon: String, txt: String, col: Color,

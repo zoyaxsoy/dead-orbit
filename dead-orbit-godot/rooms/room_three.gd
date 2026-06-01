@@ -78,7 +78,8 @@ var room_four_transition_overlay: ColorRect
 var room_four_transition_label: Label
 
 func _ready() -> void:
-	FadeManager.fade_in()
+	var intro = preload("res://rooms/room_three_intro.gd").new()
+	add_child(intro)
 	_build_level_data()
 	_build_world()
 	_build_hull_visuals()
@@ -87,6 +88,12 @@ func _ready() -> void:
 	_build_breaches()
 	_build_players()
 	_build_hud()
+	# Hide HUD while intro is showing; reveal it the moment intro dismisses
+	hud_layer.visible = false
+	intro.tree_exited.connect(func():
+		if is_instance_valid(hud_layer):
+			hud_layer.visible = true
+	)
 	_reset_to_checkpoint(0, false, "")
 	_update_camera(1.0)
 	_update_hud()
