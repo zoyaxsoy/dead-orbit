@@ -33,7 +33,7 @@
 [ext_resource type="Texture2D" uid="uid://daiyayu0sgjg6" path="res://room_two/graphics/wall_energy_node_fill_animation_sheet.png" id="28_13ave"]
 [ext_resource type="Script" uid="uid://lt3yln68veq4" path="res://room_two/area_scripts/energy_node.gd" id="28_vhqpk"]
 [ext_resource type="Script" uid="uid://cnq6mcwh1xyt6" path="res://room_two/area_scripts/area_three/laser.gd" id="29_13ave"]
-[ext_resource type="Script" path="res://room_two/end_zone.gd" id="34_l0ds2"]
+[ext_resource type="Script" uid="uid://cgiexd3dqhxdl" path="res://room_two/end_zone.gd" id="34_l0ds2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hrltk"]
 atlas = ExtResource("3_nsqpp")
@@ -11431,7 +11431,6 @@ scale = Vector2(0.99999994, 0.99999994)
 
 [node name="BegCutScene" type="CanvasLayer" parent="CutScenes" unique_id=1205401290]
 process_mode = 3
-visible = false
 script = ExtResource("2_4u6g1")
 
 [node name="TextureRect" type="TextureRect" parent="CutScenes/BegCutScene" unique_id=862739634]

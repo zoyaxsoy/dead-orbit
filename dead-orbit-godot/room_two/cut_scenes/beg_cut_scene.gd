@@ -5,10 +5,6 @@ var _dismissed: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	get_tree().paused = true
-	# Hide legacy TextureRect child from the old cut-scene
-	for child in get_children():
-		child.visible = false
 	_build_ui()
 	_blink_hint()
 
@@ -19,7 +15,6 @@ func _input(event: InputEvent) -> void:
 	   event.is_action_pressed("sol_up") or \
 	   event.is_action_pressed("luna_up"):
 		_dismissed = true
-		get_tree().paused = false
 		queue_free()
 
 func _build_ui() -> void:
