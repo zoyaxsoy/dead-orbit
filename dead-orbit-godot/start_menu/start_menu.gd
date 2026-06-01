@@ -19,17 +19,24 @@ func _process(_delta):
 	if not _input_enabled:
 		return
 
-	var axis := Input.get_joy_axis(0, JOY_AXIS_LEFT_X)
+	var axis := maxf(
+		Input.get_joy_axis(0, JOY_AXIS_LEFT_X),
+		Input.get_joy_axis(1, JOY_AXIS_LEFT_X)
+	)
+	var axis_min := minf(
+		Input.get_joy_axis(0, JOY_AXIS_LEFT_X),
+		Input.get_joy_axis(1, JOY_AXIS_LEFT_X)
+	)
 
 	if axis > 0.5 and not _joy_moved:
 		_joy_moved = true
 		selected_button = 1
 		_update_button_highlight()
-	elif axis < -0.5 and not _joy_moved:
+	elif axis_min < -0.5 and not _joy_moved:
 		_joy_moved = true
 		selected_button = 0
 		_update_button_highlight()
-	elif absf(axis) < 0.3:
+	elif absf(axis) < 0.3 and absf(axis_min) < 0.3:
 		_joy_moved = false
 
 	if Input.is_action_just_pressed("luna_up") or Input.is_action_just_pressed("sol_up"):
