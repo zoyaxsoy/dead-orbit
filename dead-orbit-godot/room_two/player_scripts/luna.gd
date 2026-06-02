@@ -5,8 +5,8 @@ const GRAVITY = 1800.0
 const MAX_FALL_SPEED = 900.0
 
 @export var walk_speed: float = 500.0
-@export var acceleration: float = 2000.0
-@export var friction: float = 800.0
+@export var acceleration: float = 1780.0
+@export var friction: float = 1650.0
 @export var air_speed: float = 600.0
 @export var air_acceleration: float = 2000.0
 
