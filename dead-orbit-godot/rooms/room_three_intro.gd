@@ -2,6 +2,7 @@ extends CanvasLayer
 
 var _hint: Label
 var _dismissed: bool = false
+var _ready_cooldown: float = 1.2
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
@@ -9,15 +10,23 @@ func _ready() -> void:
 	_build_ui()
 	_blink_hint()
 
-func _input(event: InputEvent) -> void:
+func _process(delta: float) -> void:
 	if _dismissed:
 		return
-	if event.is_action_pressed("dismiss_action") or \
-	   event.is_action_pressed("sol_up") or \
-	   event.is_action_pressed("luna_up"):
+	if _ready_cooldown > 0.0:
+		_ready_cooldown -= delta
+		return
+	if Input.is_action_just_pressed("sol_up") or \
+	   Input.is_action_just_pressed("luna_up") or \
+	   Input.is_action_just_pressed("dismiss_action"):
 		_dismissed = true
 		get_tree().paused = false
 		queue_free()
+
+func _blink_hint() -> void:
+	var tw := create_tween().set_loops()
+	tw.tween_property(_hint, "modulate:a", 0.15, 0.7)
+	tw.tween_property(_hint, "modulate:a", 1.0,  0.7)
 
 func _build_ui() -> void:
 	# ── Semi-transparent dark scrim — room shows through ──────────────────────
@@ -94,7 +103,7 @@ func _build_ui() -> void:
 	add_child(div2)
 
 	# ── Press X hint (blinking) ───────────────────────────────────────────────
-	_hint = _lbl("Press X to begin", 13, Color(1.0, 1.0, 1.0, 1.0), 376.0, 400.0)
+	_hint = _lbl("Press B/X to begin", 13, Color(1.0, 1.0, 1.0, 1.0), 376.0, 400.0)
 
 	# ── Control reminder — two-column SOL / LUNA ──────────────────────────────
 	_lbl_half("SOL",              12, Color(1.0,  0.45, 0.05, 0.85), 414.0, 430.0, true)
@@ -171,8 +180,3 @@ func _lbl(txt: String, font_sz: int, col: Color,
 	lbl.add_theme_constant_override("outline_size", outline_sz)
 	add_child(lbl)
 	return lbl
-
-func _blink_hint() -> void:
-	var tw := create_tween().set_loops()
-	tw.tween_property(_hint, "modulate:a", 0.15, 0.7)
-	tw.tween_property(_hint, "modulate:a", 1.0,  0.7)

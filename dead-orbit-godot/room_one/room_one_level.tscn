@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://bkbjwu8jy2nvc"]
+[gd_scene format=3 uid="uid://dq4yrvcqtx3om"]
 
 [ext_resource type="Texture2D" uid="uid://isv06a7cs75u" path="res://room_one/room_one_graphics/parallax/cyberpunk-corridor-PREVIEW.png" id="1_bg"]
 [ext_resource type="Texture2D" uid="uid://4kgd62m5w1m0" path="res://room_one/room_one_graphics/parallax/big-computer.png" id="2_computer"]

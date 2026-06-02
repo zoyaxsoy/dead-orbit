@@ -104,7 +104,6 @@ func _ready() -> void:
 	_build_breaches()
 	_build_players()
 	_build_hud()
-	# Hide HUD while intro is showing; reveal it the moment intro dismisses
 	hud_layer.visible = false
 	intro.tree_exited.connect(func():
 		if is_instance_valid(hud_layer):

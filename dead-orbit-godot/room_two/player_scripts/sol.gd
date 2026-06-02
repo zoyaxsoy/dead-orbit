@@ -1,25 +1,27 @@
 extends CharacterBody2D
-
-const JUMP_VELOCITY = -950.0
-const GRAVITY = 1800.0
-const MAX_FALL_SPEED = 900.0
-
-@export var walk_speed: float = 900.0
-@export var acceleration: float = 2000.0
-@export var friction: float = 800.0
+@export var JUMP_VELOCITY = -550.0
+@export var GRAVITY = 1450.0
+@export var MAX_FALL_SPEED = 900.0
+@export var walk_speed: float = 500.0
+@export var acceleration: float = 1780.0
+@export var friction: float = 1650.0
 @export var air_speed: float = 600.0
 @export var air_acceleration: float = 2000.0
 
 var can_climb := false
 var ladder = null
 var climb_speed = 100
+
 @onready var anim = $AnimatedSprite2D
 @onready var room = get_parent().get_parent()
+
 var has_shield: bool = false
 var respawn_count: int = 0
 var first_respawn_point: Vector2 = Vector2.ZERO
 var respawn_point: Vector2 = Vector2.ZERO
 var first_respawn_point_set: bool = false
+var jump_count: int = 0
+const MAX_JUMPS: int = 2
 
 func _ready():
 	respawn_point = global_position
@@ -50,21 +52,25 @@ func _physics_process(delta: float) -> void:
 		move_and_slide()
 		return
 
+	# reset jump count on landing
+	if is_on_floor():
+		jump_count = 0
+
 	# gravity
 	if not is_on_floor():
 		var fall_multiplier = 1.8 if velocity.y > 0 else 0.9
 		velocity.y += GRAVITY * fall_multiplier * delta
 		velocity.y = minf(velocity.y, MAX_FALL_SPEED)
 
-	# jump
-	if Input.is_action_just_pressed("sol_up") and is_on_floor():
+	# jump (double jump)
+	if Input.is_action_just_pressed("sol_up") and jump_count < MAX_JUMPS:
 		velocity.y = JUMP_VELOCITY
+		jump_count += 1
 
 	# horizontal movement
 	var direction = Input.get_axis("sol_left", "sol_right")
 	var current_speed := walk_speed if is_on_floor() else air_speed
 	var current_accel := acceleration if is_on_floor() else air_acceleration
-
 	if absf(direction) > 0.01:
 		velocity.x = move_toward(velocity.x, direction * current_speed, current_accel * delta)
 	else:
