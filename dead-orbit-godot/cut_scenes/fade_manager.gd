@@ -25,4 +25,6 @@ func fade_to_scene(path: String, duration: float = 0.8) -> void:
 	overlay.mouse_filter = Control.MOUSE_FILTER_STOP
 	var tween = create_tween()
 	tween.tween_property(overlay, "color:a", 1.0, duration)
-	tween.tween_callback(func(): get_tree().change_scene_to_file(path))
+	tween.tween_callback(func(): 
+		get_tree().change_scene_to_file(path)
+	)
