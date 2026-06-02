@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://dvxwha6b15pu"]
 
 [ext_resource type="Script" uid="uid://c4twt5q5t08rj" path="res://room_one/room_one.gd" id="1_room"]
-[ext_resource type="PackedScene" path="res://room_one/room_one_level.tscn" id="2_level"]
+[ext_resource type="PackedScene" uid="uid://bkbjwu8jy2nvc" path="res://room_one/room_one_level.tscn" id="2_level"]
 [ext_resource type="Script" uid="uid://cdbk6dsov6pkm" path="res://room_one/room_one_intro.gd" id="3_intro"]
 
 [node name="RoomOne" type="Control" unique_id=609616050]
@@ -18,6 +18,7 @@ script = ExtResource("1_room")
 layer = 10
 
 [node name="BlackBg" type="ColorRect" parent="CanvasLayer" unique_id=1096800501]
+texture_filter = 1
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -58,6 +59,7 @@ render_target_update_mode = 4
 player_is_sol = false
 
 [node name="Divider" type="ColorRect" parent="CanvasLayer" unique_id=1427452060]
+texture_filter = 1
 anchors_preset = 13
 anchor_left = 0.5
 anchor_right = 0.5
