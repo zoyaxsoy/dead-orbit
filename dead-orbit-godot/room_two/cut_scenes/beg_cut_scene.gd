@@ -95,7 +95,7 @@ func _build_ui() -> void:
 	add_child(div2)
 
 	# ── Press X hint (blinking) ───────────────────────────────────────────────
-	_hint = _lbl("Press X to begin", 13, Color(1.0, 1.0, 1.0, 1.0), 410.0, 434.0)
+	_hint = _lbl("Press B/X to begin", 13, Color(1.0, 1.0, 1.0, 1.0), 410.0, 434.0)
 
 	# ── Control reminder — two-column SOL / LUNA ──────────────────────────────
 	_lbl_half("SOL",             12, Color(1.0,  0.45, 0.05, 0.85), 448.0, 464.0, true)
