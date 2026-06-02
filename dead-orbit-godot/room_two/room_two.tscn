@@ -11498,6 +11498,7 @@ animation = &"walk"
 [node name="Camera2D" type="Camera2D" parent="Players/Sol" unique_id=2126147581]
 position = Vector2(-1.6943359, -4.5776367e-05)
 scale = Vector2(0.99999994, 0.99999994)
+zoom = Vector2(0.82, 0.82)
 limit_left = 0
 limit_top = -1405
 limit_right = 14955
@@ -11522,6 +11523,7 @@ sprite_frames = SubResource("SpriteFrames_vf01q")
 animation = &"walk"
 
 [node name="Camera2D" type="Camera2D" parent="Players/Luna" unique_id=522354781]
+zoom = Vector2(0.82, 0.82)
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Players/Luna" unique_id=629291532]
 position = Vector2(0.015625, 133.33289)
@@ -11914,7 +11916,7 @@ shape = SubResource("RectangleShape2D_vhqpk")
 [node name="EndZone" type="Area2D" parent="Checkpoints" unique_id=1315248899]
 position = Vector2(5293.29, -164.55)
 script = ExtResource("34_l0ds2")
-next_scene = "/Users/zoyasoy/Desktop/dead-orbit/dead-orbit-godot/rooms/room_three.tscn"
+next_scene = "res://cut_scenes/two_to_three.tscn"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/EndZone" unique_id=1469349769]
 position = Vector2(-0.6904297, 18.274994)

@@ -64,23 +64,23 @@ func _build_ui() -> void:
 	# ── Objective section ─────────────────────────────────────────────────────
 	_lbl("OBJECTIVE", 10, Color(0.35, 0.82, 1.0, 0.65), 118.0, 134.0)
 
-	_lbl("Traverse the outer hull, seal all three breaches, and reach the exit airlock before the EVA clock expires.",
-		13, Color(0.90, 0.88, 0.80, 0.95), 142.0, 172.0)
+	_lbl("Traverse the outer hull, seal all three breaches, and reach the exit airlock before the EVA clock expires. To seal, one player stands on the assigned repair point while the partner holds repair at the breach until the bar fills.",
+		13, Color(0.90, 0.88, 0.80, 0.95), 142.0, 184.0)
 
 	# ── Hazards section ───────────────────────────────────────────────────────
-	_lbl("HAZARDS", 10, Color(1.0, 0.45, 0.05, 0.65), 192.0, 208.0)
+	_lbl("HAZARDS", 10, Color(1.0, 0.45, 0.05, 0.65), 198.0, 214.0)
 
 	_lbl_icon("•", "Hull gaps — Falling off the outer hull resets you to the last checkpoint.",
-		Color(0.90, 0.88, 0.80, 0.95), 216.0, 238.0)
+		Color(0.90, 0.88, 0.80, 0.95), 222.0, 244.0)
 
 	_lbl_icon("•", "Magnetic strips — Standing on the wrong polarity breaks your magnetic lock and triggers a reset.",
-		Color(0.90, 0.88, 0.80, 0.95), 244.0, 280.0)
+		Color(0.90, 0.88, 0.80, 0.95), 250.0, 286.0)
 
 	_lbl_icon("•", "Tether limit — Moving too far apart snaps both players back to the last checkpoint.",
-		Color(0.90, 0.88, 0.80, 0.95), 286.0, 322.0)
+		Color(0.90, 0.88, 0.80, 0.95), 292.0, 328.0)
 
 	_lbl_icon("•", "EVA timer — If time runs out, the section resets.",
-		Color(0.90, 0.88, 0.80, 0.95), 328.0, 348.0)
+		Color(0.90, 0.88, 0.80, 0.95), 334.0, 354.0)
 
 	# ── Cyan divider above hint ───────────────────────────────────────────────
 	var div2 := ColorRect.new()
@@ -103,10 +103,11 @@ func _build_ui() -> void:
 	_lbl_half("L. Stick   move",  11, Color(0.50, 0.60, 0.80, 0.70), 434.0, 450.0, false)
 	_lbl_half("X   jump",         11, Color(0.50, 0.60, 0.80, 0.70), 454.0, 470.0, true)
 	_lbl_half("X   jump",         11, Color(0.50, 0.60, 0.80, 0.70), 454.0, 470.0, false)
-	_lbl_half("B + X   flip gravity", 11, Color(0.50, 0.60, 0.80, 0.70), 474.0, 490.0, true)
-	_lbl_half("B + X   flip gravity", 11, Color(0.50, 0.60, 0.80, 0.70), 474.0, 490.0, false)
-	_lbl_half("Hold B   seal / anchor", 11, Color(0.50, 0.60, 0.80, 0.70), 494.0, 510.0, true)
-	_lbl_half("Hold B   seal / anchor", 11, Color(0.50, 0.60, 0.80, 0.70), 494.0, 510.0, false)
+	_lbl_half("Q / RB   flip gravity", 11, Color(0.50, 0.60, 0.80, 0.70), 474.0, 490.0, true)
+	_lbl_half("L / RB   flip gravity", 11, Color(0.50, 0.60, 0.80, 0.70), 474.0, 490.0, false)
+	_lbl_half("S / B   seal breach", 11, Color(0.50, 0.60, 0.80, 0.70), 494.0, 510.0, true)
+	_lbl_half("Down / B   seal breach", 11, Color(0.50, 0.60, 0.80, 0.70), 494.0, 510.0, false)
+	_lbl("Stand on repair points to anchor the breach repair.", 11, Color(0.50, 0.60, 0.80, 0.78), 514.0, 532.0)
 
 # ── Icon + text row ───────────────────────────────────────────────────────────
 func _lbl_icon(icon: String, txt: String, col: Color,

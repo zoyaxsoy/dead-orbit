@@ -1,11 +1,12 @@
 extends Control
 
+const HOLD_DURATION: float = 5.0   # seconds both players must hold simultaneously
+const ROOM_ONE_CANVAS_SIZE := Vector2i(1152, 648)
+
 @onready var sol_level = $CanvasLayer/LeftSVC/LeftViewport/SolLevel
 @onready var luna_level = $CanvasLayer/RightSVC/RightViewport/LunaLevel
 @onready var sol_rocks_label: Label = $CanvasLayer/SolRocksLabel
 @onready var luna_rocks_label: Label = $CanvasLayer/LunaRocksLabel
-
-const HOLD_DURATION: float = 5.0   # seconds both players must hold simultaneously
 
 var _sol_complete: bool = false
 var _luna_complete: bool = false
@@ -16,10 +17,15 @@ var _button_activated: bool = false
 var _prompt_cl: CanvasLayer = null
 var _progress_bar: ColorRect = null
 var _progress_label: Label = null
+var _display_overridden: bool = false
+var _previous_content_scale_size: Vector2i
+var _previous_content_scale_mode: int
+var _previous_content_scale_aspect: int
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	FadeManager.fade_in()
+	_apply_room_one_display()
 	sol_level.player_reached_exit.connect(_on_sol_at_exit)
 	luna_level.player_reached_exit.connect(_on_luna_at_exit)
 	sol_level.player_left_exit.connect(_on_sol_left_exit)
@@ -35,6 +41,30 @@ func _ready() -> void:
 func _input(event: InputEvent) -> void:
 	$CanvasLayer/LeftSVC/LeftViewport.push_input(event)
 	$CanvasLayer/RightSVC/RightViewport.push_input(event)
+
+func _exit_tree() -> void:
+	_restore_room_one_display()
+
+func _apply_room_one_display() -> void:
+	if _display_overridden:
+		return
+	var window := get_tree().root
+	_previous_content_scale_size = window.content_scale_size
+	_previous_content_scale_mode = window.content_scale_mode
+	_previous_content_scale_aspect = window.content_scale_aspect
+	window.content_scale_size = ROOM_ONE_CANVAS_SIZE
+	window.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	window.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
+	_display_overridden = true
+
+func _restore_room_one_display() -> void:
+	if not _display_overridden:
+		return
+	var window := get_tree().root
+	window.content_scale_size = _previous_content_scale_size
+	window.content_scale_mode = _previous_content_scale_mode
+	window.content_scale_aspect = _previous_content_scale_aspect
+	_display_overridden = false
 
 func _setup_player_labels() -> void:
 	var root := Control.new()

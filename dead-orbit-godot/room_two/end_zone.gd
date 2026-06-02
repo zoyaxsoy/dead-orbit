@@ -43,6 +43,6 @@ func _start_transition():
 	var tween = create_tween()
 	tween.tween_property(overlay, "color", Color(0.01, 0.015, 0.026, 0.92), 1.0)
 	tween.tween_interval(0.5)
-	tween.tween_callback(func(): label.text = "Your narrative text here.")
+	tween.tween_callback(func(): label.text = "Airlock cycling.")
 	tween.tween_interval(2.5)
 	tween.tween_callback(func(): get_tree().change_scene_to_file(next_scene))
