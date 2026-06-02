@@ -11,17 +11,27 @@ const CAM_MAX_X = 8612.0
 const HALFWAY_X = 4900.0           # rocks trigger here — end of extended first half
 const MID_RESPAWN_X = 4900.0       # respawn point once in the rocks zone
 const FIRST_CHECKPOINT_X = 2500.0  # respawn point once past the midway charges
+const DEBUG_START_AT_ROCKS = false
 const DEATH_Y = 720.0
 const ROCK_SPEED_BASE = 80.0
 const ROCK_INTERVAL_MIN = 0.8
 const ROCK_INTERVAL_MAX = 1.5
+const ROCK_FIRST_DELAY = 0.8
+const ROCK_RESPAWN_GRACE = 0.65
 const ROCK_SPAWN_Y = 50.0
+const ROCK_IMPACT_Y = 619.0
 const HOLE_RADIUS = 48.0
 const ROCK_GRACE_SECONDS = 0.8
 const ROCK_SPAWN_CUTOFF = 8800.0   # hazard spawn-ahead cap (= exit x so rocks fall right to door)
 const EXIT_X = 8800.0              # matches Exit node position.x
 const ROCK_STOP_DIST = 50.0        # stop ALL rocks within the last 50 px of exit
 const _BUTTON_X = 8830.0           # floor button world x — right at the exit wall
+const SMART_DEBRIS_CHANCE = 0.34
+const SMART_DEBRIS_COOLDOWN = 4.2
+const SMART_DEBRIS_STOP_DIST = 980.0
+const SMART_DEBRIS_MIN_AHEAD = 320.0
+const SMART_DEBRIS_MAX_AHEAD = 650.0
+const ROCK_SAFE_LANDING_MARGIN = 104.0
 
 # Static gap x-ranges — filled in at runtime so only dynamic rock holes exist
 # Gaps widened from ~120 px to ~220 px so they require a proper jump
@@ -45,6 +55,7 @@ var _next_rock_time: float = 2.0
 var _rock_pause: float = 0.0
 var _level_complete: bool = false
 var _is_dying: bool = false   # true while death overlay is showing
+var _rock_checkpoint_reached: bool = false
 var _exit_overlay_cl: CanvasLayer = null  # reference so we can dismiss it on full restart
 var _button_spr: Sprite2D = null          # floor button visual
 var _button_hint_cl: CanvasLayer = null   # world-space "S / ↓ to press" label beside button
@@ -58,8 +69,12 @@ var _hole_visuals: Array = []
 var _floor_tile_sprites: Array = []
 # x1/x2 ranges of original tiles destroyed by a pit — recreated fresh on clear
 var _split_original_ranges: Array = []
+var _smart_debris_cooldown: float = 0.0
+var _debris_astar := AStar2D.new()
+var _debris_waypoint_ids: Array = []
 
 var _rock_script = preload("res://room_one/rock.gd")
+var _smart_debris_script = preload("res://room_one/smart_debris.gd")
 
 func _ready() -> void:
 	# Apply player identity — must happen before first physics frame.
@@ -76,6 +91,7 @@ func _ready() -> void:
 
 	_build_floor_segs()
 	_fill_static_gaps()
+	_build_smart_debris_graph()
 
 	for charge in $Charges.get_children():
 		charge.body_entered.connect(_on_hazard_body_entered)
@@ -84,6 +100,8 @@ func _ready() -> void:
 	_setup_exit_visual()
 	_setup_button()
 	_setup_floor_visuals()
+	if DEBUG_START_AT_ROCKS:
+		_start_at_rock_section()
 
 func _process(delta: float) -> void:
 	if _is_dying:
@@ -128,10 +146,18 @@ func _update_parallax() -> void:
 
 func _check_halfway() -> void:
 	if not _rocks_active and player.global_position.x > HALFWAY_X:
-		_rocks_active = true
+		_rock_checkpoint_reached = true
+		_arm_rocks(ROCK_FIRST_DELAY)
 		rocks_started.emit()
 
+func _arm_rocks(first_delay: float) -> void:
+	_rocks_active = true
+	_rock_timer = 0.0
+	_next_rock_time = first_delay
+	_rock_pause = 0.0
+
 func _tick_rocks(delta: float) -> void:
+	_smart_debris_cooldown = maxf(0.0, _smart_debris_cooldown - delta)
 	if _rock_pause > 0.0:
 		_rock_pause -= delta
 		return
@@ -146,12 +172,15 @@ func _spawn_rock() -> void:
 	if player.global_position.x >= EXIT_X - ROCK_STOP_DIST:
 		return
 
-	# ── Hazard rock (ahead of player, punches floor hole, kills on contact) ──
-	# 560 px offset: rock enters camera view ~0.65 s into fall with ~0.8 s left
-	# before landing — visible long enough to see coming and react.
-	var spawn_x = player.global_position.x + 560.0
-	if spawn_x <= ROCK_SPAWN_CUTOFF:
-		var r = _make_rock(spawn_x, randf_range(380.0, 520.0))
+	var r: Area2D = null
+	if _should_spawn_smart_debris():
+		r = _make_smart_debris()
+	if r == null:
+		# Original hazard behavior: fall ahead of the player and punch a floor hole.
+		var spawn_x = player.global_position.x + 560.0
+		if spawn_x <= ROCK_SPAWN_CUTOFF:
+			r = _make_rock(spawn_x, randf_range(380.0, 520.0))
+	if is_instance_valid(r):
 		r.body_entered.connect(_on_hazard_body_entered)
 
 	# ── Atmospheric rocks (behind, on, and slightly in front of player) ──────
@@ -162,14 +191,115 @@ func _spawn_rock() -> void:
 			var ar = _make_rock(atm_x, randf_range(160.0, 280.0))
 			ar.is_hazard = false  # won't kill; won't punch a floor hole
 
-func _make_rock(spawn_x: float, fall_spd: float) -> Area2D:
+func _make_rock(spawn_x: float, fall_spd: float, horizontal_speed: float = -1.0) -> Area2D:
 	var rock = Area2D.new()
 	rock.set_script(_rock_script)
 	rocks.add_child(rock)
-	rock.speed = ROCK_SPEED_BASE + randf_range(-40.0, 60.0)
+	rock.speed = horizontal_speed if horizontal_speed >= 0.0 else ROCK_SPEED_BASE + randf_range(-40.0, 60.0)
 	rock.fall_speed = fall_spd
 	rock.global_position = Vector2(spawn_x, ROCK_SPAWN_Y)
 	return rock
+
+func _find_fair_rock_impact_x(min_x: float, max_x: float) -> float:
+	var candidates: Array = []
+	for seg in _floor_segs:
+		var seg_width := float(seg.x2) - float(seg.x1)
+		if seg_width < (HOLE_RADIUS + ROCK_SAFE_LANDING_MARGIN) * 2.0:
+			continue
+		var left: float = maxf(float(seg.x1) + HOLE_RADIUS + ROCK_SAFE_LANDING_MARGIN, min_x)
+		var right: float = minf(float(seg.x2) - HOLE_RADIUS - ROCK_SAFE_LANDING_MARGIN, max_x)
+		if right > left:
+			candidates.append({"x1": left, "x2": right, "width": right - left})
+
+	if candidates.is_empty():
+		return NAN
+
+	var total_width := 0.0
+	for candidate in candidates:
+		total_width += float(candidate.width)
+	var pick := randf() * total_width
+	for candidate in candidates:
+		pick -= float(candidate.width)
+		if pick <= 0.0:
+			return randf_range(float(candidate.x1), float(candidate.x2))
+	var last = candidates[candidates.size() - 1]
+	return randf_range(float(last.x1), float(last.x2))
+
+func _should_spawn_smart_debris() -> bool:
+	if _smart_debris_cooldown > 0.0:
+		return false
+	if _has_active_smart_debris():
+		return false
+	if player.global_position.x < HALFWAY_X + 220.0:
+		return false
+	if player.global_position.x >= EXIT_X - SMART_DEBRIS_STOP_DIST:
+		return false
+	return randf() <= SMART_DEBRIS_CHANCE
+
+func _has_active_smart_debris() -> bool:
+	for rock in rocks.get_children():
+		if rock.has_meta("smart_debris"):
+			return true
+	return false
+
+func _make_smart_debris() -> Area2D:
+	var min_x: float = player.global_position.x + SMART_DEBRIS_MIN_AHEAD
+	var max_x: float = minf(player.global_position.x + SMART_DEBRIS_MAX_AHEAD, ROCK_SPAWN_CUTOFF)
+	var impact_x := _find_fair_rock_impact_x(min_x, max_x)
+	if is_nan(impact_x):
+		impact_x = clampf(player.global_position.x + randf_range(SMART_DEBRIS_MIN_AHEAD, SMART_DEBRIS_MAX_AHEAD), HALFWAY_X + 180.0, ROCK_SPAWN_CUTOFF)
+	_smart_debris_cooldown = SMART_DEBRIS_COOLDOWN
+	var start_pos := Vector2(camera.global_position.x + 620.0, randf_range(70.0, 145.0))
+	var path := _smart_debris_path(start_pos, impact_x)
+	var debris = Area2D.new()
+	debris.set_script(_smart_debris_script)
+	debris.set_meta("smart_debris", true)
+	rocks.add_child(debris)
+	debris.call("configure_smart_path", path, impact_x, player)
+	return debris
+
+func _build_smart_debris_graph() -> void:
+	_debris_astar = AStar2D.new()
+	_debris_waypoint_ids.clear()
+	var lane_xs := [4500.0, 5000.0, 5520.0, 6040.0, 6560.0, 7080.0, 7600.0, 8120.0, 8620.0]
+	var lane_ys := [88.0, 168.0, 260.0]
+	for x_index in range(lane_xs.size()):
+		var column_ids: Array = []
+		for y_index in range(lane_ys.size()):
+			var id := x_index * lane_ys.size() + y_index + 1
+			var wobble := sin(float(x_index) * 0.9 + float(y_index) * 1.7) * 28.0
+			_debris_astar.add_point(id, Vector2(lane_xs[x_index], lane_ys[y_index] + wobble))
+			column_ids.append(id)
+		_debris_waypoint_ids.append(column_ids)
+
+	for x_index in range(_debris_waypoint_ids.size()):
+		for y_index in range(_debris_waypoint_ids[x_index].size()):
+			var id: int = _debris_waypoint_ids[x_index][y_index]
+			if x_index + 1 < _debris_waypoint_ids.size():
+				_debris_astar.connect_points(id, _debris_waypoint_ids[x_index + 1][y_index])
+				if y_index > 0:
+					_debris_astar.connect_points(id, _debris_waypoint_ids[x_index + 1][y_index - 1])
+				if y_index + 1 < _debris_waypoint_ids[x_index].size():
+					_debris_astar.connect_points(id, _debris_waypoint_ids[x_index + 1][y_index + 1])
+			if y_index + 1 < _debris_waypoint_ids[x_index].size():
+				_debris_astar.connect_points(id, _debris_waypoint_ids[x_index][y_index + 1])
+
+func _smart_debris_path(start_pos: Vector2, impact_x: float) -> PackedVector2Array:
+	var staging := Vector2(clampf(impact_x, HALFWAY_X + 240.0, ROCK_SPAWN_CUTOFF - 160.0), randf_range(135.0, 220.0))
+	var points := PackedVector2Array([start_pos])
+	var start_id := _debris_astar.get_closest_point(start_pos)
+	var end_id := _debris_astar.get_closest_point(staging)
+	if start_id >= 0 and end_id >= 0:
+		for waypoint in _debris_astar.get_point_path(start_id, end_id):
+			var point: Vector2 = waypoint
+			if points[points.size() - 1].distance_to(point) > 28.0:
+				points.append(point)
+	if points.size() < 4:
+		points.append(Vector2((start_pos.x + impact_x) * 0.5 + 110.0, 92.0))
+		points.append(Vector2((start_pos.x + impact_x) * 0.5 - 80.0, 238.0))
+	if points[points.size() - 1].distance_to(staging) > 24.0:
+		points.append(staging)
+	return points
 
 func _clean_rocks() -> void:
 	for rock in rocks.get_children():
@@ -200,7 +330,6 @@ func _respawn() -> void:
 	_is_dying = false
 
 func _execute_respawn() -> void:
-	# No checkpoints — every death restarts from the very beginning.
 	if _rocks_active:
 		# Clear rocks so the player restarts a clean run
 		for rock in rocks.get_children():
@@ -209,19 +338,24 @@ func _execute_respawn() -> void:
 		_rock_timer = 0.0
 		_next_rock_time = randf_range(ROCK_INTERVAL_MIN, ROCK_INTERVAL_MAX)
 		_rock_pause = 0.0
+		_smart_debris_cooldown = 0.0
 		_rocks_active = false
-	player.respawn()
-	camera.global_position = Vector2(CAM_MIN_X, CAM_Y)
+	if _rock_checkpoint_reached:
+		_respawn_at_rock_checkpoint()
+	else:
+		player.respawn()
+		camera.global_position = Vector2(CAM_MIN_X, CAM_Y)
 	_parallax_ref_x = 0.0
 
 func _execute_full_restart() -> void:
-	# Player died at/near the exit — restart from the very beginning of the level.
+	# Player died at/near the exit — reset exit state, but keep the rocks checkpoint once earned.
 	for rock in rocks.get_children():
 		rock.queue_free()
 	_clear_rock_holes()
 	_rock_timer = 0.0
 	_next_rock_time = randf_range(ROCK_INTERVAL_MIN, ROCK_INTERVAL_MAX)
 	_rock_pause = 0.0
+	_smart_debris_cooldown = 0.0
 	_rocks_active = false
 
 	# Dismiss the exit-reached banner and hint label
@@ -240,11 +374,24 @@ func _execute_full_restart() -> void:
 		_button_spr.modulate = Color(0.0, 0.0, 0.0, 0.0)   # invisible on full restart
 		_button_spr.scale    = Vector2(1.5, 1.5)
 
-	# Return player to the original start position
-	player.global_position = Vector2(150.0, _FLOOR_TOP - 32.0)
-	player.velocity = Vector2.ZERO
-	camera.global_position = Vector2(CAM_MIN_X, CAM_Y)
+	if _rock_checkpoint_reached:
+		_respawn_at_rock_checkpoint()
+	else:
+		player.global_position = Vector2(150.0, _FLOOR_TOP - 32.0)
+		player.velocity = Vector2.ZERO
+		camera.global_position = Vector2(CAM_MIN_X, CAM_Y)
 	_parallax_ref_x = 0.0
+
+func _respawn_at_rock_checkpoint() -> void:
+	player.global_position = Vector2(MID_RESPAWN_X + 80.0, _FLOOR_TOP - 32.0)
+	player.velocity = Vector2.ZERO
+	camera.global_position = Vector2(player.global_position.x, CAM_Y)
+	_arm_rocks(ROCK_RESPAWN_GRACE)
+
+func _start_at_rock_section() -> void:
+	_rock_checkpoint_reached = true
+	_respawn_at_rock_checkpoint()
+	rocks_started.emit()
 
 func _on_hazard_body_entered(body: Node) -> void:
 	if body == player:
@@ -480,10 +627,22 @@ func _fill_static_gaps() -> void:
 # ── Dynamic rock impact holes ─────────────────────────────────────────────────
 
 func create_rock_hole(ix: float, sprite_col: int = 0) -> void:
+	if not _can_create_fair_rock_hole(ix):
+		return
 	_punch_floor_at(ix)
 	_punch_tile_at(ix)
 	_add_impact_visuals(ix, sprite_col)
 	_check_floor_clearance()
+
+func _can_create_fair_rock_hole(ix: float) -> bool:
+	for seg in _floor_segs:
+		if ix <= float(seg.x1) or ix >= float(seg.x2):
+			continue
+		return (
+			ix >= float(seg.x1) + HOLE_RADIUS + ROCK_SAFE_LANDING_MARGIN
+			and ix <= float(seg.x2) - HOLE_RADIUS - ROCK_SAFE_LANDING_MARGIN
+		)
+	return false
 
 func _check_floor_clearance() -> void:
 	# Sum up all walkable floor visible in the current camera view.

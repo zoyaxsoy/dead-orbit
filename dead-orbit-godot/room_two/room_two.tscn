@@ -12086,7 +12086,7 @@ shape = SubResource("RectangleShape2D_vhqpk")
 [node name="EndZone" type="Area2D" parent="Checkpoints" unique_id=1315248899]
 position = Vector2(5293.29, -164.55)
 script = ExtResource("34_l0ds2")
-next_scene = "/Users/zoyasoy/Desktop/dead-orbit/dead-orbit-godot/rooms/room_three.tscn"
+next_scene = "res://cut_scenes/two_to_three.tscn"
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Checkpoints/EndZone" unique_id=1469349769]
 position = Vector2(-0.6904297, 18.274994)

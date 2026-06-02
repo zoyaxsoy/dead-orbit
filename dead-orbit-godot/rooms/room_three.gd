@@ -32,6 +32,12 @@ const POLARITY_RED := "red"
 const POLARITY_NEUTRAL := "neutral"
 const SIDE_FLOOR := "floor"
 const SIDE_CEILING := "ceiling"
+const INTERACTION_NEAR_RADIUS := 170.0
+const ANCHOR_ACTIVE_RADIUS := 82.0
+const BREACH_ACTIVE_RADIUS := 128.0
+const TRAVELLING_SPARK_HIT_RADIUS := 34.0
+const TRAVELLING_SPARK_TRAVEL_SECONDS := 2.05
+const TRAVELLING_SPARK_CYCLE_SECONDS := 3.15
 
 @export var gravity: float = 1450.0
 @export var walk_speed: float = 265.0
@@ -41,6 +47,7 @@ const SIDE_CEILING := "ceiling"
 @export var gravity_flip_impulse: float = 270.0
 @export var tether_rest_length: float = 360.0
 @export var tether_max_length: float = 540.0
+@export var tether_snap_length: float = 710.0
 @export var tether_pull_strength: float = 560.0
 @export var tether_position_correction: float = 0.18
 @export var breach_seal_seconds: float = 6.2
@@ -58,6 +65,11 @@ var breach_label: Label
 var progress_label: Label
 var status_label: Label
 var completion_label: Label
+var anchor_prompt_label: Label
+var breach_prompt_label: Label
+var repair_progress_panel: Control
+var repair_progress_fill: ColorRect
+var repair_progress_label: Label
 
 var players: Dictionary = {}
 var platforms: Array = []
@@ -65,6 +77,7 @@ var magnetic_zones: Array = []
 var breaches: Array = []
 var checkpoints: Array = []
 var warning_lights: Array = []
+var travelling_sparks: Array = []
 
 var current_checkpoint: int = 0
 var challenge_time: float = CHALLENGE_SECONDS
@@ -72,6 +85,8 @@ var sealed_breach_count: int = 0
 var completed: bool = false
 var status_time: float = 0.0
 var blink_time: float = 0.0
+var tether_snap_flash_time: float = 0.0
+var spark_hit_cooldown: float = 0.0
 var room_four_transition_started: bool = false
 var room_four_transition_elapsed: float = 0.0
 var room_four_transition_overlay: ColorRect
@@ -101,10 +116,13 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	blink_time += delta
 	status_time = maxf(0.0, status_time - delta)
+	tether_snap_flash_time = maxf(0.0, tether_snap_flash_time - delta)
+	spark_hit_cooldown = maxf(0.0, spark_hit_cooldown - delta)
 	if room_four_transition_started:
 		_update_room_four_transition(delta)
 	_update_warning_lights()
 	_update_repair_sparks()
+	_update_travelling_sparks()
 	_update_tether_visual()
 	_update_hud()
 
@@ -128,6 +146,7 @@ func _physics_process(delta: float) -> void:
 		body.move_and_slide()
 		_update_player_state_after_move(player_id, delta)
 
+	_check_travelling_spark_hits()
 	_update_breaches(delta)
 	_update_checkpoints()
 	_update_exit_airlock()
@@ -337,7 +356,7 @@ func _build_world() -> void:
 	camera.limit_top = -160
 	camera.limit_right = int(LEVEL_WIDTH)
 	camera.limit_bottom = 1260
-	camera.zoom = Vector2(1.28, 1.28)
+	camera.zoom = Vector2(1.0, 1.0)
 	camera.position_smoothing_enabled = true
 	camera.position_smoothing_speed = 6.5
 	camera.position = Vector2(480, CAMERA_CENTER_Y)
@@ -442,18 +461,25 @@ func _build_breaches() -> void:
 		breach["spark"] = spark
 		breaches[index] = breach
 
+		if index > 0:
+			_add_travelling_spark(index, breach)
+
 func _build_players() -> void:
 	players["luna"] = _create_player("Luna", LUNA_SHEET, POLARITY_BLUE, {
 		"left": "luna_left",
 		"right": "luna_right",
 		"up": "luna_up",
 		"down": "luna_down",
+		"flip": "luna_gravity_flip",
+		"repair": "luna_repair",
 	})
 	players["sol"] = _create_player("Sol", SOL_SHEET, POLARITY_RED, {
 		"left": "sol_left",
 		"right": "sol_right",
 		"up": "sol_up",
 		"down": "sol_down",
+		"flip": "sol_gravity_flip",
+		"repair": "sol_repair",
 	})
 
 func _build_hud() -> void:
@@ -485,6 +511,48 @@ func _build_hud() -> void:
 	completion_label.add_theme_font_size_override("font_size", 26)
 	completion_label.visible = false
 	hud_layer.add_child(completion_label)
+
+	_build_interaction_hud()
+
+func _build_interaction_hud() -> void:
+	anchor_prompt_label = _make_label("", Vector2.ZERO, Vector2(260, 34), Color(0.56, 0.86, 1.0))
+	anchor_prompt_label.name = "AnchorPrompt"
+	anchor_prompt_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	anchor_prompt_label.add_theme_font_size_override("font_size", 16)
+	anchor_prompt_label.visible = false
+	hud_layer.add_child(anchor_prompt_label)
+
+	breach_prompt_label = _make_label("", Vector2.ZERO, Vector2(300, 34), Color(1.0, 0.86, 0.58))
+	breach_prompt_label.name = "BreachPrompt"
+	breach_prompt_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	breach_prompt_label.add_theme_font_size_override("font_size", 16)
+	breach_prompt_label.visible = false
+	hud_layer.add_child(breach_prompt_label)
+
+	repair_progress_panel = Control.new()
+	repair_progress_panel.name = "RepairProgressPrompt"
+	repair_progress_panel.size = Vector2(210, 34)
+	repair_progress_panel.visible = false
+	hud_layer.add_child(repair_progress_panel)
+
+	var progress_back := ColorRect.new()
+	progress_back.name = "RepairProgressBack"
+	progress_back.position = Vector2(0, 18)
+	progress_back.size = Vector2(210, 10)
+	progress_back.color = Color(0.01, 0.015, 0.024, 0.86)
+	repair_progress_panel.add_child(progress_back)
+
+	repair_progress_fill = ColorRect.new()
+	repair_progress_fill.name = "RepairProgressFill"
+	repair_progress_fill.position = progress_back.position
+	repair_progress_fill.size = Vector2(0, progress_back.size.y)
+	repair_progress_fill.color = Color(0.36, 0.92, 1.0, 0.95)
+	repair_progress_panel.add_child(repair_progress_fill)
+
+	repair_progress_label = _make_label("", Vector2(0, -4), Vector2(210, 20), Color(0.86, 1.0, 1.0))
+	repair_progress_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	repair_progress_label.add_theme_font_size_override("font_size", 14)
+	repair_progress_panel.add_child(repair_progress_label)
 
 func _create_player(display_name: String, sheet: Texture2D, player_polarity: String, controls: Dictionary) -> Dictionary:
 	var body := CharacterBody2D.new()
@@ -544,9 +612,9 @@ func _apply_player_input(player_id: String, delta: float) -> void:
 	body.up_direction = Vector2(0.0, -float(gravity_dir))
 
 	var input_x: float = Input.get_action_strength(str(controls["right"])) - Input.get_action_strength(str(controls["left"]))
-	var holding_down := Input.is_action_pressed(str(controls["down"]))
-	var flip_requested := holding_down and Input.is_action_just_pressed(str(controls["up"]))
-	state["holding_down"] = holding_down
+	var repair_held := Input.is_action_pressed(str(controls["repair"]))
+	var flip_requested := Input.is_action_just_pressed(str(controls["flip"]))
+	state["holding_down"] = repair_held
 
 	if flip_requested:
 		gravity_dir *= -1
@@ -580,7 +648,7 @@ func _apply_player_input(player_id: String, delta: float) -> void:
 	elif on_surface:
 		body.velocity.x = move_toward(body.velocity.x, 0.0, friction * delta)
 
-	if on_surface and Input.is_action_just_pressed(str(controls["up"])) and not flip_requested:
+	if on_surface and Input.is_action_just_pressed(str(controls["up"])):
 		body.velocity.y = -float(gravity_dir) * jump_velocity
 	else:
 		body.velocity.y = clampf(body.velocity.y + gravity * float(gravity_dir) * delta, -max_fall_speed, max_fall_speed)
@@ -659,9 +727,9 @@ func _update_breaches(delta: float) -> void:
 		var sealer_body: CharacterBody2D = sealer_player["body"] as CharacterBody2D
 		var breach_position: Vector2 = breach["position"] as Vector2
 		var anchor_position: Vector2 = breach["anchor_position"] as Vector2
-		var anchored: bool = anchor_body.global_position.distance_to(anchor_position) <= 82.0
+		var anchored: bool = anchor_body.global_position.distance_to(anchor_position) <= ANCHOR_ACTIVE_RADIUS
 		anchored = anchored and str(anchor_player["zone_polarity"]) == str(breach["anchor_polarity"])
-		var sealer_close: bool = sealer_body.global_position.distance_to(breach_position) <= 128.0
+		var sealer_close: bool = sealer_body.global_position.distance_to(breach_position) <= BREACH_ACTIVE_RADIUS
 		var sealer_holding: bool = bool(sealer_player["holding_down"])
 
 		if anchored and sealer_close and sealer_holding:
@@ -760,9 +828,10 @@ func _update_failures() -> void:
 		_soft_reset("CHECKPOINT RESET")
 		return
 
-	var far_apart := luna_body.global_position.distance_to(sol_body.global_position) > tether_max_length + 190.0
+	var far_apart := luna_body.global_position.distance_to(sol_body.global_position) > tether_snap_length
 	if far_apart:
-		_soft_reset("TETHER RECOVERY")
+		tether_snap_flash_time = 0.8
+		_soft_reset("TETHER SNAPPED")
 
 func _update_camera(delta: float) -> void:
 	var luna_body: CharacterBody2D = players["luna"]["body"] as CharacterBody2D
@@ -801,7 +870,11 @@ func _update_tether_visual() -> void:
 
 	tether_line.points = points
 	tether_line.width = lerpf(3.0, 6.0, tension)
-	tether_line.default_color = Color(0.46 + 0.34 * tension, 0.82 - 0.28 * tension, 1.0 - 0.42 * tension, 0.78 + 0.18 * tension)
+	if tether_snap_flash_time > 0.0:
+		tether_line.width = 7.0
+		tether_line.default_color = Color(1.0, 0.16, 0.08, 0.96)
+	else:
+		tether_line.default_color = Color(0.46 + 0.34 * tension, 0.82 - 0.28 * tension, 1.0 - 0.42 * tension, 0.78 + 0.18 * tension)
 
 func _update_warning_lights() -> void:
 	var frame := int(blink_time * 8.0) % 4
@@ -816,12 +889,94 @@ func _update_repair_sparks() -> void:
 		spark.visible = active
 		spark.region_rect = Rect2(frame * 32, 0, 32, 32)
 
+func _add_travelling_spark(breach_index: int, breach: Dictionary) -> void:
+	var anchor_position: Vector2 = breach["anchor_position"] as Vector2
+	var anchor_side := str(breach["anchor_side"])
+	var lane_y := anchor_position.y + 42.0
+	if anchor_side == SIDE_FLOOR:
+		lane_y = anchor_position.y - 42.0
+
+	var lane_start := Vector2(anchor_position.x - 132.0, lane_y)
+	var lane_end := Vector2(anchor_position.x + 132.0, lane_y)
+	if breach_index % 2 == 0:
+		var temp := lane_start
+		lane_start = lane_end
+		lane_end = temp
+
+	var spark := Sprite2D.new()
+	spark.name = "%s TravellingSpark" % str(breach["name"])
+	spark.texture = REPAIR_SPARKS
+	spark.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	spark.region_enabled = true
+	spark.region_rect = Rect2(0, 0, 32, 32)
+	spark.scale = Vector2(1.2, 1.2)
+	spark.z_index = 35
+	spark.visible = false
+	world.add_child(spark)
+
+	travelling_sparks.append({
+		"sprite": spark,
+		"breach_index": breach_index,
+		"target_player": str(breach["anchor_player"]),
+		"start": lane_start,
+		"end": lane_end,
+		"phase": float(breach_index) * 0.82,
+		"active": false,
+	})
+
+func _update_travelling_sparks() -> void:
+	var frame := int(blink_time * 14.0) % 4
+	for index in range(travelling_sparks.size()):
+		var spark_data: Dictionary = travelling_sparks[index]
+		var spark: Sprite2D = spark_data["sprite"] as Sprite2D
+		var active := _is_travelling_spark_active(spark_data)
+		spark_data["active"] = active
+		spark.visible = active
+		spark.region_rect = Rect2(frame * 32, 0, 32, 32)
+		if active:
+			var cycle_time := fmod(blink_time + float(spark_data["phase"]), TRAVELLING_SPARK_CYCLE_SECONDS)
+			var travel_t := clampf(cycle_time / TRAVELLING_SPARK_TRAVEL_SECONDS, 0.0, 1.0)
+			var lane_start: Vector2 = spark_data["start"] as Vector2
+			var lane_end: Vector2 = spark_data["end"] as Vector2
+			spark.position = lane_start.lerp(lane_end, travel_t)
+		travelling_sparks[index] = spark_data
+
+func _is_travelling_spark_active(spark_data: Dictionary) -> bool:
+	var breach_index := int(spark_data["breach_index"])
+	if breach_index >= breaches.size():
+		return false
+	var breach: Dictionary = breaches[breach_index]
+	if bool(breach["sealed"]):
+		return false
+	if breach_index > 0 and not bool(breaches[breach_index - 1]["sealed"]):
+		return false
+	if current_checkpoint < breach_index:
+		return false
+	var cycle_time := fmod(blink_time + float(spark_data["phase"]), TRAVELLING_SPARK_CYCLE_SECONDS)
+	return cycle_time <= TRAVELLING_SPARK_TRAVEL_SECONDS
+
+func _check_travelling_spark_hits() -> void:
+	if spark_hit_cooldown > 0.0:
+		return
+	for spark_data in travelling_sparks:
+		if not bool(spark_data["active"]):
+			continue
+		var player_id := str(spark_data["target_player"])
+		if not players.has(player_id):
+			continue
+		var body: CharacterBody2D = players[player_id]["body"] as CharacterBody2D
+		var spark: Sprite2D = spark_data["sprite"] as Sprite2D
+		if body.global_position.distance_to(spark.global_position) <= TRAVELLING_SPARK_HIT_RADIUS:
+			spark_hit_cooldown = 0.9
+			_soft_reset("%s HIT BY ARC" % player_id.to_upper())
+			return
+
 func _update_hud() -> void:
 	if timer_label == null:
 		return
 
 	var seconds_left: int = max(0, int(ceil(challenge_time)))
-	var minutes: int = int(seconds_left / 60)
+	var minutes: int = int(float(seconds_left) / 60.0)
 	var seconds: int = seconds_left % 60
 	timer_label.text = "EVA %02d:%02d" % [minutes, seconds]
 	breach_label.text = "BREACHES %d/3" % sealed_breach_count
@@ -835,9 +990,109 @@ func _update_hud() -> void:
 
 	if status_time <= 0.0 and not completed:
 		if sealed_breach_count < 3:
-			status_label.text = "DOWN+UP / S+W FLIPS GRAVITY"
+			status_label.text = "GRAVITY FLIP: SOL Q/RB  LUNA L/RB"
 		else:
 			status_label.text = "EXIT AIRLOCK READY"
+
+	_update_interaction_prompts()
+
+func _update_interaction_prompts() -> void:
+	if anchor_prompt_label == null or breach_prompt_label == null or repair_progress_panel == null:
+		return
+	if completed:
+		_hide_interaction_prompts()
+		return
+
+	var breach := _closest_interaction_breach()
+	if breach.is_empty():
+		_hide_interaction_prompts()
+		return
+
+	var anchor_id := str(breach["anchor_player"])
+	var sealer_id := str(breach["sealer_player"])
+	var anchor_player: Dictionary = players[anchor_id]
+	var sealer_player: Dictionary = players[sealer_id]
+	var anchor_body: CharacterBody2D = anchor_player["body"] as CharacterBody2D
+	var sealer_body: CharacterBody2D = sealer_player["body"] as CharacterBody2D
+	var anchor_position: Vector2 = breach["anchor_position"] as Vector2
+	var breach_position: Vector2 = breach["position"] as Vector2
+	var anchor_distance := anchor_body.global_position.distance_to(anchor_position)
+	var sealer_distance := sealer_body.global_position.distance_to(breach_position)
+	var anchor_near := anchor_distance <= INTERACTION_NEAR_RADIUS
+	var sealer_near := sealer_distance <= INTERACTION_NEAR_RADIUS
+	var anchored := anchor_distance <= ANCHOR_ACTIVE_RADIUS and str(anchor_player["zone_polarity"]) == str(breach["anchor_polarity"])
+	var sealer_close := sealer_distance <= BREACH_ACTIVE_RADIUS
+	var progress := float(breach["progress"])
+
+	anchor_prompt_label.visible = anchor_near
+	if anchor_near:
+		var polarity := str(breach["anchor_polarity"]).to_upper()
+		if anchored:
+			anchor_prompt_label.text = "%s: repair point linked" % _player_display_name(anchor_id)
+		else:
+			anchor_prompt_label.text = "%s: stand on %s repair point" % [_player_display_name(anchor_id), polarity]
+		_place_hud_node(anchor_prompt_label, anchor_position, Vector2(0, -94))
+
+	breach_prompt_label.visible = sealer_near
+	if sealer_near:
+		if sealer_close and anchored:
+			breach_prompt_label.text = "%s: hold %s to seal breach" % [_player_display_name(sealer_id), _repair_control_text(sealer_id)]
+		elif sealer_close:
+			breach_prompt_label.text = "%s: wait for repair point link" % _player_display_name(sealer_id)
+		else:
+			breach_prompt_label.text = "%s: move closer to breach" % _player_display_name(sealer_id)
+		_place_hud_node(breach_prompt_label, breach_position, Vector2(0, -94))
+
+	repair_progress_panel.visible = anchor_near or sealer_near or progress > 0.01
+	if repair_progress_panel.visible:
+		repair_progress_label.text = "%s repair %02d%%" % [str(breach["name"]), int(round(progress * 100.0))]
+		repair_progress_fill.size = Vector2(210.0 * clampf(progress, 0.0, 1.0), repair_progress_fill.size.y)
+		_place_hud_node(repair_progress_panel, breach_position, Vector2(0, -52))
+
+func _closest_interaction_breach() -> Dictionary:
+	var chosen: Dictionary = {}
+	var best_score := INF
+	for breach in breaches:
+		if bool(breach["sealed"]):
+			continue
+		var anchor_id := str(breach["anchor_player"])
+		var sealer_id := str(breach["sealer_player"])
+		var anchor_body: CharacterBody2D = players[anchor_id]["body"] as CharacterBody2D
+		var sealer_body: CharacterBody2D = players[sealer_id]["body"] as CharacterBody2D
+		var anchor_distance := anchor_body.global_position.distance_to(breach["anchor_position"] as Vector2)
+		var sealer_distance := sealer_body.global_position.distance_to(breach["position"] as Vector2)
+		var score: float = minf(anchor_distance, sealer_distance)
+		if score <= INTERACTION_NEAR_RADIUS or float(breach["progress"]) > 0.01:
+			if score < best_score:
+				best_score = score
+				chosen = breach
+	return chosen
+
+func _hide_interaction_prompts() -> void:
+	anchor_prompt_label.visible = false
+	breach_prompt_label.visible = false
+	repair_progress_panel.visible = false
+
+func _place_hud_node(node: Control, world_position: Vector2, offset: Vector2) -> void:
+	var hud_position := _world_to_hud(world_position) - node.size * 0.5 + offset
+	node.position = _clamp_hud_position(hud_position, node.size)
+
+func _world_to_hud(world_position: Vector2) -> Vector2:
+	var viewport_size := get_viewport_rect().size
+	return viewport_size * 0.5 + (world_position - camera.global_position) * camera.zoom
+
+func _clamp_hud_position(hud_position: Vector2, hud_size: Vector2) -> Vector2:
+	var viewport_size := get_viewport_rect().size
+	return Vector2(
+		clampf(hud_position.x, 8.0, maxf(8.0, viewport_size.x - hud_size.x - 8.0)),
+		clampf(hud_position.y, 54.0, maxf(54.0, viewport_size.y - hud_size.y - 8.0))
+	)
+
+func _player_display_name(player_id: String) -> String:
+	return "LUNA" if player_id == "luna" else "SOL"
+
+func _repair_control_text(player_id: String) -> String:
+	return "Down / B" if player_id == "luna" else "S / B"
 
 func _soft_reset(message: String) -> void:
 	_reset_to_checkpoint(current_checkpoint, true, message)
@@ -882,7 +1137,7 @@ func _is_player_repairing(player_id: String) -> bool:
 	for breach in breaches:
 		if bool(breach["sealed"]):
 			continue
-		if str(breach["sealer_player"]) == player_id and body.global_position.distance_to(breach["position"] as Vector2) <= 128.0:
+		if str(breach["sealer_player"]) == player_id and body.global_position.distance_to(breach["position"] as Vector2) <= BREACH_ACTIVE_RADIUS:
 			return true
 	return false
 
@@ -893,7 +1148,7 @@ func _is_player_repairing_breach(player_id: String, breach: Dictionary) -> bool:
 	if str(breach["sealer_player"]) != player_id:
 		return false
 	var body: CharacterBody2D = state["body"] as CharacterBody2D
-	return body.global_position.distance_to(breach["position"] as Vector2) <= 128.0
+	return body.global_position.distance_to(breach["position"] as Vector2) <= BREACH_ACTIVE_RADIUS
 
 func _attachment_probe_point(body: CharacterBody2D, gravity_dir: int) -> Vector2:
 	return body.global_position + Vector2(0.0, 31.0 * float(gravity_dir))

@@ -255,9 +255,9 @@ func _process_section(delta: float) -> void:
 func _process_tuning(delta: float) -> void:
 	_play_static_loop("tuning")
 	var input_x := 0.0
-	if Input.is_key_pressed(KEY_E):
+	if Input.is_action_pressed("room4_sol_tune_right"):
 		input_x += 1.0
-	if Input.is_key_pressed(KEY_Q):
+	if Input.is_action_pressed("room4_sol_tune_left"):
 		input_x -= 1.0
 
 	tuning_drift_time += delta
@@ -268,7 +268,7 @@ func _process_tuning(delta: float) -> void:
 	var clarity := _signal_clarity()
 	static_player.volume_db = lerpf(TUNING_STATIC_DB, CLEAR_STATIC_DB, clarity)
 
-	var capture_now := Input.is_key_pressed(KEY_F)
+	var capture_now := Input.is_action_pressed("room4_sol_capture")
 	if capture_now and not sol_capture_key_down:
 		_attempt_signal_capture()
 	sol_capture_key_down = capture_now
@@ -389,7 +389,7 @@ func _apply_escape_movement(delta: float) -> void:
 	sol_escape_pos.y = minf(sol_escape_pos.y, floor_y)
 
 func _process_digit_controls(player_id: String) -> void:
-	var controls := _controls_for(player_id)
+	var controls := _entry_controls_for(player_id)
 	var submitted := luna_submitted if player_id == "luna" else sol_submitted
 	if submitted:
 		return
@@ -411,8 +411,8 @@ func _process_digit_controls(player_id: String) -> void:
 		_change_digit(player_id, -1)
 
 func _process_submit_keys() -> void:
-	var luna_now := Input.is_key_pressed(KEY_ENTER)
-	var sol_now := Input.is_key_pressed(KEY_F)
+	var luna_now := Input.is_action_pressed("room4_luna_submit")
+	var sol_now := Input.is_action_pressed("room4_sol_submit")
 	if luna_now and not luna_submit_key_down:
 		_submit_entry("luna")
 	if sol_now and not sol_submit_key_down:
@@ -463,8 +463,8 @@ func _reset_entry_attempt(reason: String) -> void:
 	sol_submit_time = -10.0
 	luna_submitted_pair = ""
 	sol_submitted_pair = ""
-	luna_submit_key_down = Input.is_key_pressed(KEY_ENTER)
-	sol_submit_key_down = Input.is_key_pressed(KEY_F)
+	luna_submit_key_down = Input.is_action_pressed("room4_luna_submit")
+	sol_submit_key_down = Input.is_action_pressed("room4_sol_submit")
 	_set_message(reason, 2.2)
 
 func _unlock_checkpoint() -> void:
@@ -481,18 +481,18 @@ func _start_tuning() -> void:
 	phase = Phase.TUNING
 	pair_revealed = false
 	tuning_drift_time = 0.0
-	sol_capture_key_down = Input.is_key_pressed(KEY_F)
+	sol_capture_key_down = Input.is_action_pressed("room4_sol_capture")
 	needle_value = clampf(0.08 + float(section_index) * 0.21, 0.06, 0.88)
 	current_clear_min = 0.17 + float(section_index) * 0.18
 	current_clear_max = current_clear_min + 0.105
-	_set_message("Sol: use Q/E to chase the clean signal, then press F to capture it.", 2.2)
+	_set_message("Sol: Q/E or LB/RB tunes. Press C or Y when the signal clears.", 2.2)
 	_play_sfx(TUNE_AUDIO)
 
 func _attempt_signal_capture() -> void:
 	if _signal_clarity() >= CAPTURE_CLARITY_THRESHOLD:
 		_reveal_pair()
 	else:
-		_set_message("Signal slipped. Keep tuning, then press F when it clears.", 1.4)
+		_set_message("Signal slipped. Tune again, then press C or Y when it clears.", 1.4)
 		_play_sfx(TUNE_AUDIO)
 
 func _reveal_pair() -> void:
@@ -601,8 +601,8 @@ func _update_labels() -> void:
 	luna_entry_label.size = Vector2(screen.x * 0.5 - 36.0, 42)
 	sol_entry_label.position = Vector2(screen.x * 0.5 + 18, screen.y - 60)
 	sol_entry_label.size = Vector2(screen.x * 0.5 - 36.0, 42)
-	luna_entry_label.text = _entry_text("LUNA", luna_digits, luna_digit_slot, luna_submitted, "ENTER")
-	sol_entry_label.text = _entry_text("SOL", sol_digits, sol_digit_slot, sol_submitted, "F")
+	luna_entry_label.text = _entry_text("LUNA", luna_digits, luna_digit_slot, luna_submitted, "ENTER/B")
+	sol_entry_label.text = _entry_text("SOL", sol_digits, sol_digit_slot, sol_submitted, "F/B")
 
 	ending_label.visible = phase == Phase.ENDING
 	ending_label.position = Vector2(72, screen.y - 150)
@@ -742,19 +742,40 @@ func _draw_dashboard(screen: Vector2) -> void:
 	if phase == Phase.ENTRY:
 		label = "RADIO CLEAR: ENTER WHAT YOU HEARD"
 	draw_string(ThemeDB.fallback_font, rect.position + Vector2(24, 42), label, HORIZONTAL_ALIGNMENT_LEFT, -1, 22, Color(0.77, 1.0, 0.9))
-	draw_string(ThemeDB.fallback_font, rect.position + Vector2(24, 76), "Sol: Q/E tunes. F captures the clean signal.", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color(0.58, 0.88, 1.0))
+	if phase == Phase.ENTRY:
+		draw_string(ThemeDB.fallback_font, rect.position + Vector2(24, 76), "Keypads active: change digits and submit together.", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color(0.58, 0.88, 1.0))
+	else:
+		draw_string(ThemeDB.fallback_font, rect.position + Vector2(24, 76), "Sol: Q/E or LB/RB tunes. C/Y captures the clean signal.", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color(0.58, 0.88, 1.0))
 
 func _draw_luna_keypad(screen: Vector2) -> void:
 	var split_x := screen.x * 0.5
-	var rect := Rect2(42, 92, split_x - 84, 132)
-	_draw_keypad_panel(rect, "LUNA KEYPAD", luna_digits, luna_digit_slot, luna_submitted, "Arrows change digits/slot. ENTER submits.")
+	var rect := Rect2(42, 92, split_x - 84, 154)
+	_draw_keypad_panel(
+		rect,
+		"LUNA KEYPAD",
+		luna_digits,
+		luna_digit_slot,
+		luna_submitted,
+		"Slot: Left/Right or D-pad",
+		"Digit: Up/Down or D-pad",
+		"Submit: Enter or B"
+	)
 
 func _draw_sol_keypad(screen: Vector2) -> void:
 	var split_x := screen.x * 0.5
-	var rect := Rect2(split_x + 62, screen.y - 206, split_x - 124, 118)
-	_draw_keypad_panel(rect, "SOL CONSOLE INPUT", sol_digits, sol_digit_slot, sol_submitted, "W/S changes digit. A/D picks slot. F submits.")
+	var rect := Rect2(split_x + 62, screen.y - 228, split_x - 124, 146)
+	_draw_keypad_panel(
+		rect,
+		"SOL CONSOLE INPUT",
+		sol_digits,
+		sol_digit_slot,
+		sol_submitted,
+		"Slot: A/D or D-pad",
+		"Digit: W/S or D-pad",
+		"Submit: F or B"
+	)
 
-func _draw_keypad_panel(rect: Rect2, title: String, digits: Array, slot: int, submitted: bool, help: String) -> void:
+func _draw_keypad_panel(rect: Rect2, title: String, digits: Array, slot: int, submitted: bool, slot_hint: String, digit_hint: String, submit_hint: String) -> void:
 	draw_rect(rect, Color(0.015, 0.03, 0.04, 0.94))
 	draw_rect(rect, Color(0.32, 0.85, 0.95, 0.72), false, 2.0)
 	draw_string(ThemeDB.fallback_font, rect.position + Vector2(16, 28), title, HORIZONTAL_ALIGNMENT_LEFT, -1, 17, Color(0.78, 0.97, 1.0))
@@ -764,7 +785,12 @@ func _draw_keypad_panel(rect: Rect2, title: String, digits: Array, slot: int, su
 		draw_rect(digit_rect, Color(0.02, 0.07, 0.095))
 		draw_rect(digit_rect, border, false, 3.0)
 		draw_string(ThemeDB.fallback_font, digit_rect.position + Vector2(15, 33), str(int(digits[i])), HORIZONTAL_ALIGNMENT_LEFT, -1, 30, Color(0.92, 1.0, 0.88))
-	draw_string(ThemeDB.fallback_font, rect.position + Vector2(16, rect.size.y - 18), "LOCKED" if submitted else help, HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color(0.9, 0.95, 0.75))
+	if submitted:
+		draw_string(ThemeDB.fallback_font, rect.position + Vector2(16, rect.size.y - 20), "LOCKED", HORIZONTAL_ALIGNMENT_LEFT, -1, 14, Color(0.9, 0.95, 0.75))
+	else:
+		draw_string(ThemeDB.fallback_font, rect.position + Vector2(16, rect.size.y - 50), slot_hint, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color(0.9, 0.95, 0.75))
+		draw_string(ThemeDB.fallback_font, rect.position + Vector2(16, rect.size.y - 34), digit_hint, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color(0.9, 0.95, 0.75))
+		draw_string(ThemeDB.fallback_font, rect.position + Vector2(16, rect.size.y - 18), submit_hint, HORIZONTAL_ALIGNMENT_LEFT, -1, 13, Color(1.0, 0.88, 0.58))
 
 func _draw_escape_bay(screen: Vector2) -> void:
 	var floor_y := _floor_y()
@@ -815,6 +841,21 @@ func _controls_for(player_id: String) -> Dictionary:
 	if player_id == "luna":
 		return {"left": "luna_left", "right": "luna_right", "up": "luna_up", "down": "luna_down"}
 	return {"left": "sol_left", "right": "sol_right", "up": "sol_up", "down": "sol_down"}
+
+func _entry_controls_for(player_id: String) -> Dictionary:
+	if player_id == "luna":
+		return {
+			"left": "room4_luna_slot_left",
+			"right": "room4_luna_slot_right",
+			"up": "room4_luna_digit_up",
+			"down": "room4_luna_digit_down",
+		}
+	return {
+		"left": "room4_sol_slot_left",
+		"right": "room4_sol_slot_right",
+		"up": "room4_sol_digit_up",
+		"down": "room4_sol_digit_down",
+	}
 
 func _is_at_luna_door() -> bool:
 	return luna_pos.distance_to(_target_position_for("luna")) <= 74.0
