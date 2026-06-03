@@ -98,7 +98,7 @@ func _setup_player_labels() -> void:
 	root.add_child(top_bar)
 
 	var ctrl_lbl := Label.new()
-	ctrl_lbl.text = "L-STICK: MOVE - X (PLAYSTATION) / B (NINTENDO): JUMP - DOUBLE PRESS X/B TO DOUBLE JUMP       +/- FOR ROOM SELECT MENU"
+	ctrl_lbl.text = "L-STICK: MOVE - X (PLAYSTATION) / B (NINTENDO): JUMP - DOUBLE PRESS X/B TO DOUBLE JUMP       +/- FOR ROOM SELECT MENU       ASSETS CREATED BY CODEX"
 	ctrl_lbl.anchor_right = 1.0
 	ctrl_lbl.offset_left = 18.0
 	ctrl_lbl.offset_top = 7.0
