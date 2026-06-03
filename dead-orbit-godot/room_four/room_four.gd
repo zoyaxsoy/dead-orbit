@@ -75,6 +75,8 @@ var luna_anim_time: float = 0.0
 var sol_anim_time: float = 0.0
 var luna_on_floor: bool = true
 var sol_on_floor: bool = true
+var luna_jump_count: int = 0
+var sol_jump_count: int = 0
 
 var luna_at_door: bool = false
 var sol_at_console: bool = false
@@ -326,10 +328,21 @@ func _apply_player_movement(player_id: String, delta: float) -> void:
 
 	if on_floor:
 		velocity.y = 0.0
-		if Input.is_action_just_pressed(str(controls["up"])):
-			velocity.y = JUMP_SPEED
-			on_floor = false
-	else:
+		if is_luna:
+			luna_jump_count = 0
+		else:
+			sol_jump_count = 0
+
+	var jump_count := luna_jump_count if is_luna else sol_jump_count
+	if Input.is_action_just_pressed(str(controls["up"])) and jump_count < 2:
+		var jump_power := JUMP_SPEED if jump_count == 0 else JUMP_SPEED * 0.6
+		velocity.y = jump_power
+		on_floor = false
+		if is_luna:
+			luna_jump_count += 1
+		else:
+			sol_jump_count += 1
+	elif not on_floor:
 		velocity.y += GRAVITY * delta
 
 	pos.x = clampf(pos.x + velocity.x * delta, 42.0, WORLD_WIDTH - 42.0)
@@ -552,6 +565,8 @@ func _reset_section(first_reset: bool, start_audio: bool = true) -> void:
 func _reset_section_positions(reason: String) -> void:
 	var luna_platforms := _platforms_for("luna")
 	var sol_platforms := _platforms_for("sol")
+	luna_jump_count = 0
+	sol_jump_count = 0
 	luna_pos = Vector2(luna_platforms[0].position.x + 55.0, luna_platforms[0].position.y)
 	sol_pos = Vector2(sol_platforms[0].position.x + 55.0, sol_platforms[0].position.y)
 	luna_velocity = Vector2.ZERO
