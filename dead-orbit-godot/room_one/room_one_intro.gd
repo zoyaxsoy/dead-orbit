@@ -90,17 +90,15 @@ func _build_ui() -> void:
 	add_child(div2)
 
 	# ── Press Space hint (blinking) ───────────────────────────────────────────
-	_hint = _lbl("Press X to begin", 13, Color(1.0, 1.0, 1.0, 1.0), 422.0, 446.0)
+	_hint = _lbl("Press X/B to begin", 13, Color(1.0, 1.0, 1.0, 1.0), 422.0, 446.0)
 
 	# ── Control reminder — two-column SOL / LUNA ──────────────────────────────
 	_lbl_half("SOL",      12, Color(1.0,  0.45, 0.05, 0.85), 468.0, 484.0, true)
 	_lbl_half("LUNA",     12, Color(0.35, 0.82, 1.0,  0.85), 468.0, 484.0, false)
 	_lbl_half("L. Stick   move", 11, Color(0.50, 0.60, 0.80, 0.70), 488.0, 504.0, true)
 	_lbl_half("L. Stick   move", 11, Color(0.50, 0.60, 0.80, 0.70), 488.0, 504.0, false)
-	_lbl_half("X   jump",        11, Color(0.50, 0.60, 0.80, 0.70), 508.0, 524.0, true)
-	_lbl_half("X   jump",        11, Color(0.50, 0.60, 0.80, 0.70), 508.0, 524.0, false)
-	_lbl_half("B   button",      11, Color(0.50, 0.60, 0.80, 0.70), 528.0, 544.0, true)
-	_lbl_half("B   button",      11, Color(0.50, 0.60, 0.80, 0.70), 528.0, 544.0, false)
+	_lbl_half("X (PlayStation) / B (Nintendo)  jump",        11, Color(0.50, 0.60, 0.80, 0.70), 508.0, 524.0, true)
+	_lbl_half("X (PlayStation) / B (Nintendo)   jump",        11, Color(0.50, 0.60, 0.80, 0.70), 508.0, 524.0, false)
 
 # ── Icon + text row — icon left-pinned, text fills the rest ──────────────────
 func _lbl_icon(icon: String, txt: String, col: Color,

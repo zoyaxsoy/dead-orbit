@@ -33,7 +33,6 @@
 [ext_resource type="Texture2D" uid="uid://f3qou5ctc8jk" path="res://room_two/graphics/extending_ladder_animation_sheet.png" id="25_im44d"]
 [ext_resource type="Texture2D" uid="uid://daiyayu0sgjg6" path="res://room_two/graphics/wall_energy_node_fill_animation_sheet.png" id="28_13ave"]
 [ext_resource type="Script" uid="uid://lt3yln68veq4" path="res://room_two/area_scripts/energy_node.gd" id="28_vhqpk"]
-[ext_resource type="Script" uid="uid://cnq6mcwh1xyt6" path="res://room_two/area_scripts/area_three/laser.gd" id="29_13ave"]
 [ext_resource type="Script" uid="uid://cgiexd3dqhxdl" path="res://room_two/end_zone.gd" id="34_l0ds2"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hrltk"]
@@ -11556,15 +11555,6 @@ animations = [{
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_13ave"]
 size = Vector2(20, 122.399994)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_4u6g1"]
-size = Vector2(105.42792, 277.60004)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_l0ds2"]
-size = Vector2(104.79996, 312.29984)
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_2b7yf"]
-size = Vector2(105.45502, 314.74988)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_qrvlp"]
 size = Vector2(19, 856.14996)
 
@@ -11650,7 +11640,7 @@ position = Vector2(9.1552734e-05, 0)
 scale = Vector2(0.9999998, 0.9999998)
 
 [node name="Sol" type="CharacterBody2D" parent="Players" unique_id=1261697106 groups=["players"]]
-position = Vector2(1000, 0)
+position = Vector2(900, 0)
 scale = Vector2(0.1, 0.1)
 script = ExtResource("3_qrvlp")
 
@@ -11677,7 +11667,7 @@ scale = Vector2(0.9999996, 0.9999996)
 shape = SubResource("RectangleShape2D_bs57x")
 
 [node name="Luna" type="CharacterBody2D" parent="Players" unique_id=1450521674 groups=["players"]]
-position = Vector2(954.52, 0)
+position = Vector2(910, 0)
 scale = Vector2(0.030000003, 0.030000003)
 script = ExtResource("5_411r1")
 
@@ -11964,60 +11954,6 @@ script = ExtResource("28_vhqpk")
 texture_filter = 1
 sprite_frames = SubResource("SpriteFrames_hwxhv")
 animation = &"fill"
-
-[node name="LaserRow" type="Node2D" parent="Course/AreaThree" unique_id=342101580]
-
-[node name="Laser1" type="Node2D" parent="Course/AreaThree/LaserRow" unique_id=243716828 groups=["lasers"]]
-position = Vector2(3972.14, -300)
-rotation = 1.5707964
-script = ExtResource("29_13ave")
-
-[node name="RayCast2D" type="RayCast2D" parent="Course/AreaThree/LaserRow/Laser1" unique_id=429674349]
-
-[node name="Line2D" type="Line2D" parent="Course/AreaThree/LaserRow/Laser1" unique_id=1224561506]
-width = 5.0
-
-[node name="DetectionArea" type="Area2D" parent="Course/AreaThree/LaserRow/Laser1" unique_id=2041744057]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaThree/LaserRow/Laser1/DetectionArea" unique_id=1681983801]
-position = Vector2(281.1139, 4.9399414)
-scale = Vector2(0.99999976, 0.99999976)
-shape = SubResource("RectangleShape2D_4u6g1")
-
-[node name="Laser2" type="Node2D" parent="Course/AreaThree/LaserRow" unique_id=426004124 groups=["lasers"]]
-position = Vector2(4273.14, -300)
-rotation = 1.5707964
-script = ExtResource("29_13ave")
-
-[node name="RayCast2D" type="RayCast2D" parent="Course/AreaThree/LaserRow/Laser2" unique_id=287120112]
-scale = Vector2(0.9999998, 0.9999998)
-
-[node name="Line2D" type="Line2D" parent="Course/AreaThree/LaserRow/Laser2" unique_id=53646453]
-width = 5.0
-
-[node name="DetectionArea" type="Area2D" parent="Course/AreaThree/LaserRow/Laser2" unique_id=1027014563]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaThree/LaserRow/Laser2/DetectionArea" unique_id=511560208]
-position = Vector2(280.3999, 9.691406)
-scale = Vector2(0.99999976, 0.99999976)
-shape = SubResource("RectangleShape2D_l0ds2")
-
-[node name="Laser3" type="Node2D" parent="Course/AreaThree/LaserRow" unique_id=1983614056 groups=["lasers"]]
-position = Vector2(4578.08, -300)
-rotation = 1.5707964
-script = ExtResource("29_13ave")
-
-[node name="RayCast2D" type="RayCast2D" parent="Course/AreaThree/LaserRow/Laser3" unique_id=1038760152]
-
-[node name="Line2D" type="Line2D" parent="Course/AreaThree/LaserRow/Laser3" unique_id=1714771695]
-width = 5.0
-
-[node name="DetectionArea" type="Area2D" parent="Course/AreaThree/LaserRow/Laser3" unique_id=54346909]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaThree/LaserRow/Laser3/DetectionArea" unique_id=670758801]
-position = Vector2(280.72748, -0.14501953)
-scale = Vector2(0.99999976, 0.99999976)
-shape = SubResource("RectangleShape2D_2b7yf")
 
 [node name="Borders" type="Node2D" parent="." unique_id=320020824]
 
