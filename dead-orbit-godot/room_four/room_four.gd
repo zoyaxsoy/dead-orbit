@@ -36,10 +36,10 @@ const HEADLAMP_CLOSE_RADIUS := 92.0
 const HEADLAMP_FULL_DISTANCE := 78.0
 const HEADLAMP_EDGE_SOFTNESS := 62.0
 const PLATFORM_VISIBLE_THRESHOLD := 0.035
-const AMBIENT_STATIC_DB := 2.0
-const TUNING_STATIC_DB := 7.0
-const CLEAR_STATIC_DB := -8.0
-const ENTRY_STATIC_DB := -14.0
+const AMBIENT_STATIC_DB := -35.0
+const TUNING_STATIC_DB := -30.0
+const CLEAR_STATIC_DB := -18.0
+const ENTRY_STATIC_DB := -24.0
 const VOICE_DB := 8.0
 const SFX_DB := 7.0
 const AUDIO_DEBUG := false
@@ -113,7 +113,12 @@ func _ready() -> void:
 	var intro = preload("res://room_four/room_four_intro.gd").new()
 	add_child(intro)
 	intro.tree_exited.connect(func():
-		var w := get_tree().root
+		var tree := get_tree()
+		if tree == null:
+			return
+		var w := tree.root
+		if w == null:
+			return
 		w.content_scale_size = Vector2i(0, 0)
 		w.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
 		if is_instance_valid(status_label):
@@ -171,9 +176,6 @@ func _build_nodes() -> void:
 	escape_pod_sprite.visible = false
 	add_child(escape_pod_sprite)
 
-	status_label = _make_label("", 19, Color(0.82, 0.96, 1.0))
-	add_child(status_label)
-
 	luna_entry_label = _make_label("", 22, Color(0.98, 1.0, 0.78))
 	luna_entry_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	add_child(luna_entry_label)
@@ -187,6 +189,37 @@ func _build_nodes() -> void:
 	ending_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	add_child(ending_label)
 
+	# ── HUD CanvasLayer ───────────────────────────────────────────────────────
+	var hud := CanvasLayer.new()
+	hud.layer = 10
+	add_child(hud)
+
+	var top_bar := ColorRect.new()
+	top_bar.anchor_right = 1.0
+	top_bar.offset_bottom = 32.0
+	top_bar.color = Color(0.02, 0.03, 0.05, 0.76)
+	hud.add_child(top_bar)
+
+	status_label = _make_label("", 16, Color(0.82, 0.96, 1.0))
+	status_label.position = Vector2(18, 7)
+	status_label.size = Vector2(700, 24)
+	hud.add_child(status_label)
+
+	var hint_lbl := Label.new()
+	hint_lbl.text = "TUNE FOR THE CODE — BOTH PLAYERS INPUT IT AT THE SAME TIME       +/- FOR ROOM SELECT MENU"
+	hint_lbl.anchor_right = 1.0
+	hint_lbl.offset_top = 7.0
+	hint_lbl.offset_bottom = 27.0
+	hint_lbl.offset_right = -18.0
+	hint_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+	hint_lbl.add_theme_font_size_override("font_size", 16)
+	hint_lbl.add_theme_color_override("font_color", Color(1.0, 0.75, 0.45))
+	hint_lbl.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.88))
+	hint_lbl.add_theme_constant_override("shadow_offset_x", 2)
+	hint_lbl.add_theme_constant_override("shadow_offset_y", 2)
+	hud.add_child(hint_lbl)
+
+	# ── Audio ─────────────────────────────────────────────────────────────────
 	static_player = AudioStreamPlayer.new()
 	static_player.name = "StaticPlayer"
 	var static_stream := AudioStreamGenerator.new()
@@ -504,14 +537,14 @@ func _start_tuning() -> void:
 	needle_value = clampf(0.08 + float(section_index) * 0.21, 0.06, 0.88)
 	current_clear_min = 0.17 + float(section_index) * 0.18
 	current_clear_max = current_clear_min + 0.105
-	_set_message("Sol: Q/E or LB/RB tunes. Press C or Y when the signal clears.", 2.2)
+	_set_message("Sol: LB/RB tunes. Press CIRCLE or A when the signal clears.", 2.2)
 	_play_sfx(TUNE_AUDIO)
 
 func _attempt_signal_capture() -> void:
 	if _signal_clarity() >= CAPTURE_CLARITY_THRESHOLD:
 		_reveal_pair()
 	else:
-		_set_message("Signal slipped. Tune again, then press C or Y when it clears.", 1.4)
+		_set_message("Signal slipped. Tune again, then press CIRCLE or A when it clears.", 1.4)
 		_play_sfx(TUNE_AUDIO)
 
 func _reveal_pair() -> void:
@@ -612,8 +645,7 @@ func _place_sprite(sprite: Sprite2D, sprite_position: Vector2, velocity: Vector2
 
 func _update_labels() -> void:
 	var screen := _screen_size()
-	status_label.position = Vector2(18, 10)
-	status_label.size = Vector2(screen.x - 36.0, 34)
+	status_label.size = Vector2(700, 24)
 	status_label.text = message_text if message_time > 0.0 else "Checkpoint %d/4" % (section_index + 1)
 
 	luna_entry_label.visible = phase == Phase.ENTRY
@@ -689,7 +721,7 @@ func _draw_dark_platform_panel(player_id: String, panel_x: float, player_pos: Ve
 			draw_texture_rect(RELAY_DOOR, door_rect, false, target_tint)
 
 	var title := "LUNA: DARK RELAY CORRIDOR" if player_id == "luna" else "SOL: DARK CONTROL WALKWAY"
-	draw_string(ThemeDB.fallback_font, Vector2(panel_x + 18, 66), title, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color(0.38, 0.75, 0.86))
+	draw_string(ThemeDB.fallback_font, Vector2(panel_x + 18, 52), title, HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color(0.38, 0.75, 0.86))
 
 func _draw_headlamp(local_player: Vector2, facing: float) -> void:
 	var origin := local_player + Vector2(18.0 * facing, -68.0)
@@ -766,34 +798,22 @@ func _draw_dashboard(screen: Vector2) -> void:
 	if phase == Phase.ENTRY:
 		draw_string(ThemeDB.fallback_font, rect.position + Vector2(24, 76), "Keypads active: change digits and submit together.", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color(0.58, 0.88, 1.0))
 	else:
-		draw_string(ThemeDB.fallback_font, rect.position + Vector2(24, 76), "Sol: Q/E or LB/RB tunes. C/Y captures the clean signal.", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color(0.58, 0.88, 1.0))
+		draw_string(ThemeDB.fallback_font, rect.position + Vector2(24, 76), "Sol: LB/RB tunes. CIRCLE/A captures the clean signal.", HORIZONTAL_ALIGNMENT_LEFT, -1, 16, Color(0.58, 0.88, 1.0))
 
 func _draw_luna_keypad(screen: Vector2) -> void:
 	var split_x := screen.x * 0.5
 	var rect := Rect2(42, 92, split_x - 84, 154)
 	_draw_keypad_panel(
-		rect,
-		"LUNA KEYPAD",
-		luna_digits,
-		luna_digit_slot,
-		luna_submitted,
-		"Slot: Left/Right or D-pad",
-		"Digit: Up/Down or D-pad",
-		"Submit: Enter or B"
+		rect, "LUNA KEYPAD", luna_digits, luna_digit_slot, luna_submitted,
+		"Slot: Left/Right on D-pad", "Digit: Up/Down on D-pad", "Submit: CIRCLE or A"
 	)
 
 func _draw_sol_keypad(screen: Vector2) -> void:
 	var split_x := screen.x * 0.5
 	var rect := Rect2(split_x + 62, screen.y - 228, split_x - 124, 146)
 	_draw_keypad_panel(
-		rect,
-		"SOL CONSOLE INPUT",
-		sol_digits,
-		sol_digit_slot,
-		sol_submitted,
-		"Slot: A/D or D-pad",
-		"Digit: W/S or D-pad",
-		"Submit: F or B"
+		rect, "SOL CONSOLE INPUT", sol_digits, sol_digit_slot, sol_submitted,
+		"Slot: Left/Right D-pad", "Digit: Up/Down D-pad", "Submit: CIRCLE or A"
 	)
 
 func _draw_keypad_panel(rect: Rect2, title: String, digits: Array, slot: int, submitted: bool, slot_hint: String, digit_hint: String, submit_hint: String) -> void:
@@ -886,8 +906,7 @@ func _is_at_sol_console() -> bool:
 
 func _rect_light_intensity(rect: Rect2, player_pos: Vector2, facing: float) -> float:
 	var samples := [
-		rect.get_center(),
-		rect.position,
+		rect.get_center(), rect.position,
 		rect.position + Vector2(rect.size.x, 0.0),
 		rect.position + Vector2(rect.size.x * 0.25, 0.0),
 		rect.position + Vector2(rect.size.x * 0.5, 0.0),
@@ -908,7 +927,6 @@ func _light_intensity(point: Vector2, player_pos: Vector2, facing: float) -> flo
 	var forward := delta.x * facing
 	if forward < 0.0 or forward > HEADLAMP_RANGE:
 		return halo
-
 	var cone_center_y := forward * 0.16
 	var cone_core := 38.0 + forward * 0.24
 	var edge_distance := absf(delta.y - cone_center_y)
@@ -931,13 +949,7 @@ func _ensure_room_audio_bus() -> void:
 		AudioServer.set_bus_volume_db(master_index, 0.0)
 
 func _play_static_loop(context: String = "static") -> void:
-	if static_player == null:
-		if AUDIO_DEBUG:
-			print("Room4 audio ", context, ": Static player is null")
-		return
-	if static_player.stream == null:
-		if AUDIO_DEBUG:
-			print("Room4 audio ", context, ": Static stream is null")
+	if static_player == null or static_player.stream == null:
 		return
 	if not static_player.playing:
 		static_player.play()
@@ -984,9 +996,7 @@ func _debug_static_state(context: String) -> void:
 	var master_index := AudioServer.get_bus_index("Master")
 	var master_muted := AudioServer.is_bus_mute(master_index) if master_index >= 0 else true
 	var master_volume := AudioServer.get_bus_volume_db(master_index) if master_index >= 0 else -999.0
-	var output_device := AudioServer.output_device
-	var output_devices := AudioServer.get_output_device_list()
-	print("Room4 audio ", context, ": playing=", static_player.playing, " volume_db=", static_player.volume_db, " bus=", static_player.bus, " master_muted=", master_muted, " master_db=", master_volume, " output_device=", output_device, " devices=", output_devices, " stream=", static_player.stream)
+	print("Room4 audio ", context, ": playing=", static_player.playing, " volume_db=", static_player.volume_db, " master_muted=", master_muted, " master_db=", master_volume)
 
 func _play_sfx(stream: AudioStream) -> void:
 	sfx_player.stream = stream
