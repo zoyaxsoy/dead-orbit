@@ -206,7 +206,7 @@ func _build_nodes() -> void:
 	hud.add_child(status_label)
 
 	var hint_lbl := Label.new()
-	hint_lbl.text = "TUNE FOR THE CODE — BOTH PLAYERS INPUT IT AT THE SAME TIME       +/- FOR ROOM SELECT MENU"
+	hint_lbl.text = "TUNE FOR THE CODE — BOTH PLAYERS INPUT IT AT THE SAME TIME       +/- FOR ROOM SELECT MENU       ASSETS CREATED BY CODEX"
 	hint_lbl.anchor_right = 1.0
 	hint_lbl.offset_top = 7.0
 	hint_lbl.offset_bottom = 27.0

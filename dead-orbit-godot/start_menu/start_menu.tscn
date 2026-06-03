@@ -74,17 +74,7 @@ texture_normal = ExtResource("7_sgpvk")
 texture_pressed = ExtResource("8_cr72d")
 texture_hover = ExtResource("9_iuh5w")
 
-[node name="CreditsPanel" type="Control" parent="." unique_id=99707110]
+[node name="CreditsPanel" type="Control" parent="." unique_id=1731592551]
 anchors_preset = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="Content" type="TextureRect" parent="CreditsPanel" unique_id=1936810497]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-
-[node name="BackButton" type="TextureButton" parent="CreditsPanel" unique_id=958288887]
-layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0

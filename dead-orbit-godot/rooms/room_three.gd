@@ -1024,7 +1024,7 @@ func _update_hud() -> void:
 
 	if status_time <= 0.0 and not completed:
 		if sealed_breach_count < 3:
-			status_label.text = "SEAL BREACH: LEFT BUMPER / GRAVITY FLIP: RIGHT BUMPER / DOUBLE PRESS X/B TO DOUBLE JUMP       +/- FOR ROOM SELECT MENU"
+			status_label.text = "SEAL BREACH: LEFT BUMPER / GRAVITY FLIP: RIGHT BUMPER / DOUBLE PRESS X/B TO DOUBLE JUMP       +/- FOR ROOM SELECT MENU       ASSETS CREATED BY CODEX"
 		else:
 			status_label.text = "EXIT AIRLOCK READY"
 
