@@ -10,6 +10,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 
 const CHAPTERS = [
+	{"name": "Start Menu", "scene": "res://start_menu/start_menu.tscn"},
 	{"name": "Room 1", "scene": "res://room_one/room_one.tscn"},
 	{"name": "Room 2", "scene": "res://room_two/room_two.tscn"},
 	{"name": "Room 3", "scene": "res://rooms/room_three.tscn"},

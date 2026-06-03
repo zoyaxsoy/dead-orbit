@@ -331,7 +331,7 @@ polygon = PackedVector2Array(-75, -150, 75, -150, 75, 150, -75, 150)
 shape = SubResource("ShapeExit")
 
 [node name="Player" type="CharacterBody2D" parent="." unique_id=572220309]
-position = Vector2(150, 560)
+position = Vector2(200, 560)
 script = ExtResource("4_player")
 
 [node name="AnimSprite" type="AnimatedSprite2D" parent="Player" unique_id=133227357]

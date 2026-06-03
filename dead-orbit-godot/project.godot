@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="dead-orbit"
-run/main_scene="uid://u3ndi3nuw8e8"
+run/main_scene="uid://c430fbp37s3uq"
 config/features=PackedStringArray("4.6", "Forward Plus")
 config/icon="res://icon.svg"
 
