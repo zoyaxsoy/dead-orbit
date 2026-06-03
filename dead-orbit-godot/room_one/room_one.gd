@@ -26,6 +26,10 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	FadeManager.fade_in()
 	_apply_room_one_display()
+
+	var intro = preload("res://room_one/room_one_intro.gd").new()
+	add_child(intro)
+
 	sol_level.player_reached_exit.connect(_on_sol_at_exit)
 	luna_level.player_reached_exit.connect(_on_luna_at_exit)
 	sol_level.player_left_exit.connect(_on_sol_left_exit)
@@ -37,6 +41,11 @@ func _ready() -> void:
 	sol_rocks_label.visible = false
 	luna_rocks_label.visible = false
 	_setup_player_labels()
+	_hud_cl.visible = false
+	intro.tree_exited.connect(func():
+		if is_instance_valid(_hud_cl):
+			_hud_cl.visible = true
+	)
 
 func _input(event: InputEvent) -> void:
 	$CanvasLayer/LeftSVC/LeftViewport.push_input(event)
@@ -66,23 +75,39 @@ func _restore_room_one_display() -> void:
 	window.content_scale_aspect = _previous_content_scale_aspect
 	_display_overridden = false
 
+var _hud_cl: CanvasLayer = null
+
 func _setup_player_labels() -> void:
+	var hud := CanvasLayer.new()
+	hud.layer = 100
+	add_child(hud)
+	_hud_cl = hud
+
 	var root := Control.new()
 	root.anchor_right  = 1.0
 	root.anchor_bottom = 1.0
-	$CanvasLayer.add_child(root)
+	hud.add_child(root)
 
-	# ── Sol — left half ───────────────────────────────────────────────────────
-	_player_lbl(root, "SOL",           14, Color(1.0,  0.45, 0.05, 1.0),  true,  10.0)
-	_player_lbl(root, "L. Stick   move", 11, Color(0.50, 0.60, 0.80, 0.70), true,  30.0)
-	_player_lbl(root, "X   jump",        11, Color(0.50, 0.60, 0.80, 0.70), true,  46.0)
-	_player_lbl(root, "B   button",      11, Color(0.50, 0.60, 0.80, 0.70), true,  62.0)
+	var top_bar := ColorRect.new()
+	top_bar.anchor_right = 1.0
+	top_bar.offset_left = 0.0
+	top_bar.offset_top = 0.0
+	top_bar.offset_right = 0.0
+	top_bar.offset_bottom = 26.0
+	top_bar.color = Color(0.05, 0.08, 0.14, 1.0)
+	root.add_child(top_bar)
 
-	# ── Luna — right half ─────────────────────────────────────────────────────
-	_player_lbl(root, "LUNA",            14, Color(0.35, 0.82, 1.0,  1.0),  false, 10.0)
-	_player_lbl(root, "L. Stick   move", 11, Color(0.50, 0.60, 0.80, 0.70), false, 30.0)
-	_player_lbl(root, "X   jump",        11, Color(0.50, 0.60, 0.80, 0.70), false, 46.0)
-	_player_lbl(root, "B   button",      11, Color(0.50, 0.60, 0.80, 0.70), false, 62.0)
+	var ctrl_lbl := Label.new()
+	ctrl_lbl.text = "L-STICK: MOVE - X (PLAYSTATION) / B (NINTENDO): JUMP - DOUBLE PRESS X/B TO DOUBLE JUMP       +/- FOR ROOM SELECT MENU"
+	ctrl_lbl.anchor_right = 1.0
+	ctrl_lbl.offset_left = 18.0
+	ctrl_lbl.offset_top = 7.0
+	ctrl_lbl.offset_bottom = 32.0
+	ctrl_lbl.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	ctrl_lbl.add_theme_font_size_override("font_size", 8)
+	ctrl_lbl.add_theme_color_override("font_color", Color(1.0, 0.75, 0.45))
+
+	root.add_child(ctrl_lbl)
 
 func _player_lbl(parent: Control, txt: String, font_sz: int, col: Color,
 		left_half: bool, top_y: float) -> void:

@@ -5,6 +5,9 @@ var _dismissed: bool = false
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
+	layer = 200
+	follow_viewport_enabled = false
+	get_tree().paused = true
 	_build_ui()
 	_blink_hint()
 
@@ -15,6 +18,7 @@ func _input(event: InputEvent) -> void:
 	   event.is_action_pressed("sol_up") or \
 	   event.is_action_pressed("luna_up"):
 		_dismissed = true
+		get_tree().paused = false
 		queue_free()
 
 func _blink_hint() -> void:
@@ -26,7 +30,7 @@ func _build_ui() -> void:
 	var scrim := ColorRect.new()
 	scrim.anchor_right  = 1.0
 	scrim.anchor_bottom = 1.0
-	scrim.color = Color(0.0, 0.01, 0.06, 0.82)
+	scrim.color = Color(0.0, 0.01, 0.06, 1.0)  # was 0.82, now fully opaque
 	add_child(scrim)
 
 	var top_bar := ColorRect.new()
@@ -66,16 +70,11 @@ func _build_ui() -> void:
 	_lbl("HAZARDS", 10, Color(1.0, 0.45, 0.05, 0.65), 204.0, 220.0)
 
 	_lbl_icon("•", "Near-total darkness — only your headlamp illuminates nearby platforms.",
-		Color(0.90, 0.88, 0.80, 0.95), 228.0, 250.0)
-
-	_lbl_icon("•", "Platform gaps — missing a platform resets you to the start of the current section.",
-		Color(0.90, 0.88, 0.80, 0.95), 256.0, 278.0)
-
+		Color(0.90, 0.88, 0.80, 0.95), 228.0, 258.0)
 	_lbl_icon("•", "Signal drift — the clean tuning window constantly shifts. Miss it and Sol must re-tune.",
-		Color(0.90, 0.88, 0.80, 0.95), 284.0, 306.0)
-
+		Color(0.90, 0.88, 0.80, 0.95), 264.0, 294.0)
 	_lbl_icon("•", "Code sync pressure — both players must submit the same crew code within 3 seconds. A mismatch resets the attempt.",
-		Color(0.90, 0.88, 0.80, 0.95), 312.0, 348.0)
+		Color(0.90, 0.88, 0.80, 0.95), 300.0, 344.0)
 
 	var div2 := ColorRect.new()
 	div2.anchor_left  = 0.5
@@ -93,12 +92,12 @@ func _build_ui() -> void:
 	_lbl_half("LUNA",           12, Color(0.35, 0.82, 1.0,  0.85), 468.0, 484.0, false)
 	_lbl_half("L. Stick   move", 11, Color(0.50, 0.60, 0.80, 0.70), 488.0, 504.0, true)
 	_lbl_half("L. Stick   move", 11, Color(0.50, 0.60, 0.80, 0.70), 488.0, 504.0, false)
-	_lbl_half("X   jump",        11, Color(0.50, 0.60, 0.80, 0.70), 508.0, 524.0, true)
-	_lbl_half("X   jump",        11, Color(0.50, 0.60, 0.80, 0.70), 508.0, 524.0, false)
-	_lbl_half("Q / E   tune signal",   11, Color(0.50, 0.60, 0.80, 0.70), 528.0, 544.0, true)
+	_lbl_half("X/B   jump",        11, Color(0.50, 0.60, 0.80, 0.70), 508.0, 524.0, true)
+	_lbl_half("X/B   jump",        11, Color(0.50, 0.60, 0.80, 0.70), 508.0, 524.0, false)
+	_lbl_half("LB / RB   tune signal",   11, Color(0.50, 0.60, 0.80, 0.70), 528.0, 544.0, true)
 	_lbl_half("D-pad   digit entry",   11, Color(0.50, 0.60, 0.80, 0.70), 528.0, 544.0, false)
-	_lbl_half("F   capture / submit",  11, Color(0.50, 0.60, 0.80, 0.70), 548.0, 564.0, true)
-	_lbl_half("Enter   submit",        11, Color(0.50, 0.60, 0.80, 0.70), 548.0, 564.0, false)
+	_lbl_half("CIRCLE (PLAYSTATION) / A (NINTENDO)   capture / submit",  11, Color(0.50, 0.60, 0.80, 0.70), 548.0, 564.0, true)
+	_lbl_half("CIRCLE (PLAYSTATION) / A (NINTENDO)   capture / submit",        11, Color(0.50, 0.60, 0.80, 0.70), 548.0, 564.0, false)
 
 func _lbl_icon(icon: String, txt: String, col: Color,
 		top_y: float, bot_y: float) -> void:
