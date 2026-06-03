@@ -101,6 +101,6 @@ func _physics_process(delta: float) -> void:
 	for i in get_slide_collision_count():
 		var col = get_slide_collision(i)
 		var collider = col.get_collider()
-		if collider is RigidBody2D and not has_shield:
+		if collider is RigidBody2D:
 			var push_direction = col.get_normal() * -1
 			collider.apply_central_impulse(push_direction * 300.0)

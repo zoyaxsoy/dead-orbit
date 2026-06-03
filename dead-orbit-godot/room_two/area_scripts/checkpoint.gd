@@ -14,4 +14,5 @@ func _on_body_entered(body):
 		for laser in get_tree().get_nodes_in_group("lasers"):
 			laser.activate()
 
+
 	

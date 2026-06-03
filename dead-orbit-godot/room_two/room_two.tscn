@@ -29,8 +29,6 @@
 [ext_resource type="Script" uid="uid://qf1df68igiav" path="res://room_two/area_scripts/checkpoint.gd" id="20_kpevg"]
 [ext_resource type="Script" uid="uid://dqk1suq48ps1y" path="res://room_two/area_scripts/area_three/pressure_plate.gd" id="24_im44d"]
 [ext_resource type="Texture2D" uid="uid://qcsc82eurwuu" path="res://room_two/graphics/ground_pressure_plate_clear_press_sheet.png" id="24_rkcg2"]
-[ext_resource type="Script" uid="uid://co07uu5l5pcbw" path="res://room_two/area_scripts/area_three/ladder.gd" id="25_4h5sc"]
-[ext_resource type="Texture2D" uid="uid://f3qou5ctc8jk" path="res://room_two/graphics/extending_ladder_animation_sheet.png" id="25_im44d"]
 [ext_resource type="Texture2D" uid="uid://daiyayu0sgjg6" path="res://room_two/graphics/wall_energy_node_fill_animation_sheet.png" id="28_13ave"]
 [ext_resource type="Script" uid="uid://lt3yln68veq4" path="res://room_two/area_scripts/energy_node.gd" id="28_vhqpk"]
 [ext_resource type="Script" uid="uid://cnq6mcwh1xyt6" path="res://room_two/area_scripts/area_three/laser.gd" id="29_13ave"]
@@ -11503,59 +11501,6 @@ sources/0 = SubResource("TileSetAtlasSource_i6pmf")
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4og5j"]
 size = Vector2(174.49997, 174.40004)
 
-[sub_resource type="AtlasTexture" id="AtlasTexture_sc6je"]
-atlas = ExtResource("25_im44d")
-region = Rect2(0, 0, 48, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_vwxdw"]
-atlas = ExtResource("25_im44d")
-region = Rect2(48, 0, 48, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_k4ino"]
-atlas = ExtResource("25_im44d")
-region = Rect2(96, 0, 48, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_ybyva"]
-atlas = ExtResource("25_im44d")
-region = Rect2(144, 0, 48, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_stihg"]
-atlas = ExtResource("25_im44d")
-region = Rect2(192, 0, 48, 128)
-
-[sub_resource type="AtlasTexture" id="AtlasTexture_rtdiv"]
-atlas = ExtResource("25_im44d")
-region = Rect2(240, 0, 48, 128)
-
-[sub_resource type="SpriteFrames" id="SpriteFrames_u7fyu"]
-animations = [{
-"frames": [{
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_sc6je")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_vwxdw")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_k4ino")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_ybyva")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_stihg")
-}, {
-"duration": 1.0,
-"texture": SubResource("AtlasTexture_rtdiv")
-}],
-"loop": false,
-"name": &"down",
-"speed": 5.0
-}]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_13ave"]
-size = Vector2(20, 122.399994)
-
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_4u6g1"]
 size = Vector2(105.42792, 277.60004)
 
@@ -11639,7 +11584,7 @@ frame_progress = 1.0
 
 [node name="EndDoor" type="AnimatedSprite2D" parent="Doors" unique_id=479440990]
 texture_filter = 1
-position = Vector2(5294, -209.59999)
+position = Vector2(5453.2, -197.62498)
 scale = Vector2(0.75, 0.75)
 sprite_frames = SubResource("SpriteFrames_4te54")
 autoplay = "default"
@@ -11650,8 +11595,9 @@ position = Vector2(9.1552734e-05, 0)
 scale = Vector2(0.9999998, 0.9999998)
 
 [node name="Sol" type="CharacterBody2D" parent="Players" unique_id=1261697106 groups=["players"]]
-position = Vector2(900, 0)
+position = Vector2(953, -250)
 scale = Vector2(0.1, 0.1)
+collision_mask = 3
 script = ExtResource("3_qrvlp")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Players/Sol" unique_id=1317959803]
@@ -11677,8 +11623,10 @@ scale = Vector2(0.9999996, 0.9999996)
 shape = SubResource("RectangleShape2D_bs57x")
 
 [node name="Luna" type="CharacterBody2D" parent="Players" unique_id=1450521674 groups=["players"]]
-position = Vector2(910, 0)
+position = Vector2(950, -300)
 scale = Vector2(0.030000003, 0.030000003)
+collision_layer = 2
+collision_mask = 3
 script = ExtResource("5_411r1")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Players/Luna" unique_id=1267105161]
@@ -11714,7 +11662,7 @@ tile_set = SubResource("TileSet_qrvlp")
 [node name="EndingFloor" type="TileMapLayer" parent="Course" unique_id=1951709083]
 texture_filter = 1
 position = Vector2(4750, 58)
-tile_map_data = PackedByteArray("AAD///X/AAAFAAEAAAAAAPX/AAAGAAEAAAABAPX/AAAFAAEAAAACAPX/AAAGAAEAAAADAPX/AAAFAAEAAAAEAPX/AAAGAAEAAAAFAPX/AAAFAAEAAAAGAPX/AAAGAAEAAAAHAPX/AAAFAAEAAAAIAPX/AAAGAAEAAAAJAPX/AAAFAAEAAAAKAPX/AAAGAAEAAAALAPX/AAAFAAEAAAAMAPX/AAAGAAEAAAANAPX/AAAFAAEAAAAOAPX/AAAGAAEAAAAPAPX/AAAFAAEAAAAQAPX/AAAGAAEAAAARAPX/AAAFAAEAAAASAPX/AAAGAAEAAAATAPX/AAAFAAEAAAAUAPX/AAAGAAEAAAAVAPX/AAAFAAEAAAAWAPX/AAAGAAEAAAAXAPX/AAAFAAEAAAAYAPX/AAAGAAEAAAAZAPX/AAAFAAEAAAAaAPX/AAAGAAEAAAAbAPX/AAAFAAEAAAAcAPX/AAAGAAEAAAAdAPX/AAAFAAEAAAAeAPX/AAAGAAEAAAAfAPX/AAAFAAEAAAAgAPX/AAAGAAEAAAAhAPX/AAAFAAEAAAAiAPX/AAAGAAEAAAAjAPX/AAAFAAEAAAAkAPX/AAAGAAEAAAAlAPX/AAAFAAEAAAAmAPX/AAAGAAEAAAAnAPX/AAAFAAEAAAAoAPX/AAAGAAEAAAApAPX/AAAFAAEAAAAqAPX/AAAGAAEAAAArAPX/AAAFAAEAAAAsAPX/AAAGAAEAAAAtAPX/AAAFAAEAAAAuAPX/AAAGAAEAAAAvAPX/AAAFAAEAAAAwAPX/AAAGAAEAAAAxAPX/AAAFAAEAAAAyAPX/AAAGAAEAAAAzAPX/AAAFAAEAAAA0APX/AAAGAAEAAAA1APX/AAAFAAEAAAA2APX/AAAGAAEAAAA3APX/AAAFAAEAAAA4APX/AAAGAAEAAAA5APX/AAAFAAEAAAA6APX/AAAGAAEAAAA7APX/AAAFAAEAAAA8APX/AAAGAAEAAAA9APX/AAAFAAEAAAA+APX/AAAGAAEAAAA/APX/AAAFAAEAAABAAPX/AAAGAAEAAABBAPX/AAAFAAEAAABCAPX/AAAGAAEAAABDAPX/AAAFAAEAAABEAPX/AAAGAAEAAABFAPX/AAAFAAEAAABGAPX/AAAGAAEAAAA=")
+tile_map_data = PackedByteArray("AAALAPX/AAAFAAEAAAAMAPX/AAAGAAEAAAANAPX/AAAFAAEAAAAOAPX/AAAGAAEAAAAPAPX/AAAFAAEAAAAQAPX/AAAGAAEAAAARAPX/AAAFAAEAAAASAPX/AAAGAAEAAAATAPX/AAAFAAEAAAAUAPX/AAAGAAEAAAAVAPX/AAAFAAEAAAAWAPX/AAAGAAEAAAAXAPX/AAAFAAEAAAAYAPX/AAAGAAEAAAAZAPX/AAAFAAEAAAAaAPX/AAAGAAEAAAAbAPX/AAAFAAEAAAAcAPX/AAAGAAEAAAAdAPX/AAAFAAEAAAAeAPX/AAAGAAEAAAAfAPX/AAAFAAEAAAAgAPX/AAAGAAEAAAAhAPX/AAAFAAEAAAAiAPX/AAAGAAEAAAAjAPX/AAAFAAEAAAAkAPX/AAAGAAEAAAAlAPX/AAAFAAEAAAAmAPX/AAAGAAEAAAAnAPX/AAAFAAEAAAAoAPX/AAAGAAEAAAApAPX/AAAFAAEAAAAqAPX/AAAGAAEAAAArAPX/AAAFAAEAAAAsAPX/AAAGAAEAAAAtAPX/AAAFAAEAAAAuAPX/AAAGAAEAAAAvAPX/AAAFAAEAAAAwAPX/AAAGAAEAAAAxAPX/AAAFAAEAAAAyAPX/AAAGAAEAAAAzAPX/AAAFAAEAAAA0APX/AAAGAAEAAAA1APX/AAAFAAEAAAA2APX/AAAGAAEAAAA3APX/AAAFAAEAAAA4APX/AAAGAAEAAAA5APX/AAAFAAEAAAA6APX/AAAGAAEAAAA7APX/AAAFAAEAAAA8APX/AAAGAAEAAAA9APX/AAAFAAEAAAA+APX/AAAGAAEAAAA/APX/AAAFAAEAAABAAPX/AAAGAAEAAABBAPX/AAAFAAEAAABCAPX/AAAGAAEAAABDAPX/AAAFAAEAAABEAPX/AAAGAAEAAABFAPX/AAAFAAEAAABGAPX/AAAGAAEAAAA=")
 tile_set = SubResource("TileSet_qrvlp")
 
 [node name="AreaOne" type="Node2D" parent="Course" unique_id=1463200024]
@@ -11762,6 +11710,8 @@ sprite_frames = SubResource("SpriteFrames_sc6je")
 animation = &"down"
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Course/AreaOne/PressurePlate" unique_id=1228412505]
+collision_layer = 3
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaOne/PressurePlate/StaticBody2D" unique_id=73070687]
 position = Vector2(0, 2.4000015)
@@ -11769,6 +11719,8 @@ scale = Vector2(0.99999976, 0.99999976)
 shape = SubResource("RectangleShape2D_im44d")
 
 [node name="Area2D" type="Area2D" parent="Course/AreaOne/PressurePlate" unique_id=1900237480]
+collision_layer = 3
+collision_mask = 3
 script = ExtResource("24_im44d")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaOne/PressurePlate/Area2D" unique_id=744936065]
@@ -11801,6 +11753,8 @@ sprite_frames = SubResource("SpriteFrames_sc6je")
 animation = &"down"
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Course/AreaTwo/PressurePlate" unique_id=688939469]
+collision_layer = 3
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaTwo/PressurePlate/StaticBody2D" unique_id=960269431]
 position = Vector2(0, 2.4000015)
@@ -11808,6 +11762,8 @@ scale = Vector2(0.99999976, 0.99999976)
 shape = SubResource("RectangleShape2D_im44d")
 
 [node name="Area2D" type="Area2D" parent="Course/AreaTwo/PressurePlate" unique_id=1133833986]
+collision_layer = 3
+collision_mask = 3
 script = ExtResource("24_im44d")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaTwo/PressurePlate/Area2D" unique_id=2009494790]
@@ -11840,6 +11796,8 @@ tile_set = SubResource("TileSet_nsqpp")
 script = ExtResource("13_05bwp")
 
 [node name="Shield" type="Area2D" parent="Course/AreaTwo" unique_id=2055702183]
+collision_layer = 3
+collision_mask = 3
 script = ExtResource("12_p78yq")
 
 [node name="Shield" type="Sprite2D" parent="Course/AreaTwo/Shield" unique_id=2039778773]
@@ -11895,13 +11853,14 @@ texture = ExtResource("19_l16gl")
 
 [node name="Floor" type="TileMapLayer" parent="Course/AreaThree" unique_id=548543278]
 texture_filter = 1
-tile_map_data = PackedByteArray("AADUAAIAAAAFAAEAAADVAAIAAAAGAAEAAADWAAIAAAAFAAEAAADXAAIAAAAGAAEAAADYAAIAAAAFAAEAAADZAAIAAAAGAAEAAADaAAIAAAAFAAEAAADbAAIAAAAGAAEAAADcAAIAAAAFAAEAAADdAAIAAAAGAAEAAADeAAIAAAAFAAEAAADfAAIAAAAGAAEAAADgAAIAAAAFAAEAAADhAAIAAAAGAAEAAADiAAIAAAAFAAEAAADjAAIAAAAGAAEAAADkAAIAAAAFAAEAAADlAAIAAAAGAAEAAADmAAIAAAAFAAEAAADnAAIAAAAGAAEAAADoAAIAAAAFAAEAAADpAAIAAAAGAAEAAADqAAIAAAAFAAEAAADrAAIAAAAGAAEAAADsAAIAAAAFAAEAAADtAAIAAAAGAAEAAADuAAIAAAAFAAEAAADvAAIAAAAGAAEAAADwAAIAAAAFAAEAAADxAAIAAAAGAAEAAADyAAIAAAAFAAEAAADzAAIAAAAGAAEAAAD0AAIAAAAFAAEAAAD1AAIAAAAGAAEAAAD2AAIAAAAFAAEAAAD3AAIAAAAGAAEAAAD4AAIAAAAFAAEAAAD5AAIAAAAGAAEAAAD6AAIAAAAFAAEAAAD7AAIAAAAGAAEAAAD8AAIAAAAFAAEAAAD9AAIAAAAGAAEAAAD+AAIAAAAFAAEAAAD/AAIAAAAGAAEAAAAAAQIAAAAFAAEAAAABAQIAAAAGAAEAAAACAQIAAAAFAAEAAAADAQIAAAAGAAEAAAAEAQIAAAAFAAEAAAAFAQIAAAAGAAEAAAAGAQIAAAAFAAEAAAAHAQIAAAAGAAEAAAAIAQIAAAAFAAEAAAAJAQIAAAAGAAEAAAAKAQIAAAAFAAEAAAALAQIAAAAGAAEAAAAMAQIAAAAFAAEAAAANAQIAAAAGAAEAAAAOAQIAAAAFAAEAAAAPAQIAAAAGAAEAAAAQAQIAAAAFAAEAAAARAQIAAAAGAAEAAAASAQIAAAAFAAEAAAATAQIAAAAGAAEAAAAUAQIAAAAFAAEAAAAVAQIAAAAGAAEAAAAWAQIAAAAFAAEAAAAXAQIAAAAGAAEAAAAYAQIAAAAFAAEAAAAZAQIAAAAGAAEAAAAaAQIAAAAFAAEAAAAbAQIAAAAGAAEAAAAcAQIAAAAFAAEAAAAdAQIAAAAGAAEAAAAeAQIAAAAFAAEAAAAfAQIAAAAGAAEAAAAgAQIAAAAFAAEAAAAhAQIAAAAGAAEAAAAiAQIAAAAFAAEAAAAjAQIAAAAGAAEAAAAkAQIAAAAFAAEAAAAlAQIAAAAGAAEAAAAmAQIAAAAFAAEAAAAnAQIAAAAGAAEAAAA=")
+tile_map_data = PackedByteArray("AADUAAIAAAAFAAEAAADVAAIAAAAGAAEAAADWAAIAAAAFAAEAAADXAAIAAAAGAAEAAADYAAIAAAAFAAEAAADZAAIAAAAGAAEAAADaAAIAAAAFAAEAAADbAAIAAAAGAAEAAADcAAIAAAAFAAEAAADdAAIAAAAGAAEAAADeAAIAAAAFAAEAAADfAAIAAAAGAAEAAADgAAIAAAAFAAEAAADhAAIAAAAGAAEAAADiAAIAAAAFAAEAAADjAAIAAAAGAAEAAADkAAIAAAAFAAEAAADlAAIAAAAGAAEAAADmAAIAAAAFAAEAAADnAAIAAAAGAAEAAADoAAIAAAAFAAEAAADpAAIAAAAGAAEAAADqAAIAAAAFAAEAAADrAAIAAAAGAAEAAADsAAIAAAAFAAEAAADtAAIAAAAGAAEAAADuAAIAAAAFAAEAAADvAAIAAAAGAAEAAADwAAIAAAAFAAEAAADxAAIAAAAGAAEAAADyAAIAAAAFAAEAAADzAAIAAAAGAAEAAAD0AAIAAAAFAAEAAAD1AAIAAAAGAAEAAAD2AAIAAAAFAAEAAAD3AAIAAAAGAAEAAAD4AAIAAAAFAAEAAAD5AAIAAAAGAAEAAAD6AAIAAAAFAAEAAAD7AAIAAAAGAAEAAAD8AAIAAAAFAAEAAAD9AAIAAAAGAAEAAAD+AAIAAAAFAAEAAAD/AAIAAAAGAAEAAAAAAQIAAAAFAAEAAAABAQIAAAAGAAEAAAACAQIAAAAFAAEAAAADAQIAAAAGAAEAAAAEAQIAAAAFAAEAAAAFAQIAAAAGAAEAAAAGAQIAAAAFAAEAAAAHAQIAAAAGAAEAAAAIAQIAAAAFAAEAAAAJAQIAAAAGAAEAAAAKAQIAAAAFAAEAAAALAQIAAAAGAAEAAAAMAQIAAAAFAAEAAAANAQIAAAAGAAEAAAAOAQIAAAAFAAEAAAAPAQIAAAAGAAEAAAAQAQIAAAAFAAEAAAARAQIAAAAGAAEAAAASAQIAAAAFAAEAAAATAQIAAAAGAAEAAAAUAQIAAAAFAAEAAAAVAQIAAAAGAAEAAAAWAQIAAAAFAAEAAAAXAQIAAAAGAAEAAAAYAQIAAAAFAAEAAAAZAQIAAAAGAAEAAAAaAQIAAAAFAAEAAAAbAQIAAAAGAAEAAAAcAQIAAAAFAAEAAAAdAQIAAAAGAAEAAAAeAQIAAAAFAAEAAAAfAQIAAAAGAAEAAAAgAQIAAAAFAAEAAAAhAQIAAAAGAAEAAAAiAQIAAAAFAAEAAAAjAQIAAAAGAAEAAAAkAQIAAAAFAAEAAAAlAQIAAAAGAAEAAAAmAQIAAAAFAAEAAAAnAQIAAAAGAAEAAAAoAQIAAAAFAAEAAAApAQIAAAAGAAEAAAAqAQIAAAAFAAEAAAArAQIAAAAGAAEAAAAsAQIAAAAFAAEAAAAtAQIAAAAGAAEAAAAuAQIAAAAFAAEAAAAvAQIAAAAGAAEAAAAwAQIAAAAFAAEAAAAxAQIAAAAGAAEAAAAyAQIAAAAFAAEAAAAzAQIAAAAGAAEAAAA=")
 tile_set = SubResource("TileSet_x8c52")
 
 [node name="MetalBox" type="RigidBody2D" parent="Course/AreaThree" unique_id=1602548057]
-position = Vector2(3736.01, -356.16)
+position = Vector2(4000, -356.16)
 scale = Vector2(0.99999994, 0.99999994)
-mass = 5.0
+collision_layer = 3
+mass = 2.0
 linear_damp = 5.0
 
 [node name="MetalBox" type="Sprite2D" parent="Course/AreaThree/MetalBox" unique_id=606068378]
@@ -11915,7 +11874,7 @@ scale = Vector2(0.9999998, 0.9999998)
 shape = SubResource("RectangleShape2D_4og5j")
 
 [node name="PressurePlate" type="Node2D" parent="Course/AreaThree" unique_id=1292083483]
-position = Vector2(4838, -129.6)
+position = Vector2(4997.2, -117.62501)
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Course/AreaThree/PressurePlate" unique_id=1433107129]
 texture_filter = 1
@@ -11925,6 +11884,8 @@ sprite_frames = SubResource("SpriteFrames_sc6je")
 animation = &"down"
 
 [node name="StaticBody2D" type="StaticBody2D" parent="Course/AreaThree/PressurePlate" unique_id=1134397558]
+collision_layer = 3
+collision_mask = 3
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaThree/PressurePlate/StaticBody2D" unique_id=1106317771]
 position = Vector2(0, 2.4000015)
@@ -11932,6 +11893,8 @@ scale = Vector2(0.99999976, 0.99999976)
 shape = SubResource("RectangleShape2D_im44d")
 
 [node name="Area2D" type="Area2D" parent="Course/AreaThree/PressurePlate" unique_id=1487043622]
+collision_layer = 3
+collision_mask = 3
 script = ExtResource("24_im44d")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaThree/PressurePlate/Area2D" unique_id=900761966]
@@ -11939,25 +11902,9 @@ position = Vector2(0, -14)
 scale = Vector2(0.99999976, 0.99999976)
 shape = SubResource("RectangleShape2D_rkcg2")
 
-[node name="Ladder" type="Node2D" parent="Course/AreaThree" unique_id=1555725816]
-position = Vector2(4750, -52.41)
-script = ExtResource("25_4h5sc")
-
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Course/AreaThree/Ladder" unique_id=360102436]
-texture_filter = 1
-sprite_frames = SubResource("SpriteFrames_u7fyu")
-animation = &"down"
-
-[node name="ClimbArea" type="Area2D" parent="Course/AreaThree/Ladder" unique_id=1055399326]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Course/AreaThree/Ladder/ClimbArea" unique_id=1651663879]
-position = Vector2(0, -2.7899895)
-scale = Vector2(0.9999998, 0.9999998)
-shape = SubResource("RectangleShape2D_13ave")
-
 [node name="EnergyNode" type="Node2D" parent="Course/AreaThree" unique_id=627549039]
 texture_filter = 1
-position = Vector2(4926.97, -215.35)
+position = Vector2(5086.1704, -203.375)
 script = ExtResource("28_vhqpk")
 
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Course/AreaThree/EnergyNode" unique_id=140777846]
@@ -11973,6 +11920,7 @@ rotation = 1.5707964
 script = ExtResource("29_13ave")
 
 [node name="RayCast2D" type="RayCast2D" parent="Course/AreaThree/LaserRow/Laser1" unique_id=429674349]
+collision_mask = 3
 
 [node name="Line2D" type="Line2D" parent="Course/AreaThree/LaserRow/Laser1" unique_id=1224561506]
 width = 5.0
@@ -11991,6 +11939,7 @@ script = ExtResource("29_13ave")
 
 [node name="RayCast2D" type="RayCast2D" parent="Course/AreaThree/LaserRow/Laser2" unique_id=287120112]
 scale = Vector2(0.9999998, 0.9999998)
+collision_mask = 3
 
 [node name="Line2D" type="Line2D" parent="Course/AreaThree/LaserRow/Laser2" unique_id=53646453]
 width = 5.0
@@ -12008,6 +11957,7 @@ rotation = 1.5707964
 script = ExtResource("29_13ave")
 
 [node name="RayCast2D" type="RayCast2D" parent="Course/AreaThree/LaserRow/Laser3" unique_id=1038760152]
+collision_mask = 3
 
 [node name="Line2D" type="Line2D" parent="Course/AreaThree/LaserRow/Laser3" unique_id=1714771695]
 width = 5.0
@@ -12084,7 +12034,9 @@ scale = Vector2(0.99999976, 0.99999976)
 shape = SubResource("RectangleShape2D_vhqpk")
 
 [node name="EndZone" type="Area2D" parent="Checkpoints" unique_id=1315248899]
-position = Vector2(5293.29, -164.55)
+position = Vector2(5452.49, -152.575)
+collision_layer = 3
+collision_mask = 3
 script = ExtResource("34_l0ds2")
 next_scene = "res://cut_scenes/two_to_three.tscn"
 
