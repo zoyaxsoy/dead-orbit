@@ -8,6 +8,8 @@ extends Node2D
 var _hud_cl: CanvasLayer = null
 var _node_labels: Array = []
 var _nodes_filled: Array = [false, false, false]
+var _hint_shown: bool = false
+var _hint_label: Label = null
 
 func _process(delta):
 	var a = player_a.global_position
@@ -67,8 +69,6 @@ func _ready():
 	$Course/AreaTwo/Shield.activated.connect($Course/AreaTwo/MovingPlatform.activate)
 	$Course/AreaTwo/Shield.activated.connect($Course/AreaTwo/CanvasLayer/ShieldPopUp.show_popup)
 	$Course/AreaTwo/Shield.collected_by.connect(_on_shield_collected)
-	$Course/AreaThree/PressurePlate/Area2D.pressed.connect(func(): $Course/AreaThree/Ladder._on_pressure_plate_pressed())
-	$Course/AreaThree/PressurePlate/Area2D.released.connect(func(): $Course/AreaThree/Ladder._on_pressure_plate_released())
 	$Course/AreaThree/PressurePlate/Area2D.pressed.connect($Course/AreaThree/EnergyNode.start_filling)
 	$Course/AreaThree/PressurePlate/Area2D.released.connect($Course/AreaThree/EnergyNode.stop_filling)
 	$Course/AreaTwo/PressurePlate/Area2D.pressed.connect($Course/AreaTwo/EnergyNode.start_filling)
@@ -78,6 +78,7 @@ func _ready():
 	$Course/AreaOne/EnergyNode.filled.connect(func(): _on_node_filled(0))
 	$Course/AreaTwo/EnergyNode.filled.connect(func(): _on_node_filled(1))
 	$Course/AreaThree/EnergyNode.filled.connect(func(): _on_node_filled(2))
+	$Checkpoints/CheckpointThree.body_entered.connect(_on_hint_trigger)
 
 func _build_hud() -> void:
 	var hud := CanvasLayer.new()
@@ -142,6 +143,20 @@ func _build_hud() -> void:
 	ctrl_lbl.add_theme_constant_override("shadow_offset_x", 2)
 	ctrl_lbl.add_theme_constant_override("shadow_offset_y", 2)
 	root.add_child(ctrl_lbl)
+	
+	_hint_label = Label.new()
+	_hint_label.text = "TRY SHIELDING ON TOP OF THE OTHER PLAYER"
+	_hint_label.anchor_right = 1.0
+	_hint_label.offset_top = 60.0
+	_hint_label.offset_bottom = 90.0
+	_hint_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_hint_label.add_theme_font_size_override("font_size", 18)
+	_hint_label.add_theme_color_override("font_color", Color(1.0, 0.95, 0.5, 1.0))
+	_hint_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.88))
+	_hint_label.add_theme_constant_override("shadow_offset_x", 2)
+	_hint_label.add_theme_constant_override("shadow_offset_y", 2)
+	_hint_label.visible = false
+	root.add_child(_hint_label)
 
 func _on_shield_collected(player):
 	player.collect_shield()
@@ -153,3 +168,12 @@ func _on_node_filled(index: int) -> void:
 	var count := _nodes_filled.count(true)
 	var lbl: Label = _node_labels[0]
 	lbl.text = "ENERGY NODES %d/3" % count
+	if count >= 3:
+		if is_instance_valid(_hud_cl):
+			_hud_cl.visible = false
+
+
+func _on_hint_trigger(body) -> void:
+	if body.is_in_group("players") and not _hint_shown:
+		_hint_shown = true
+		_hint_label.visible = true
