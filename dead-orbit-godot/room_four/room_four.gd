@@ -368,7 +368,11 @@ func _apply_player_movement(player_id: String, delta: float) -> void:
 
 	var jump_count := luna_jump_count if is_luna else sol_jump_count
 	if Input.is_action_just_pressed(str(controls["up"])) and jump_count < 2:
-		var jump_power := JUMP_SPEED if jump_count == 0 else JUMP_SPEED * 0.6
+		var jump_power: float
+		if jump_count == 0:
+			jump_power = JUMP_SPEED
+		else:
+			jump_power = JUMP_SPEED * 0.6 if is_luna else JUMP_SPEED * 0.9
 		velocity.y = jump_power
 		on_floor = false
 		if is_luna:
