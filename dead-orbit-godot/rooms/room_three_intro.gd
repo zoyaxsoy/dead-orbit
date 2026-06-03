@@ -1,5 +1,7 @@
 extends CanvasLayer
 
+const REPAIR_POINT_SAMPLE := preload("res://rooms/room_three_graphics/room3_anchor_blue.png")
+
 var _hint: Label
 var _dismissed: bool = false
 
@@ -77,6 +79,8 @@ func _build_ui() -> void:
 	_lbl_icon("•", "EVA timer — If time runs out, the section resets.",
 		Color(0.90, 0.88, 0.80, 0.95), 334.0, 354.0)
 
+	_sample_card("REPAIR POINT", REPAIR_POINT_SAMPLE, true, Color(0.25, 0.78, 1.0, 0.95))
+
 	var div2 := ColorRect.new()
 	div2.anchor_left  = 0.5
 	div2.anchor_right = 0.5
@@ -97,9 +101,50 @@ func _build_ui() -> void:
 	_lbl_half("X (PlayStation) / B (Nintendo)   jump",         11, Color(0.50, 0.60, 0.80, 0.70), 454.0, 470.0, false)
 	_lbl_half("Right-Bumper/RB   Flip Gravity", 11, Color(0.50, 0.60, 0.80, 0.70), 474.0, 490.0, true)
 	_lbl_half("Right-Bumper/RB   Flip Gravity", 11, Color(0.50, 0.60, 0.80, 0.70), 474.0, 490.0, false)
-	_lbl_half("Left-Bumper/LB (PlayStation/Nintendo)   Seal Branch", 11, Color(0.50, 0.60, 0.80, 0.70), 494.0, 510.0, true)
-	_lbl_half("Left-Bumper/LB (PlayStation/Nintendo)   Seal Branch", 11, Color(0.50, 0.60, 0.80, 0.70), 494.0, 510.0, false)
+	_lbl_half("Left-Bumper/LB (PlayStation/Nintendo)   Seal Breach", 11, Color(0.50, 0.60, 0.80, 0.70), 494.0, 510.0, true)
+	_lbl_half("Left-Bumper/LB (PlayStation/Nintendo)   Seal Breach", 11, Color(0.50, 0.60, 0.80, 0.70), 494.0, 510.0, false)
 	_lbl("Stand on repair points to anchor the breach repair.", 11, Color(0.50, 0.60, 0.80, 0.78), 514.0, 532.0)
+
+func _sample_card(title: String, texture: Texture2D, left_side: bool, accent: Color) -> void:
+	var card := ColorRect.new()
+	card.color = Color(0.01, 0.03, 0.10, 0.62)
+	card.offset_left = 70.0 if left_side else -246.0
+	card.offset_right = 230.0 if left_side else -54.0
+	card.anchor_left = 0.0 if left_side else 1.0
+	card.anchor_right = 0.0 if left_side else 1.0
+	card.offset_top = 214.0
+	card.offset_bottom = 344.0
+	add_child(card)
+
+	var strip := ColorRect.new()
+	strip.color = accent
+	strip.anchor_right = 1.0
+	strip.offset_bottom = 2.0
+	card.add_child(strip)
+
+	var icon := TextureRect.new()
+	icon.texture = texture
+	icon.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED if left_side else TextureRect.STRETCH_KEEP_ASPECT
+	icon.clip_contents = not left_side
+	icon.anchor_right = 1.0
+	icon.offset_left = 22.0 if left_side else 18.0
+	icon.offset_right = -22.0 if left_side else -18.0
+	icon.offset_top = 16.0 if left_side else 14.0
+	icon.offset_bottom = 86.0 if left_side else 72.0
+	card.add_child(icon)
+
+	var label := Label.new()
+	label.text = title
+	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	label.anchor_right = 1.0
+	label.offset_top = 94.0 if left_side else 90.0
+	label.offset_bottom = 118.0
+	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_color_override("font_color", accent)
+	label.add_theme_color_override("font_outline_color", Color(0, 0, 0, 1))
+	label.add_theme_constant_override("outline_size", 2)
+	card.add_child(label)
 
 func _lbl_icon(icon: String, txt: String, col: Color,
 		top_y: float, bot_y: float) -> void:
