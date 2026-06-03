@@ -802,9 +802,12 @@ func _update_exit_airlock() -> void:
 func _start_room_four_transition() -> void:
 	if room_four_transition_started:
 		return
-
 	room_four_transition_started = true
 	room_four_transition_elapsed = 0.0
+
+	var cl := CanvasLayer.new()
+	cl.layer = 50
+	add_child(cl)
 
 	room_four_transition_overlay = ColorRect.new()
 	room_four_transition_overlay.name = "SignalRelayTransition"
@@ -815,29 +818,38 @@ func _start_room_four_transition() -> void:
 	room_four_transition_overlay.offset_top = 0.0
 	room_four_transition_overlay.offset_right = 0.0
 	room_four_transition_overlay.offset_bottom = 0.0
-	hud_layer.add_child(room_four_transition_overlay)
+	cl.add_child(room_four_transition_overlay)
 
-	room_four_transition_label = _make_label("", Vector2(70, 165), Vector2(820, 230), Color(0.82, 0.96, 1.0))
+	room_four_transition_label = Label.new()
 	room_four_transition_label.name = "SignalRelayTransitionText"
+	room_four_transition_label.text = ""
+	room_four_transition_label.anchor_right = 1.0
+	room_four_transition_label.anchor_bottom = 1.0
+	room_four_transition_label.offset_left = 0.0
+	room_four_transition_label.offset_top = 0.0
+	room_four_transition_label.offset_right = 0.0
+	room_four_transition_label.offset_bottom = 0.0
 	room_four_transition_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	room_four_transition_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
 	room_four_transition_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	room_four_transition_label.add_theme_font_size_override("font_size", 26)
+	room_four_transition_label.add_theme_color_override("font_color", Color(0.82, 0.96, 1.0))
+	room_four_transition_label.add_theme_color_override("font_shadow_color", Color(0, 0, 0, 0.88))
+	room_four_transition_label.add_theme_constant_override("shadow_offset_x", 2)
+	room_four_transition_label.add_theme_constant_override("shadow_offset_y", 2)
+	room_four_transition_label.add_theme_font_size_override("font_size", 36)
 	room_four_transition_overlay.add_child(room_four_transition_label)
 
 func _update_room_four_transition(delta: float) -> void:
 	room_four_transition_elapsed += delta
 	if room_four_transition_label == null:
 		return
-
 	if room_four_transition_elapsed < 2.2:
 		room_four_transition_label.text = "The hull seals. The station goes quiet."
 	elif room_four_transition_elapsed < 4.8:
 		room_four_transition_label.text = "CASS: Signal Relay offline. Escape pod access is locked behind a crew code channel."
 	else:
 		room_four_transition_label.text = "Restore the relay together. Luna follows the dark corridor. Sol tunes the interference."
-
-	if room_four_transition_elapsed >= 7.0:
+	if room_four_transition_elapsed >= 7.0 or Input.is_action_just_pressed("dismiss_action"):
 		FadeManager.fade_to_scene("res://room_four/room_four.tscn")
 
 func _update_failures() -> void:
@@ -1114,7 +1126,7 @@ func _player_display_name(player_id: String) -> String:
 	return "LUNA" if player_id == "luna" else "SOL"
 
 func _repair_control_text(player_id: String) -> String:
-	return "Hold down on X (PlayStation) / B (Nintendo)" if player_id == "luna" else "Hold down on X (PlayStation) / B (Nintendo)"
+	return "Hold down on LEFT BUMPER" if player_id == "luna" else "Hold down LEFT BUMPER"
 
 func _soft_reset(message: String) -> void:
 	_reset_to_checkpoint(current_checkpoint, true, message)
