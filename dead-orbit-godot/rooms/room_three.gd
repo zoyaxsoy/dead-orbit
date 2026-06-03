@@ -94,8 +94,19 @@ var room_four_transition_label: Label
 
 func _ready() -> void:
 	FadeManager.fade_in()
+	var window := get_tree().root
+	window.content_scale_size = Vector2i(1152, 648)
+	window.content_scale_mode = Window.CONTENT_SCALE_MODE_CANVAS_ITEMS
+	window.content_scale_aspect = Window.CONTENT_SCALE_ASPECT_EXPAND
 	var intro = preload("res://rooms/room_three_intro.gd").new()
 	add_child(intro)
+	intro.tree_exited.connect(func():
+		var w := get_tree().root
+		w.content_scale_size = Vector2i(0, 0)
+		w.content_scale_mode = Window.CONTENT_SCALE_MODE_DISABLED
+		if is_instance_valid(hud_layer):
+			hud_layer.visible = true
+	)
 	_build_level_data()
 	_build_world()
 	_build_hull_visuals()
@@ -112,6 +123,7 @@ func _ready() -> void:
 	_reset_to_checkpoint(0, false, "")
 	_update_camera(1.0)
 	_update_hud()
+	hud_layer.visible = false
 
 func _process(delta: float) -> void:
 	blink_time += delta
@@ -602,6 +614,7 @@ func _create_player(display_name: String, sheet: Texture2D, player_polarity: Str
 		"repairing": false,
 		"holding_down": false,
 		"zone_polarity": POLARITY_NEUTRAL,
+		"jump_count": 0
 	}
 
 func _apply_player_input(player_id: String, delta: float) -> void:
@@ -648,8 +661,16 @@ func _apply_player_input(player_id: String, delta: float) -> void:
 	elif on_surface:
 		body.velocity.x = move_toward(body.velocity.x, 0.0, friction * delta)
 
-	if on_surface and Input.is_action_just_pressed(str(controls["up"])):
-		body.velocity.y = -float(gravity_dir) * jump_velocity
+	if on_surface:
+		state["jump_count"] = 0
+
+	if on_surface:
+		state["jump_count"] = 0
+
+	if Input.is_action_just_pressed(str(controls["up"])) and int(state["jump_count"]) < 2:
+		var jump_power := jump_velocity if int(state["jump_count"]) == 0 else jump_velocity * 0.5
+		body.velocity.y = -float(gravity_dir) * jump_power
+		state["jump_count"] = int(state["jump_count"]) + 1
 	else:
 		body.velocity.y = clampf(body.velocity.y + gravity * float(gravity_dir) * delta, -max_fall_speed, max_fall_speed)
 
@@ -990,7 +1011,7 @@ func _update_hud() -> void:
 
 	if status_time <= 0.0 and not completed:
 		if sealed_breach_count < 3:
-			status_label.text = "GRAVITY FLIP: SOL Q/RB  LUNA L/RB"
+			status_label.text = "SEAL BREACH: LEFT BUMPER / GRAVITY FLIP: RIGHT BUMPER"
 		else:
 			status_label.text = "EXIT AIRLOCK READY"
 
@@ -1092,7 +1113,7 @@ func _player_display_name(player_id: String) -> String:
 	return "LUNA" if player_id == "luna" else "SOL"
 
 func _repair_control_text(player_id: String) -> String:
-	return "Down / B" if player_id == "luna" else "S / B"
+	return "Hold down on X (PlayStation) / B (Nintendo)" if player_id == "luna" else "Hold down on X (PlayStation) / B (Nintendo)"
 
 func _soft_reset(message: String) -> void:
 	_reset_to_checkpoint(current_checkpoint, true, message)

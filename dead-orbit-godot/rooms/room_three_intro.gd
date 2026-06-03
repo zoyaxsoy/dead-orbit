@@ -2,25 +2,19 @@ extends CanvasLayer
 
 var _hint: Label
 var _dismissed: bool = false
-var _ready_cooldown: float = 1.2
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	get_tree().paused = true
 	_build_ui()
 	_blink_hint()
 
-func _process(delta: float) -> void:
+func _input(event: InputEvent) -> void:
 	if _dismissed:
 		return
-	if _ready_cooldown > 0.0:
-		_ready_cooldown -= delta
-		return
-	if Input.is_action_just_pressed("sol_up") or \
-	   Input.is_action_just_pressed("luna_up") or \
-	   Input.is_action_just_pressed("dismiss_action"):
+	if event.is_action_pressed("dismiss_action") or \
+	   event.is_action_pressed("sol_up") or \
+	   event.is_action_pressed("luna_up"):
 		_dismissed = true
-		get_tree().paused = false
 		queue_free()
 
 func _blink_hint() -> void:
@@ -29,21 +23,18 @@ func _blink_hint() -> void:
 	tw.tween_property(_hint, "modulate:a", 1.0,  0.7)
 
 func _build_ui() -> void:
-	# ── Semi-transparent dark scrim — room shows through ──────────────────────
 	var scrim := ColorRect.new()
 	scrim.anchor_right  = 1.0
 	scrim.anchor_bottom = 1.0
 	scrim.color = Color(0.0, 0.01, 0.06, 0.82)
 	add_child(scrim)
 
-	# ── Top accent bar (cyan) ─────────────────────────────────────────────────
 	var top_bar := ColorRect.new()
 	top_bar.anchor_right  = 1.0
 	top_bar.offset_bottom = 4.0
 	top_bar.color = Color(0.05, 0.85, 1.0, 1.0)
 	add_child(top_bar)
 
-	# ── Bottom accent bar (orange) ────────────────────────────────────────────
 	var bot_bar := ColorRect.new()
 	bot_bar.anchor_top    = 1.0
 	bot_bar.anchor_right  = 1.0
@@ -52,14 +43,11 @@ func _build_ui() -> void:
 	bot_bar.color = Color(1.0, 0.45, 0.05, 1.0)
 	add_child(bot_bar)
 
-	# ── Room badge ────────────────────────────────────────────────────────────
 	_lbl("ROOM  3", 11, Color(0.05, 0.85, 1.0, 0.70), 18.0, 36.0)
 
-	# ── Room title ────────────────────────────────────────────────────────────
 	_lbl("OUTER HULL WALK", 40, Color(0.90, 0.95, 1.00, 1.0), 40.0, 98.0,
 		Color(0.0, 0.0, 0.0, 1.0), 4)
 
-	# ── Cyan divider under title ──────────────────────────────────────────────
 	var div := ColorRect.new()
 	div.anchor_left  = 0.5
 	div.anchor_right = 0.5
@@ -70,13 +58,11 @@ func _build_ui() -> void:
 	div.color = Color(0.05, 0.85, 1.0, 0.45)
 	add_child(div)
 
-	# ── Objective section ─────────────────────────────────────────────────────
 	_lbl("OBJECTIVE", 10, Color(0.35, 0.82, 1.0, 0.65), 118.0, 134.0)
 
 	_lbl("Traverse the outer hull, seal all three breaches, and reach the exit airlock before the EVA clock expires. To seal, one player stands on the assigned repair point while the partner holds repair at the breach until the bar fills.",
 		13, Color(0.90, 0.88, 0.80, 0.95), 142.0, 184.0)
 
-	# ── Hazards section ───────────────────────────────────────────────────────
 	_lbl("HAZARDS", 10, Color(1.0, 0.45, 0.05, 0.65), 198.0, 214.0)
 
 	_lbl_icon("•", "Hull gaps — Falling off the outer hull resets you to the last checkpoint.",
@@ -91,7 +77,6 @@ func _build_ui() -> void:
 	_lbl_icon("•", "EVA timer — If time runs out, the section resets.",
 		Color(0.90, 0.88, 0.80, 0.95), 334.0, 354.0)
 
-	# ── Cyan divider above hint ───────────────────────────────────────────────
 	var div2 := ColorRect.new()
 	div2.anchor_left  = 0.5
 	div2.anchor_right = 0.5
@@ -102,23 +87,20 @@ func _build_ui() -> void:
 	div2.color = Color(0.05, 0.85, 1.0, 0.30)
 	add_child(div2)
 
-	# ── Press X hint (blinking) ───────────────────────────────────────────────
 	_hint = _lbl("Press B/X to begin", 13, Color(1.0, 1.0, 1.0, 1.0), 376.0, 400.0)
 
-	# ── Control reminder — two-column SOL / LUNA ──────────────────────────────
 	_lbl_half("SOL",              12, Color(1.0,  0.45, 0.05, 0.85), 414.0, 430.0, true)
 	_lbl_half("LUNA",             12, Color(0.35, 0.82, 1.0,  0.85), 414.0, 430.0, false)
 	_lbl_half("L. Stick   move",  11, Color(0.50, 0.60, 0.80, 0.70), 434.0, 450.0, true)
 	_lbl_half("L. Stick   move",  11, Color(0.50, 0.60, 0.80, 0.70), 434.0, 450.0, false)
-	_lbl_half("X   jump",         11, Color(0.50, 0.60, 0.80, 0.70), 454.0, 470.0, true)
-	_lbl_half("X   jump",         11, Color(0.50, 0.60, 0.80, 0.70), 454.0, 470.0, false)
-	_lbl_half("Q / RB   flip gravity", 11, Color(0.50, 0.60, 0.80, 0.70), 474.0, 490.0, true)
-	_lbl_half("L / RB   flip gravity", 11, Color(0.50, 0.60, 0.80, 0.70), 474.0, 490.0, false)
-	_lbl_half("S / B   seal breach", 11, Color(0.50, 0.60, 0.80, 0.70), 494.0, 510.0, true)
-	_lbl_half("Down / B   seal breach", 11, Color(0.50, 0.60, 0.80, 0.70), 494.0, 510.0, false)
+	_lbl_half("X (PlayStation) / B (Nintendo)   jump",         11, Color(0.50, 0.60, 0.80, 0.70), 454.0, 470.0, true)
+	_lbl_half("X (PlayStation) / B (Nintendo)   jump",         11, Color(0.50, 0.60, 0.80, 0.70), 454.0, 470.0, false)
+	_lbl_half("Right-Bumper/RB   Flip Gravity", 11, Color(0.50, 0.60, 0.80, 0.70), 474.0, 490.0, true)
+	_lbl_half("Right-Bumper/RB   Flip Gravity", 11, Color(0.50, 0.60, 0.80, 0.70), 474.0, 490.0, false)
+	_lbl_half("Left-Bumper/LB (PlayStation/Nintendo)   Seal Branch", 11, Color(0.50, 0.60, 0.80, 0.70), 494.0, 510.0, true)
+	_lbl_half("Left-Bumper/LB (PlayStation/Nintendo)   Seal Branch", 11, Color(0.50, 0.60, 0.80, 0.70), 494.0, 510.0, false)
 	_lbl("Stand on repair points to anchor the breach repair.", 11, Color(0.50, 0.60, 0.80, 0.78), 514.0, 532.0)
 
-# ── Icon + text row ───────────────────────────────────────────────────────────
 func _lbl_icon(icon: String, txt: String, col: Color,
 		top_y: float, bot_y: float) -> void:
 	var ico := Label.new()
@@ -146,7 +128,6 @@ func _lbl_icon(icon: String, txt: String, col: Color,
 	lbl.add_theme_constant_override("outline_size", 2)
 	add_child(lbl)
 
-# ── Half-width centred label (left = Sol, right = Luna) ───────────────────────
 func _lbl_half(txt: String, font_sz: int, col: Color,
 		top_y: float, bot_y: float, left_half: bool) -> Label:
 	var lbl := Label.new()
@@ -163,7 +144,6 @@ func _lbl_half(txt: String, font_sz: int, col: Color,
 	add_child(lbl)
 	return lbl
 
-# ── Full-width centred label ──────────────────────────────────────────────────
 func _lbl(txt: String, font_sz: int, col: Color,
 		top_y: float, bot_y: float,
 		outline_col := Color(0, 0, 0, 1), outline_sz := 2) -> Label:
